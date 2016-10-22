@@ -1,0 +1,41 @@
+<aside>
+    <div id="sidebar" class="nav-collapse">
+
+        <ul class="sidebar-menu" id="nav-accordion">
+            <li>
+                <a id="myPage" href="{:U('Home/Dashboard/index')}">
+                    <i class="fa fa-dashboard">
+                    </i>
+                <span>
+                  个人主页
+                </span>
+                </a>
+            </li>
+            <!--<if condition="($privilege['gOrderQ'] eq 1) or ($privilege['gOrderE'] eq 1) ">-->
+                <!-- 快递订单管理 -->
+                <li class="sub-menu">
+                    <a href="javascript:;" id="admin_module">
+                        <i class="fa fa-sitemap">
+                        </i>
+                        <span>
+                          快递订单管理
+                        </span>
+                    </a>
+                    <ul class="sub">
+                        <li id="user_manage">
+                            <a href="{:U('admin/pickup/index')}">
+                                收件管理
+                            </a>
+                        </li>
+
+                        <li id="group_manage">
+                            <a href="{:U('admin/send/index')}">
+                                寄件管理
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+        </ul>
+
+    </div>
+</aside>
