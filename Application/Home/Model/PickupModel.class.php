@@ -3,25 +3,20 @@ namespace Home\Model;
 use Think\Model;
 class PickupModel extends Model
 {
-    // protected $_map = array
-    // (
-    //     'city' => 'city',
-    //     'school' => 'school',
-    //     'rename' => 'rename',
-    //     'telphone' => 'telphone',
-    //     'dbuild' => 'dbuild',
-    //     'express' => 'express',
-    //     'express_type' => 'express_type',
-    //     'price' => 'price',
-    //     'express_sms' => 'express_sms',
-    //     'fetch_code' => 'fetch_code',
-    //     'remarks' => 'remarks'
-    // );
+    protected $_map = array
+    (
+
+        'rename' => 'receiver_name',
+        'tel' => 'receiver_phone',
+        'dor' => 'dormitory_id',
+        'express' => 'express_company',
+        'fetch_code' => 'express_code',
+    );
 
     protected $_validate = array
     (
-        array('rename','require','请输入收件人姓名'),
-        array('telphone','require','请输入tel')
+        array('receiver_name','require','请输入收件人姓名'),
+        array('receiver_phone','require','请输入收件人电话')
     );
 }
 
