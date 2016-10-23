@@ -90,7 +90,7 @@
 
         <!-- 代取件 -->
         <div class="menuSelect normal">
-            <form action="" method="post">
+            <form method="post">
                 <table>
                     <tr>
                         <th><i class="red">*</i>收件姓名</th>
@@ -164,11 +164,11 @@
                         <td><textarea name="remarks" id="remarks"></textarea> </td>
                     </tr>
                 </table>
-                <input type="submit" value="提交信息" id="Pickup">
+                <input type="submit" value="提交信息" onclick="return submit()" >
             </form>
         </div><!-- menuSelect -->
 <script>
-    $("#Pickup").click(function(){
+    function submit(){
         var city = $("#secArea").val();
         var school = $("#secSchool").val();
         var rename = $("#rename").val();
@@ -184,73 +184,66 @@
         if(city=="")
         {
             alert('请选择城市！');
-            return;
+            return false;
         }
         else if(school=="")
         {
             alert('请选择学校！');
-            return;
+            return false;
         }
         else if(rename=="")
         {
             alert('请输入收件人姓名！');
-            return; 
+            return false;
         }
         else if(telephone=="")
         {
             alert('请输入手机号码！');
-            return;
+            return false;
         }
         else if(dbuild=="")
         {
-            alert('请选择寝室楼！')
-            return;
+            alert('请选择寝室楼！');
+            return false;
         }
         else if(express=="")
         {
-            alert('请选择快递公司！')
-            return;
+            alert('请选择快递公司！');
+            return false;
         }
         else if(express_type=="")
         {
-            alert('请选择快递类型！')
-            return;
-        }
-        else if(false)
-        {
-            //价格占位
-            alert('')
-            return;
+            alert('请选择快递类型！');
+            return false;
         }
         else if(express_sms=='')
         {
-            alert('快递短信不能为空！')
-            return;
+            alert('快递短信不能为空！');
+            return false;
         }
         else if(fetch_code=='')
         {
-            alert('提取码/货架号/手机号 不能为空！')
-            return;
+            alert('提取码/货架号/手机号 不能为空！');
+            return false;
         }
 
 
         $.post("{:U('index/newRecvOrder')}",{'city':city,'school':school,'rename':rename,'tel':telephone,'address':dbuild,
-        'express':express,'express_type':express_type,'price':price,'express_sms':express_sms,'fetch_code':fetch_code,'remarks':remarks},function(t){
-                alert(t);}).error(
-                    function()
-                    {
-                        alert('提交失败！');
-                    }
-                )
+        'express':express,'express_type':express_type,'price':price,'express_sms':express_sms,'fetch_code':fetch_code,'remarks':remarks}
+                ,function(t){
+                    alert(t);
+                    return false;
+                });
 
 
-    })
+        return false;
+    }
 
 </script>
 
         <!-- 代寄件 -->
         <div class="menuSelect">
-            <form action="">
+            <form >
                 <table>
                     <tr>
                         <th><i class="red">*</i>寄件姓名</th>
@@ -267,7 +260,7 @@
                         <td>
                             <select name="" id="secFloor2"></select> <!-- 从floorData.js中读取 -->
                             <div class="defaultAdd">
-                                <input type="checkbox" name="" id="defaultAddNormal" checked="checked"><label for="defaultAddNormal">设为默认地址</label>
+                                <input type="checkbox" name="" id="defaultAddNormal2" checked="checked"><label for="defaultAddNormal2">设为默认地址</label>
                             </div>
                         </td>
                     </tr>
@@ -286,11 +279,11 @@
                         <td><textarea name="sremark" id="sending_remark"></textarea> </td>
                     </tr>
                 </table>
-                <input type="submit" value="提交信息" id="newSendOrder">
+                <input class="submit" value="提交信息" id="newSendOrder" onclick="return submit2()">
             </form>
         </div><!-- menuSelect -->
         <script>
-    $("#newSendOrder").click(function(){
+    function submit2(){
         var city = $("#secArea").val();
         var school = $("#secSchool").val();
         var rename = $("#sender_name").val();
@@ -302,32 +295,32 @@
         if(city=="")
         {
             alert('请选择城市！');
-            return;
+            return false;
         }
         else if(school=="")
         {
             alert('请选择学校！');
-            return;
+            return false;
         }
         else if(rename=="")
         {
             alert('请输入寄件人姓名！');
-            return; 
+            return false;
         }
         else if(telephone=="")
         {
             alert('请输入手机号码！');
-            return;
+            return false;
         }
         else if(dbuild=="")
         {
-            alert('请选择寝室楼！')
-            return;
+            alert('请选择寝室楼！');
+            return false;
         }
         else if(delivery=="")
         {
-            alert('请选择快递物品！')
-            return;
+            alert('请选择快递物品！');
+            return false;
         }
 
 
@@ -338,15 +331,13 @@
             'tel':telephone,'address':dbuild,
             'delivery':delivery,'remarks':remarks},
             function(t){
-                alert(t);}).error(
-                    function()
-                    {
-                        alert('提交失败！!');
-                    }
-                )
+                alert(t);
+                return false;
+            }
+        );
 
-
-    })
+        return false;
+    }
 
 </script>
 
