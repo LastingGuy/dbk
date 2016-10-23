@@ -31,7 +31,7 @@ create table dbk_pickup(
 	pickup_id int not null auto_increment comment '订单id',
     user_id int comment '用户id',
     receiver_name varchar(10) comment '收件人姓名',
-    receiver_phone int(12) comment '收件人手机号码',
+    receiver_phone varchar(12) comment '收件人手机号码',
     dormitory_id int unsigned comment '寝室id',
     express_type varchar(50) not null comment '快递类型',
     express_company varchar(20) not null comment '快递公司',
@@ -50,7 +50,7 @@ create table dbk_send(
 	send_id int not null auto_increment comment '订单id',
 	user_id int comment '用户id',
     sender_name varchar(10) comment '寄件人姓名',
-    sender_phone int(12) comment '寄件人手机号码',
+    sender_phone varchar(12) comment '寄件人手机号码',
     dormitory_id int unsigned comment '寝室id',
     sender_goods varchar(300) not null comment '寄件物品',
     remarks varchar(300) comment '备注',
@@ -92,8 +92,8 @@ as
 insert into dbk_school(school_name,school_city) values('浙江大学城市学院','杭州市');
 insert into dbk_school(school_name,school_city) values('树人大学','杭州市');
 insert into dbk_school(school_name,school_city) values('浙江工业大学(朝晖校区)','杭州市');
-insert into dbk_school(school_name,school_city) values('武汉科技大学城市学院','武汉');
-insert into dbk_school(school_name,school_city) values('浙江师范大学','金华');
+insert into dbk_school(school_name,school_city) values('武汉科技大学城市学院','武汉市');
+insert into dbk_school(school_name,school_city) values('浙江师范大学','金华市');
 
 
 #导入寝室
