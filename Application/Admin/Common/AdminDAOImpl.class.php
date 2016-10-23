@@ -11,7 +11,7 @@ class AdminDAOImpl implements IAdminDAO{
     public function login($user_id, $user_passwd){
         $model = M("admin");
         $condition['admin_id'] = $user_id;
-        if($model->where($condition)->getField('admin_passwd') == $user_passwd){
+        if($model->where($condition)->getField('admin_passwd') === $user_passwd){
             $this->addSession($user_id);
             return  1;
         }else{
