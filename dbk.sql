@@ -14,7 +14,6 @@ create table dbk_dormitory(
     dormitory_address varchar(20) comment '寝室地址',
     constraint pk_dbk_dormitory primary key(dormitory_id),
     constraint fk_dbk_dormitory foreign key(school_id) references dbk_school(school_id)
-
 )  default character set utf8;
 
 #管理员
@@ -64,12 +63,12 @@ create table dbk_send(
 #建立代收件视图
 create view dbk_pickup_view
 as
- select dbk_school.school_city, dbk_school.school_name,
-		dbk_dormitory.dormitory_address,
+ select dbk_school.school_id, dbk_school.school_city, dbk_school.school_name,
+		    dbk_dormitory.dormitory_address,
         dbk_pickup.dormitory_id, dbk_pickup.express_code, dbk_pickup.express_company,
         dbk_pickup.express_sms, dbk_pickup.express_status, dbk_pickup.express_type,
         dbk_pickup.pickup_id, dbk_pickup.price, dbk_pickup.receiver_name, dbk_pickup.receiver_phone,
-        dbk_pickup.remarks, dbk_pickup.school_id, dbk_pickup.time, dbk_pickup.user_id
+        dbk_pickup.remarks, dbk_pickup.time, dbk_pickup.user_id
  from dbk_school, dbk_dormitory, dbk_pickup
  where dbk_school.school_id = dbk_dormitory.school_id and dbk_dormitory.dormitory_id = dbk_pickup.dormitory_id
 
@@ -80,11 +79,11 @@ as
 #建立代寄件视图
 create view dbk_send_view
 as
- select dbk_school.school_city, dbk_school.school_name,
-		dbk_dormitory.dormitory_address,
+ select  dbk_school.school_id, dbk_school.school_city, dbk_school.school_name,
+		    dbk_dormitory.dormitory_address,
         dbk_send.dormitory_id, dbk_send.sender_goods, dbk_send.sender_status,
         dbk_send.send_id, dbk_send.sender_name, dbk_send.sender_phone,
-        dbk_send.remarks, dbk_send.school_id, dbk_send.time, dbk_send.user_id
+        dbk_send.remarks, dbk_send.time, dbk_send.user_id
  from dbk_school, dbk_dormitory, dbk_send
  where dbk_school.school_id = dbk_dormitory.school_id and dbk_dormitory.dormitory_id = dbk_send.dormitory_id;
 
