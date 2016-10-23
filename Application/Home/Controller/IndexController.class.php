@@ -48,7 +48,7 @@ class IndexController extends Controller{
             {
                 if($pickup->add($data))
                 {
-                    $this->ajaxReturn('提交成功!'); 
+                    $this->ajaxReturn('提交成功'); 
                 }
                 else
                 {

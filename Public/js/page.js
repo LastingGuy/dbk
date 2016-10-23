@@ -21,8 +21,8 @@
         switch($('.expressSize').val())
         {
           case 'size1': $('.normal .price').text('1'); break;
-          case 'size2': $('.normal .price').text('1.5'); break;
-          case 'size3': $('.normal .price').text('3'); break;
+          case 'size2': $('.normal .price').text('1'); break;
+          case 'size3': $('.normal .price').text('1'); break;
           default: ;
         }
       });
