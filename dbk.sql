@@ -44,7 +44,6 @@ create table dbk_pickup(
 	express_status tinyint not null comment ' 0：等待接单  1：已接单  2：正在配送 3:已完成',
 	constraint pk_dbk_pickup primary key(pickup_id),
     constraint fk_dbk_dormitory_pickup foreign key(dormitory_id) references dbk_dormitory(dormitory_id),
-      constraint  fk_dbk_school_pickup foreign key(school_id) references dbk_dormitory(school_id)
 )  default character set utf8 ;
 
 #代寄件
@@ -60,7 +59,6 @@ create table dbk_send(
     sender_status tinyint not null comment '寄件状态  0:未接单 1:已接单 2：正在寄件 3：完成寄件' ,
     constraint pk_dbk_send primary key(send_id),
     constraint  fk_dbk_dormitory_send foreign key(dormitory_id) references dbk_dormitory(dormitory_id),
-    constraint  fk_dbk_school_send foreign key(school_id) references dbk_dormitory(school_id)
 )  default character set utf8;
 
 #建立代收件视图
