@@ -61,17 +61,17 @@
 <!-- END JS -->
 <script>
     function login(){
-        userId = $('#userId').val();
-        passwd = $('#passwd').val();
+        var userId = $('#userId').val();
+        var passwd = $('#passwd').val();
         $.post(
-                "{:U('home/index/login')}",
+                "{:U('admin/index/login')}",
                 {
-                    "userId": userId,
-                    "passwd": passwd
+                    "uid": userId,
+                    "password": passwd
                 },
                 function(data) {
                     if (data['login'] == 1) {
-                        window.location = "{:U('admin/index/login')}";
+                        window.location = "{:U('admin/pickup/index')}";
                     }
                     else if (data['login'] == 0) {
                         alert("账号或密码错误，登录失败！");

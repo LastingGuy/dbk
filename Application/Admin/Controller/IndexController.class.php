@@ -8,15 +8,14 @@ class IndexController extends Controller {
     }
 
     //登录
-    public  function login(){
-        $user_id = I("post.userId");
-        $user_passwd = I("post.passwd");
-
+    public function login(){
+        $user_id = I('post.uid');
+        $user_passwd = I('post.password');
+        
         //进行验证
-        $object = new Common\AdminDAOImple();
-        $return_data =   array();
-        $return_data["login"] = $object->login($user_id,$user_passwd);
+        $object = new Common\AdminDAOImpl();
+        $return_data = $object->login($user_id,$user_passwd);
 
-        return $return_data;
+        $this->ajaxReturn($return_data);
     }
 }

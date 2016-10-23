@@ -6,12 +6,13 @@
  * Time: 0:08
  */
 namespace Admin\Common;
-class AdminDAOImple implements IAdminDAO{
+class AdminDAOImpl implements IAdminDAO{
     //登录验证
     public function login($user_id, $user_passwd){
-        $model = D("admin");
+        $model = M("admin");
+        var_dump($user_id);
         $data = array();
-        $condition['user_id'] = $user_id;
+        $condition['admin_id'] = $user_id;
         if($model->where($condition)->getField('admin_passwd') == $user_passwd){
             $this->addSession($user_id);
             $data['login']  = 0;
