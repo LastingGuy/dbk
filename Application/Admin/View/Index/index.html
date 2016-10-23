@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html lang="en">
+<html>
 <head>
     <!-- BEGIN META -->
     <meta charset="utf-8">
@@ -44,8 +44,6 @@
             <button class="btn btn-lg btn-login btn-block" onclick="return login()">
                 登 录
             </button>
-
-
         </div>
         <!-- END LOGIN WRAPPER -->
 
@@ -64,10 +62,10 @@
         var userId = $('#userId').val();
         var passwd = $('#passwd').val();
         $.post(
-                "{:U('Admin/Index/Login')}",
+                "{:U('Admin/Index/login')}",
                 {
-                    "uid": userId,
-                    "password": passwd
+                    'uid': userId,
+                    'password': passwd
                 },
                 function(data) {
                     if (data['login'] == 1) {
