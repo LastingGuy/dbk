@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html lang="en">
+<html>
 <head>
     <!-- BEGIN META -->
     <meta charset="utf-8">
@@ -44,8 +44,6 @@
             <button class="btn btn-lg btn-login btn-block" onclick="return login()">
                 登 录
             </button>
-
-
         </div>
         <!-- END LOGIN WRAPPER -->
 
@@ -61,17 +59,17 @@
 <!-- END JS -->
 <script>
     function login(){
-        userId = $('#userId').val();
-        passwd = $('#passwd').val();
+        var userId = $('#userId').val();
+        var passwd = $('#passwd').val();
         $.post(
-                "{:U('home/index/login')}",
+                "{:U('Admin/Index/login')}",
                 {
-                    "userId": userId,
-                    "passwd": passwd
+                    'uid': userId,
+                    'password': passwd
                 },
                 function(data) {
                     if (data['login'] == 1) {
-                        window.location = "{:U('admin/index/login')}";
+                        window.location = "{:U('admin/pickup/index')}";
                     }
                     else if (data['login'] == 0) {
                         alert("账号或密码错误，登录失败！");

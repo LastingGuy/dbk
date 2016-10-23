@@ -1,10 +1,3 @@
-#管理员
-create table dbk_admin(
-  admin_id varchar(20) not null comment '管理员id',
-  admin_passwd varchar(20) not null comment '管理员密码',
-  admin_school int unsigned comment '学校id',
-  constraint pk_dbk_admin primary key(admin_id)
-)default character set utf8;
 
 #学校
 create table dbk_school(
@@ -12,7 +5,7 @@ create table dbk_school(
 	school_name varchar(50) comment '学校名',
     school_city varchar(30) comment '学校所在城市',
     constraint pk_dbk_school primary key(school_id)
-)  default character set utf8 ;
+)default character set utf8;
 
 #寝室
 create table dbk_dormitory(
@@ -23,6 +16,16 @@ create table dbk_dormitory(
     constraint fk_dbk_dormitory foreign key(school_id) references dbk_school(school_id)
 
 )  default character set utf8;
+
+#管理员
+create table dbk_admin(
+  admin_id varchar(20) not null comment '管理员id',
+  admin_passwd varchar(20) not null comment '管理员密码',
+  admin_school int unsigned comment '学校id',
+  constraint pk_dbk_admin primary key(admin_id),
+  constraint fk_dbk_admin foreign key(admin_school) references dbk_school(school_id)
+)default character set utf8;
+
 
 #代取件表
 create table dbk_pickup(
@@ -40,7 +43,8 @@ create table dbk_pickup(
 	`time`  datetime not null comment '下单时间',
 	express_status tinyint not null comment ' 0：等待接单  1：已接单  2：正在配送 3:已完成',
 	constraint pk_dbk_pickup primary key(pickup_id),
-    constraint fk_dbk_pickup foreign key(dormitory_id) references dbk_dormitory(dormitory_id)
+    constraint fk_dbk_dormitory_pickup foreign key(dormitory_id) references dbk_dormitory(dormitory_id),
+      constraint  fk_dbk_school_pickup foreign key(school_id) references dbk_dormitory(school_id)
 )  default character set utf8 ;
 
 #代寄件
@@ -55,5 +59,33 @@ create table dbk_send(
     `time` datetime  not null comment '下单时间',
     sender_status tinyint not null comment '寄件状态  0:未接单 1:已接单 2：正在寄件 3：完成寄件' ,
     constraint pk_dbk_send primary key(send_id),
-    constraint  fk_dbk_send foreign key(dormitory_id) references dbk_dormitory(dormitory_id)
+    constraint  fk_dbk_dormitory_send foreign key(dormitory_id) references dbk_dormitory(dormitory_id),
+    constraint  fk_dbk_school_send foreign key(school_id) references dbk_dormitory(school_id)
 )  default character set utf8;
+
+#建立代收件视图
+create view dbk_pickup_view
+as
+ select dbk_school.school_city, dbk_school.school_name,
+		dbk_dormitory.dormitory_address,
+        dbk_pickup.dormitory_id, dbk_pickup.express_code, dbk_pickup.express_company,
+        dbk_pickup.express_sms, dbk_pickup.express_status, dbk_pickup.express_type,
+        dbk_pickup.pickup_id, dbk_pickup.price, dbk_pickup.receiver_name, dbk_pickup.receiver_phone,
+        dbk_pickup.remarks, dbk_pickup.school_id, dbk_pickup.time, dbk_pickup.user_id
+ from dbk_school, dbk_dormitory, dbk_pickup
+ where dbk_school.school_id = dbk_dormitory.school_id and dbk_dormitory.dormitory_id = dbk_pickup.dormitory_id
+
+
+
+
+
+#建立代寄件视图
+create view dbk_send_view
+as
+ select dbk_school.school_city, dbk_school.school_name,
+		dbk_dormitory.dormitory_address,
+        dbk_send.dormitory_id, dbk_send.sender_goods, dbk_send.sender_status,
+        dbk_send.send_id, dbk_send.sender_name, dbk_send.sender_phone,
+        dbk_send.remarks, dbk_send.school_id, dbk_send.time, dbk_send.user_id
+ from dbk_school, dbk_dormitory, dbk_send
+ where dbk_school.school_id = dbk_dormitory.school_id and dbk_dormitory.dormitory_id = dbk_send.dormitory_id;

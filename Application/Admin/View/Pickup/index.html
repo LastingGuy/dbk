@@ -107,11 +107,11 @@
     {
         var aData = oTable.fnGetData( nTr );
         var sOut = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
-        sOut += '<tr><td>学 校：</td><td>'+aData['oContent']+'</td></tr>';
-        sOut += '<tr><td>寝 室：</td><td>'+aData['oContent']+'</td></tr>';
-        sOut += '<tr><td>快递短信：</td><td>'+aData['oContent']+'</td></tr>';
-        sOut += '<tr><td>取件码/货架号/手机号：</td><td>'+aData['oOther']+'</td></tr>';
-        sOut += '<tr><td>备 注：</td><td>'+aData['oOther']+'</td></tr>';
+        sOut += '<tr><td>学 校：</td><td>'+aData['school_name']+'</td></tr>';
+        sOut += '<tr><td>寝 室：</td><td>'+aData['dormitory_address']+'</td></tr>';
+        sOut += '<tr><td>快递短信：</td><td>'+aData['express_sms']+'</td></tr>';
+        sOut += '<tr><td>取件码/货架号/手机号：</td><td>'+aData['express_code']+'</td></tr>';
+        sOut += '<tr><td>备 注：</td><td>'+aData['remarks']+'</td></tr>';
         sOut += '</table>';
 
         return sOut;
@@ -127,17 +127,20 @@
             //open server side
             serverSide: true,
             "ajax": {
-
+                "url":"{:U('admin/pickup/get')}"
             },
             "searching": true,
             columns: [
                 { "data": "look", "orderable":false},
-                { "data": "oid", "orderable":true},
-                { "data": "oCusName", "orderable":false },
-                { "data": "oCnr", "orderable":true },
-                { "data": "oOrdDate", "orderable":true },
-                { "data": "oDelDate", "orderable":true },
-                { "data": "oState", "orderable":false },
+                { "data": "pickup_id", "orderable":false},
+                { "data": "user_id", "orderable":true},
+                { "data": "receiver_name", "orderable":false },
+                { "data": "receiver_phone", "orderable":true },
+                { "data": "express_company", "orderable":true },
+                { "data": "express_type", "orderable":true },
+                { "data": "price", "orderable":false },
+                { "data": "time", "orderable":false },
+                { "data": "express_status", "orderable":false },
             ],
             "oLanguage": {
                 "sProcessing": "正在加载中......",
