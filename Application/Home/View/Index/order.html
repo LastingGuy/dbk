@@ -235,14 +235,26 @@
             return;
         }
 
-        $.post("{:U('index/newRecvOrder')}",{'city':city,'school':school,'rename':rename,'tel':telephone,'address':dbuild,
-        'express':express,'express_type':express_type,'price':price,'express_sms':express_sms,'fetch_code':fetch_code,'remarks':remarks},function(t){
-                alert(t);}).error(
-                    function()
-                    {
-                        alert('提交失败！');
-                    }
-                )
+        $.post("{:U('index/newRecvOrder')}",
+        {
+            'city':city,'school':school,'rename':rename,
+        'tel':telephone,'address':dbuild,
+        'express':express,'express_type':express_type,
+        'price':price,'express_sms':express_sms,
+        'fetch_code':fetch_code,'remarks':remarks
+        },
+        function(t)
+        {
+                alert(t);
+                if(t=='提交成功')
+                    location.reload(true);
+        }).error
+        (
+            function()
+            {
+                alert('提交失败！');
+            }
+        )
 
     }
 
@@ -335,16 +347,23 @@
         $.post(
             "{:U('index/newSendOrder')}"
             ,
-            {'city':city,'school':school,'rename':rename,
+            {
+                'city':city,'school':school,'rename':rename,
             'tel':telephone,'address':dbuild,
-            'delivery':delivery,'remarks':remarks},
-            function(t){
-                alert(t);}).error(
-                    function()
-                    {
-                        alert('提交失败！!');
-                    }
-                )
+            'delivery':delivery,'remarks':remarks
+            },
+            function(t)
+            {
+                alert(t);
+                if(t=='提交成功')
+                    location.reload(true);
+            }).error
+            (
+                function()
+                {
+                    alert('提交失败！!');
+                }
+            )
 
 
     }
