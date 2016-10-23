@@ -15,7 +15,7 @@ class IndexController extends Controller{
     #create the order of receiving mail
     public function newRecvOrder()
 	{
-        if(true)
+        if(IS_POST)
         {
             $data = I('post.');
             $school = $data['school'];
