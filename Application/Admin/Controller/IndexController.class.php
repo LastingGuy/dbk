@@ -11,11 +11,11 @@ class IndexController extends Controller {
     public function login(){
         $user_id = I('post.uid');
         $user_passwd = I('post.password');
-        
-        //进行验证
-        $object = new Common\AdminDAOImpl();
-        $return_data = $object->login($user_id,$user_passwd);
 
-        $this->ajaxReturn($return_data);
+        var_dump(I('POST.'));
+        //进行验证
+        /*$object = new Common\AdminDAOImpl();
+        $return_data['login'] = $object->login($user_id,$user_passwd);
+        $this->ajaxReturn($return_data);*/
     }
 }

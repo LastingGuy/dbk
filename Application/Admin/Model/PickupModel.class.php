@@ -9,6 +9,20 @@ namespace Admin\Model;
 use Think\Model;
 class PickupModel extends Model
 {
+    protected $_link = array(
+        'dormitory'=>array(
+            'mapping_type'      => self::BELONGS_TO,
+            'class_name'        => 'dormitory',
+            'foreign_key'       => 'dormitory_id',
+            'mapping_name'      => 'dormitory',
+            ),
+        'school'=>array(
+            'mapping_type'      => self::BELONGS_TO,
+            'class_name'        => 'school',
+            'foreign_key'       => 'school_id',
+            'mapping_name'      => 'school',
+        ),
+        );
     protected $_map = array(
         "pickup" => 'pickup_id',
         "user" => 'user_id',
