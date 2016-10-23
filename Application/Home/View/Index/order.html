@@ -181,19 +181,67 @@
         var fetch_code = $("#fetch_code").val();
         var remarks = $("#remarks").val();
 
-        
-
-        $.post(
-            "{:U('index/newOrder')}",
-            {'city':city,'school':school,'rename':rename,'telephone':telephone,'dbuild':dbuild,
-        'express':express,'express_type':express_type,'price':price,'express_sms':express_sms,'fetch_code':fetch_code,'remarks':remarks}
-        ,function(t)
+        if(city=="")
         {
-                 document.write(t)
+            alert('请选择城市！');
+            return;
         }
-        );
+        else if(school=="")
+        {
+            alert('请选择学校！');
+            return;
+        }
+        else if(rename=="")
+        {
+            alert('请输入收件人姓名！');
+            return; 
+        }
+        else if(telephone=="")
+        {
+            alert('请输入手机号码！');
+            return;
+        }
+        else if(dbuild=="")
+        {
+            alert('请选择寝室楼！')
+            return;
+        }
+        else if(express=="")
+        {
+            alert('请选择快递公司！')
+            return;
+        }
+        else if(express_type=="")
+        {
+            alert('请选择快递类型！')
+            return;
+        }
+        else if(false)
+        {
+            //价格占位
+            alert('')
+            return;
+        }
+        else if(express_sms=='')
+        {
+            alert('快递短信不能为空！')
+            return;
+        }
+        else if(fetch_code=='')
+        {
+            alert('提取码/货架号/手机号 不能为空！')
+            return;
+        }
 
 
+        $.post("{:U('index/newOrder')}",{'city':city,'school':school,'rename':rename,'tel':telephone,'address':dbuild,
+        'express':express,'express_type':express_type,'price':price,'express_sms':express_sms,'fetch_code':fetch_code,'remarks':remarks},function(t){
+                alert(t);}).error(
+                    function()
+                    {
+                        alert('提交失败！');
+                    }
+                )
 
 
     })

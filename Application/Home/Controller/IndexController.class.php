@@ -16,26 +16,48 @@ class IndexController extends Controller{
 	{
         if(IS_POST)
         {
-            
-            $pickup = D('pickup');
-            if($pickup->create())
+            $data = I('post.');
+            $school = $data['school'];
+            $city = $data['city'];
+            $address = $data['address'];
+            $DOR = D('DormitoryView'); //实例化寝室模型
+            $dor = $DOR->field('dormitory_id')->where("school_name='$school' and school_city='$city' and dormitory_address = '$address'")->select();
+            if(count($dor)>0)
             {
-                if($pickup->add())
+                $dor = $dor[0]['dormitory_id'];
+                $data['dor'] = $dor;
+            }
+            else
+            {
+                $this->ajaxReturn('请填写正确的收货人地址');
+            }
+
+            $data['receiver_name'] = $data['rename'];
+            $data['receiver_phone'] = $data['tel'];
+            $data['dormitory_id'] = $data['dor'];
+            $data['express_company'] = $data['express'];
+            $data['express_code'] = $data['fetch_code'];
+            $data['time'] = date('Y-m-d H:i:s');
+
+            $pickup = D('pickup');
+            if($pickup->create($data))
+            {
+                if($pickup->add($data))
                 {
                     $this->ajaxReturn('提交成功!'); 
                 }
                 else
                 {
-                    // echo $pickup->getError();
-                    // $this->ajaxReturn('提交失败');
-                    exit($pickup->getError());
+                    $this->ajaxReturn('提交失败');
                 }
+            
             }
             else
             {
-                 // echo $pickup->getError();
-                 exit($pickup->getError());
-                 $this->ajaxReturn('提交失败');
+                 
+                //  exit($pickup->getError());
+                 $this->ajaxReturn($pickup->getError());
+                // echo 'wrong';
             }
 
         }
