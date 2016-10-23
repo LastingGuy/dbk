@@ -87,3 +87,106 @@ as
         dbk_send.remarks, dbk_send.school_id, dbk_send.time, dbk_send.user_id
  from dbk_school, dbk_dormitory, dbk_send
  where dbk_school.school_id = dbk_dormitory.school_id and dbk_dormitory.dormitory_id = dbk_send.dormitory_id;
+
+
+#导入学校
+insert into dbk_school(school_name,school_city) values('浙江大学城市学院','杭州市');
+insert into dbk_school(school_name,school_city) values('树人大学','杭州市');
+insert into dbk_school(school_name,school_city) values('浙江工业大学(朝晖校区)','杭州市');
+insert into dbk_school(school_name,school_city) values('武汉科技大学城市学院','武汉');
+insert into dbk_school(school_name,school_city) values('浙江师范大学','金华');
+
+
+#导入寝室
+##浙江大学城市学院
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'问源楼' from dbk_school where school_name='浙江大学城市学院';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'尚雅楼' from dbk_school where school_name='浙江大学城市学院';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'求真楼' from dbk_school where school_name='浙江大学城市学院';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'思睿楼' from dbk_school where school_name='浙江大学城市学院';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'致远楼' from dbk_school where school_name='浙江大学城市学院';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'弘毅楼' from dbk_school where school_name='浙江大学城市学院';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'惟学楼' from dbk_school where school_name='浙江大学城市学院';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'精诚楼' from dbk_school where school_name='浙江大学城市学院';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'明德楼' from dbk_school where school_name='浙江大学城市学院';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'慕贤楼' from dbk_school where school_name='浙江大学城市学院';
+
+##树人大学
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'清乐园1号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'清乐园2号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'清乐园3号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'清乐园4号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'致勤楼-东楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'致勤楼-西楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'致和园1号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'致和园2号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'致和园3号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'致和园4号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'致和园5号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'树人园2号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'树人园4号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'树人园5号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'树人园6号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'树人园7号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'树人园8号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'树人园10号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'树人园11号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'树人园12号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'树人园15号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'树人园17号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'树人园18号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'树人园22号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'树人园23号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'致信楼1号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'致信楼2号楼' from dbk_school where school_name='树人大学';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'致信楼3号楼' from dbk_school where school_name='树人大学';
+
+
+##浙江工业大学(朝晖校区)
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'尚德园1号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'尚德园2号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'尚德园3号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'尚德园4号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'尚德园5号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'尚德园6号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'尚德园7号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'尚德园8号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'尚德园9号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'尚德园10号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'尚德园11号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'尚德园12号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'尚德园研究生楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'梦溪园梦1号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'梦溪园梦2号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'梦溪园梦3号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'梦溪园梦4号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'梦溪园梦5号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'梦溪园梦6号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'梦溪园梦7号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'东新关1号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'东新关2号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'东新关3号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'东新关4号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'东新关5号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'东新关6号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'东新关7号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'东新关8号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'东新关9号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'东新关10号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'东新关11号楼' from dbk_school where school_name='浙江工业大学(朝晖校区)';
+
+##武汉科技大学城市学院
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'北一楼' from dbk_school where school_name='武汉科技大学城市学院';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'北二楼' from dbk_school where school_name='武汉科技大学城市学院';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'北三楼' from dbk_school where school_name='武汉科技大学城市学院';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'北四楼' from dbk_school where school_name='武汉科技大学城市学院';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'北五楼' from dbk_school where school_name='武汉科技大学城市学院';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'北六楼' from dbk_school where school_name='武汉科技大学城市学院';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'北七楼' from dbk_school where school_name='武汉科技大学城市学院';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'北八楼' from dbk_school where school_name='武汉科技大学城市学院';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'北九楼' from dbk_school where school_name='武汉科技大学城市学院';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'北十楼' from dbk_school where school_name='武汉科技大学城市学院';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'南一楼' from dbk_school where school_name='武汉科技大学城市学院';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'南二楼' from dbk_school where school_name='武汉科技大学城市学院';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'南三楼' from dbk_school where school_name='武汉科技大学城市学院';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'南四楼' from dbk_school where school_name='武汉科技大学城市学院';
+insert into dbk_dormitory(school_id,dormitory_address) select school_id,'南五楼' from dbk_school where school_name='武汉科技大学城市学院';
