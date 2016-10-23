@@ -13,22 +13,22 @@
     <meta name="keywords" content="代步客,校园代取快递,取快递,快递助手">
     <meta name="description" content="代步客,校园代取快递">
 
-    <link href="__HCSS__/base.css" rel="stylesheet">
-    <link href="__HCSS__/style.css" rel="stylesheet">
-    <script src="__HJS__/html5.js" type="text/javascript"></script>
-    <script src="__HJS__/jquery-1.10.2.min.js" type="text/javascript"></script>
-    <script src="__HJS__/swipe.js" type="text/javascript"></script>
+    <link href="__PUBLIC__/css/base.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/phone_style.css" rel="stylesheet">
+    <script src="__PUBLIC__/js/html5.js" type="text/javascript"></script>
+    <script src="__PUBLIC__/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script src="__PUBLIC__/js/swipe.js" type="text/javascript"></script>
 
     <!--[if lt IE 9]>
     <script src="__HJS__/html5.js" type="text/javascript"></script>
     <![endif]-->
 
     <!--[if IE 8 ]>
-    <link rel="stylesheet" type="text/css" href="statics/css/style-ie.css" />
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/style-ie.css" />
     <![endif]-->
 
     <!--[if lt IE 8 ]>
-    <link rel="stylesheet" type="text/css" href="__HCSS__/style-ie.css" />
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/style-ie.css" />
     <div id="ie7tips"><p>您的浏览器版本过低，请升级到ie10以上或更换Chrome,firefox等浏览器获得流畅的浏览效果！</p></div>
     <![endif]-->
 
@@ -45,13 +45,13 @@
     <div class="banner" id="bannerBox">
         <ul>
             <li>
-                <a href="javascript:;"><img class="dis_block" src="__HIMG__/banner.jpg"></a>
+                <a href="javascript:;"><img class="dis_block" src="__PUBLIC__/img/banner.jpg"></a>
             </li>
             <li>
-                <a href="javascript:;"><img class="dis_block" src="__HIMG__/banner.jpg"></a>
+                <a href="javascript:;"><img class="dis_block" src="__PUBLIC__/img/banner.jpg"></a>
             </li>
             <li>
-                <a href="javascript:;"><img class="dis_block" src="__HIMG__/banner.jpg"></a>
+                <a href="javascript:;"><img class="dis_block" src="__PUBLIC__/img/banner.jpg"></a>
             </li>
         </ul>
         <ol>
@@ -234,7 +234,7 @@
         }
 
 
-        $.post("{:U('index/newOrder')}",{'city':city,'school':school,'rename':rename,'tel':telephone,'address':dbuild,
+        $.post("{:U('index/newRecvOrder')}",{'city':city,'school':school,'rename':rename,'tel':telephone,'address':dbuild,
         'express':express,'express_type':express_type,'price':price,'express_sms':express_sms,'fetch_code':fetch_code,'remarks':remarks},function(t){
                 alert(t);}).error(
                     function()
@@ -254,12 +254,12 @@
                 <table>
                     <tr>
                         <th><i class="red">*</i>寄件姓名</th>
-                        <td><input type="text"></td>
+                        <td><input type="text" id="sender_name"></td>
                     </tr>
 
                     <tr>
                         <th><i class="red">*</i>手机号码</th>
-                        <td><input type="text"></td>
+                        <td><input type="text" id="sender_phone"></td>
                     </tr>
 
                     <tr>
@@ -275,7 +275,7 @@
 
                     <tr>
                         <th><i class="red">*</i>寄件物品</th>
-                        <td> <textarea name="" id=""></textarea> </td>
+                        <td> <textarea name="delivery" id="delivery"></textarea> </td>
                     </tr>
 
 
@@ -283,20 +283,79 @@
 
                     <tr>
                         <th>特殊备注</th>
-                        <td><textarea name="" id=""></textarea> </td>
+                        <td><textarea name="sremark" id="sending_remark"></textarea> </td>
                     </tr>
                 </table>
-                <input type="submit" value="提交信息">
+                <input type="submit" value="提交信息" id="newSendOrder">
             </form>
         </div><!-- menuSelect -->
+        <script>
+    $("#newSendOrder").click(function(){
+        var city = $("#secArea").val();
+        var school = $("#secSchool").val();
+        var rename = $("#sender_name").val();
+        var telephone = $("#sender_phone").val();
+        var dbuild = $("#secFloor2").val();
+        var delivery = $("#delivery").val();
+        var remarks = $("#sending_remark").val();
 
+        if(city=="")
+        {
+            alert('请选择城市！');
+            return;
+        }
+        else if(school=="")
+        {
+            alert('请选择学校！');
+            return;
+        }
+        else if(rename=="")
+        {
+            alert('请输入寄件人姓名！');
+            return; 
+        }
+        else if(telephone=="")
+        {
+            alert('请输入手机号码！');
+            return;
+        }
+        else if(dbuild=="")
+        {
+            alert('请选择寝室楼！')
+            return;
+        }
+        else if(delivery=="")
+        {
+            alert('请选择快递物品！')
+            return;
+        }
+
+
+        $.post(
+            "{:U('index/newSendOrder')}"
+            ,
+            {'city':city,'school':school,'rename':rename,
+            'tel':telephone,'address':dbuild,
+            'delivery':delivery,'remarks':remarks},
+            function(t){
+                alert(t);}).error(
+                    function()
+                    {
+                        alert('提交失败！!');
+                    }
+                )
+
+
+    })
+
+</script>
 
     </div><!-- fixWidth -->
 </div><!-- contain -->
 
 
-<script src="__HJS__/page.js" type="text/javascript"></script><!-- 轮播图/价格切换特效等 -->
-<script src="__HJS__/floorData.js" type="text/javascript"></script><!-- 地区-学校-楼幢信息 -->
+<script src="__PUBLIC__/js/page.js" type="text/javascript"></script><!-- 轮播图/价格切换特效等 -->
+<script src="__PUBLIC__/js/floorData.js" type="text/javascript"></script><!-- 地区-学校-楼幢信息 -->
 
 
 </body>
