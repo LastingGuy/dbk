@@ -164,11 +164,12 @@
                         <td><textarea name="remarks" id="remarks"></textarea> </td>
                     </tr>
                 </table>
-                <input value="提交信息" id="Pickup">
+                <input type="submit" value="提交信息" id="Pickup" onclick="sendpickuporder(); return false;">
             </form>
         </div><!-- menuSelect -->
 <script>
-    $("#Pickup").click(function(){
+    function sendpickuporder()
+    {
         var city = $("#secArea").val();
         var school = $("#secSchool").val();
         var rename = $("#rename").val();
@@ -180,6 +181,7 @@
         var express_sms = $("#express_sms").val();
         var fetch_code = $("#fetch_code").val();
         var remarks = $("#remarks").val();
+
 
         if(city=="")
         {
@@ -233,7 +235,6 @@
             return;
         }
 
-
         $.post("{:U('index/newRecvOrder')}",{'city':city,'school':school,'rename':rename,'tel':telephone,'address':dbuild,
         'express':express,'express_type':express_type,'price':price,'express_sms':express_sms,'fetch_code':fetch_code,'remarks':remarks},function(t){
                 alert(t);}).error(
@@ -243,8 +244,7 @@
                     }
                 )
 
-
-    })
+    }
 
 </script>
 
@@ -286,11 +286,12 @@
                         <td><textarea name="sremark" id="sending_remark"></textarea> </td>
                     </tr>
                 </table>
-                <input value="提交信息" id="newSendOrder">
+                <input type="submit" value="提交信息" id="newSendOrder" onclick="sendSendOrder();return false;">
             </form>
         </div><!-- menuSelect -->
-        <script>
-    $("#newSendOrder").click(function(){
+<script>
+    function sendSendOrder()
+    {
         var city = $("#secArea").val();
         var school = $("#secSchool").val();
         var rename = $("#sender_name").val();
@@ -346,7 +347,7 @@
                 )
 
 
-    })
+    }
 
 </script>
 
