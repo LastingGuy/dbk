@@ -11,16 +11,17 @@ use Admin\Common;
 class SendController extends Controller
 {
     public function index()
-    {if(!session("?admin_id")) {
-        header('Location'.U("Admin/Index/index"));
-    }
+    {
+        if(!session("?admin_id")) {
+        header('Location:'.U("Admin/Index/index"));
+        }
         $this->display();
     }
 
     //获取代寄件订单
     public function  get(){
         if(!session("?admin_id")) {
-            header('Location'.U("Admin/Index/index"));
+            header('Location:'.U("Admin/Index/index"));
         }
 
         $param_array['draw'] = I("get.draw");
