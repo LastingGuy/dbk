@@ -14,9 +14,6 @@ class IndexController extends Controller{
         "code=$weixin_code&".
         "grant_type=authorization_code";
         $content = file_get_contents($weixin_token_url);
-        var_dump($content);
-
-
     }
 
     public function order()
