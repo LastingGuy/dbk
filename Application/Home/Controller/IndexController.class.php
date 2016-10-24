@@ -8,7 +8,15 @@ class IndexController extends Controller{
         $weixin_state = I("get.state");
         $weixin_appid = I("get.appid");
 
-        var_dump(I("get."));
+        $weixin_token_url = "https://api.weixin.qq.com/sns/oauth2/access_token?".
+        "appid=wx9b82294bfe34589e&".
+        "secret=20af5faa385f8bce23e8920dfbbb545b&".
+        "code=$weixin_code&".
+        "grant_type=authorization_code";
+        $content = file_get_contents($weixin_token_url);
+        var_dump($content);
+
+
     }
 
     public function order()
