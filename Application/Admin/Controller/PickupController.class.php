@@ -36,4 +36,11 @@ class PickupController extends Controller
         $this->ajaxReturn($return_data);
         
     }
+
+    //导出数据
+    public function export()
+    {
+        $object = new Common\PickupDAOImpl();
+        $object->export();
+    }
 }

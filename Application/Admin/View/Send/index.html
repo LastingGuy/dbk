@@ -57,6 +57,16 @@
                      </span>
                 </header>
                 <div class="panel-body">
+                    <div class="clearfix">
+                        <div class="btn-group pull-right">
+                            <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">工 具 <i class="fa fa-angle-down"></i>
+                            </button>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a href="{:U('admin/send/export')}">导出Excel</a></li>
+
+                            </ul>
+                        </div>
+                    </div>
                     <div class="adv-table table-responsive">
                         <table  class="display table table-bordered" id="hidden-table-info">
                             <thead>
@@ -96,8 +106,8 @@
 <script  src="__ROOT__/Public/assets/data-tables/DT_bootstrap.js"></script><!-- DATATABLE JS -->
 <script src="__ROOT__/Public/js/common-scripts.js" ></script><!-- BASIC COMMON JS  -->
 <script >
-    $("#order_module").addClass("active");
-    $("#query_order").addClass("active");
+    $("#express_module").addClass("active");
+    $("#send_manage").addClass("active");
 
     /* DATATABLE MODIFICATION SCRIPT */
     /* Formating function for row details */
