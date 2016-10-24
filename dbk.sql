@@ -1,4 +1,13 @@
 
+#用户
+create table dbk_user(
+  user_id varchar(13) comment '用户id，使用手机进行注册',
+  openid varchar(100) comment '用户在微信上的id',
+  user_passwd varchar(50) comment '用户密码',
+  register_time time comment '注册时间',
+  constraint pk_dbk_user primary key(user_id)
+)default character set utf8;
+
 #学校
 create table dbk_school(
 	school_id int unsigned auto_increment comment '学校id',
@@ -71,10 +80,6 @@ as
         dbk_pickup.remarks, dbk_pickup.time, dbk_pickup.user_id
  from dbk_school, dbk_dormitory, dbk_pickup
  where dbk_school.school_id = dbk_dormitory.school_id and dbk_dormitory.dormitory_id = dbk_pickup.dormitory_id;
-
-
-
-
 
 #建立代寄件视图
 create view dbk_send_view

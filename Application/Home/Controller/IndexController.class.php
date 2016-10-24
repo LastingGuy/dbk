@@ -4,7 +4,11 @@ use Think\Controller;
 class IndexController extends Controller{
     public function index()
     {
-        $this->display();
+        $weixin_code = I("get.code");
+        $weixin_state = I("get.state");
+        $weixin_appid = I("get.appid");
+
+        var_dump(I("get."));
     }
 
     public function order()
