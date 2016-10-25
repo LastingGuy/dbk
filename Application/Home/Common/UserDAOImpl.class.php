@@ -48,7 +48,7 @@ class UserDAOImpl implements IUserDAO{
     //获取微信用户个人信息
     public function getUserInfo()
     {
-        if(!session('!weixin_user'))
+        if(!session('?weixin_user'))
         {
             return false;
         }
