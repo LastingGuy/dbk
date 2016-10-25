@@ -21,7 +21,7 @@ class IndexController extends Controller{
         //查看用户是否已经写入数据库，没有则写入
         $object = new Common\UserDAOImpl();
         $object->login($weixin_user['openid']);
-        $this->redirect('home/order/index');
+        $this->redirect('home/index/order');
     }
 
     public function order()
