@@ -26,7 +26,8 @@ class IndexController extends Controller{
 
     public function order()
     {
-        $this->display();
+        echo session('openid');
+        //$this->display();
     }
 
     #create the order of receiving mail
