@@ -6,12 +6,18 @@ class IndexController extends Controller{
     //登陆
     public function index()
     {
-
-        //查看用户是否已经写入数据库，没有则写入
-        $object = new Common\UserDAOImpl();
-        if($object->login())
+        if(IS_GET)
         {
-            $this->redirect('home/index/order');
+            //查看用户是否已经写入数据库，没有则写入
+            $object = new Common\UserDAOImpl();
+            if($object->login())
+            {
+                $this->redirect('home/index/order');
+            }
+            else
+            {
+                $this->error('请登录！');
+            }
         }
         else
         {
