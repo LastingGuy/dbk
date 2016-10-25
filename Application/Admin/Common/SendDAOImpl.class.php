@@ -19,7 +19,7 @@ class SendDAOImpl implements ISendDAO{
         $return_data['recordsFiltered'] = $model->count();
 
         //获取订单
-        $return_data['data'] = $model->where("school_id='$school'")->order("pickup_id")->limit($param['start'],$param['length'])->select();
+        $return_data['data'] = $model->where("school_id='$school'")->order("send_id")->limit($param['start'],$param['length'])->select();
 
         foreach($return_data['data'] as $key=>$value){
 
