@@ -23,6 +23,8 @@ class UsercenterController extends Controller
             $this->error('请登录！');
         }
     }
+
+    //用户中心主页
     public function usercenter()
     {
         $user = new Common\UserDAOImpl();
@@ -40,8 +42,62 @@ class UsercenterController extends Controller
         }
         else
         {
-            echo('请登录！');
+            $this->error('请登录！');
         }
+
+    }
+
+    //所有订单
+    public function allorder()
+    {
+        if(session('?weixin_user'))
+        {
+            // test
+            // $openid = 'oF6atwMLdDGJg_5NHyy0PBfeg0RU';
+            
+            $openid = session('weixin_user');
+
+            $orders = $this->getOrders($openid,0,0);
+            // print_r($orders);
+            $this->assign('count',count($orders));
+            $this->assign('recoder',$orders);
+            $this->display();
+        }
+        else
+        {
+            $this->error('请登录！');
+        }
+    }
+
+    ///获得订单
+    private function getOrders($openid,$type,$status)
+    {
+        //type: 0:代取快递订单 1：代寄快递
+        //status：0：all， 2：待收获 ，3：完成
+        if($type!=0 && $type!=1)
+        {
+             return false;
+        }
+        if($status!=0 && $status!=2 && $status!=3)
+        {
+            return false;
+        }
+
+        if($type==0)
+        {
+            $pickupModel = M('pickup');
+            if($status==0)
+            {
+                $datas = $pickupModel->where("openid='$openid'")->order('time desc')->select();
+                return $datas;
+            }
+            else
+            {
+                $datas = $pickupModel->where("openid='$openid' and express_status='$status'")->order('pickup_id desc')->select();
+                return $datas;
+            }
+        }
+
 
     }
 }
