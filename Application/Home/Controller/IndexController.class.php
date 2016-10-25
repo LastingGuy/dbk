@@ -27,7 +27,7 @@ class IndexController extends Controller{
     public function order()
     {
         echo 'test';
-        echo session('openid');
+        echo session('weixin_user');
         //$this->display();
     }
 
