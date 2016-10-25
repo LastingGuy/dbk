@@ -61,6 +61,7 @@ class UserDAOImpl implements IUserDAO{
             "&openid=".$openid.
             "&lang=zh_CN";
             $content = file_get_contents($url);
+            echo $content;
             if($info = json_decode($content,true))
             {
                 session('user_name',$info['nickname']);

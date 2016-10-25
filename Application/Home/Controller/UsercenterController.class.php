@@ -40,7 +40,7 @@ class UsercenterController extends Controller
         }
         else
         {
-            $this->error('请登录！');
+            echo('请登录！');
         }
 
     }
