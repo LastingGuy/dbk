@@ -13,7 +13,7 @@ class UserDAOImpl implements IUserDAO{
     public function login($openid){
 
         $model = D("weixin_user");
-        if($model->where("$openid = $openid")->find()){
+        if($model->where("openid = $openid")->find()){
             session("weixin_user",$openid);
         }
         else{
