@@ -58,7 +58,6 @@ class UsercenterController extends Controller
             $openid = session('weixin_user');
 
             $orders = $this->getOrders($openid,0,0);
-            // print_r($orders);
             $this->assign('count',count($orders));
             $this->assign('recoder',$orders);
             $this->display();
@@ -69,6 +68,50 @@ class UsercenterController extends Controller
         }
     }
 
+    //未完成订单
+    public function unfinishedorder()
+    {
+        if(session('?weixin_user'))
+        {
+            // test
+            // $openid = 'oF6atwMLdDGJg_5NHyy0PBfeg0RU';
+            
+            $openid = session('weixin_user');
+
+            $orders = $this->getOrders($openid,0,2);
+            $this->assign('count',count($orders));
+            $this->assign('recoder',$orders);
+            $this->display();
+        }
+        else
+        {
+            $this->error('请登录！');
+        }
+    }
+
+
+    //已完成订单
+    public function finishedorder()
+    {
+        if(session('?weixin_user'))
+        {
+            // test
+            // $openid = 'oF6atwMLdDGJg_5NHyy0PBfeg0RU';
+            
+            $openid = session('weixin_user');
+
+            $orders = $this->getOrders($openid,0,3);
+            $this->assign('count',count($orders));
+            $this->assign('recoder',$orders);
+            $this->display();
+        }
+        else
+        {
+            $this->error('请登录！');
+        }
+    }
+
+    
     ///获得订单
     private function getOrders($openid,$type,$status)
     {
