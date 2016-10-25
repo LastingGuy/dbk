@@ -20,7 +20,8 @@ class PickupModel extends Model
         array('dormitory_id','require','请填写正确的收货人地址'),
         array('express_sms','require','请输入快递公司短信'),
         array('express_code','require','请输入提取码'),
-        array('price','require','请输入价格')
+        array('price','require','请输入价格'),
+        array('openid','require','请登录！')
     );
 }
 

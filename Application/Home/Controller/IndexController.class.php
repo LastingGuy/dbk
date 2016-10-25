@@ -26,14 +26,19 @@ class IndexController extends Controller{
 
     public function order()
     {
-        echo 'test';
-        echo session('weixin_user');
-        //$this->display();
+        $this->display();
     }
 
     #create the order of receiving mail
     public function newRecvOrder()
 	{
+        //验证是否登陆
+        if(!session('?weixin_user'))
+        {
+            $this->ajaxReturn('请登录！')
+        }
+
+        
         if(IS_POST)
         {
             $data = I('post.');
@@ -61,6 +66,8 @@ class IndexController extends Controller{
             $data['express_company'] = $data['express'];
             $data['express_code'] = $data['fetch_code'];
             $data['time'] = date('Y-m-d H:i:s');
+            $data['openid'] = session('weixin_user');
+            $data['express_status'] = 2;
 
             $pickup = D('pickup');
             if($pickup->create($data))
@@ -77,10 +84,7 @@ class IndexController extends Controller{
             }
             else
             {
-                 
-                //  exit($pickup->getError());
                  $this->ajaxReturn($pickup->getError());
-                // echo 'wrong';
             }
 
         }
@@ -90,8 +94,16 @@ class IndexController extends Controller{
         }
     }
 
+    //创建代取快递订单
     public function newSendOrder()
     {
+        //验证是否登陆
+        if(!session('?weixin_user'))
+        {
+            $this->ajaxReturn('请登陆！')
+        }
+
+
         if(IS_POST)
         {
             $send = D('send');
@@ -100,11 +112,6 @@ class IndexController extends Controller{
             $school = $data['school'];
             $city = $data['city'];
             $address = $data['address'];
-            // $data['rename'] = '123';
-            // $data['tel'] = 123;
-            // $data['dor'] = 1;
-            // $data['delivery'] = 'gum';
-            // $data['remark'] = 'no';
 
             ///获得寝室id
             $DOR = D('DormitoryView'); //实例化寝室模型
@@ -125,6 +132,9 @@ class IndexController extends Controller{
             $data['dormitory_id'] = $data['dor'];
             $data['sender_goods'] = $data['delivery'];
             $data['time'] = date('Y-m-d H:i:s');
+            $data['openid'] = session('weixin_user');
+            $data['sender_status'] = 2;
+
             // var_dump($data);
             if($send->create($data))
             {
