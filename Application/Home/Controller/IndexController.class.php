@@ -22,7 +22,14 @@ class IndexController extends Controller{
     //订单界面
     public function order()
     {
-        $this->display();
+        if(!session('?weixin_user'))
+        {
+            $this->error('请登录！');
+        }
+        else
+        {
+            $this->display();
+        }
     }
 
     #create the order of receiving mail
