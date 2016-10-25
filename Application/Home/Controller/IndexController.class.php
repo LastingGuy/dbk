@@ -28,11 +28,11 @@ class IndexController extends Controller{
     //订单界面
     public function order()
     {
-        if(!session('?weixin_user'))
-        {
-            $this->error('请登录！');
-        }
-        else
+        // if(!session('?weixin_user'))
+        // {
+        //     $this->error('请登录！');
+        // }
+        // else
         {
             $this->display();
         }
