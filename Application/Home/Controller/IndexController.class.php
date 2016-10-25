@@ -35,7 +35,7 @@ class IndexController extends Controller{
         //验证是否登陆
         if(!session('?weixin_user'))
         {
-            $this->ajaxReturn('请登录！')
+            $this->ajaxReturn('请登录！');
         }
 
         
@@ -100,7 +100,7 @@ class IndexController extends Controller{
         //验证是否登陆
         if(!session('?weixin_user'))
         {
-            $this->ajaxReturn('请登陆！')
+            $this->ajaxReturn('请登陆！');
         }
 
 
