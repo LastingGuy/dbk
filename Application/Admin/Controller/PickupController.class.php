@@ -43,4 +43,14 @@ class PickupController extends Controller
         $object = new Common\PickupDAOImpl();
         $object->export();
     }
+
+    //修改订单状态
+    public function updateStatus(){
+        $pickup_id = I("get.pickup_id");
+
+        $object = new Common\PickupDAOImpl();
+        $data['result'] = $object->updateStatus($pickup_id);
+
+        $this->ajaxReturn($data);
+    }
 }

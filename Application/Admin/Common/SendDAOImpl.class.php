@@ -21,6 +21,12 @@ class SendDAOImpl implements ISendDAO{
         //获取订单
         $return_data['data'] = $model->where("school_id='$school'")->select();
         foreach($return_data['data'] as $key=>$value){
+            if($return_data['data'][$key]['sender_status'] == 2){
+                $return_data['data'][$key]['sender_status'] = "<div style='color:red'>进行中</div>";
+            }
+            else if($return_data['data'][$key]['sender_status'] == 3){
+                $return_data['data'][$key]['sender_status'] = "<div style='color:green'>已完成</div>";
+            }
             $return_data['data'][$key]['look'] = "<img src='".__ROOT__."/Public/assets/advanced-datatable/examples/examples_support/details_open.png'>";
         }
         return $return_data;

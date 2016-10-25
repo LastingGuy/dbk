@@ -22,7 +22,25 @@ class PickupDAOImpl implements IPickupDAO{
         //获取订单
         $return_data['data'] = $model->where("school_id='$school'")->select();
         foreach($return_data['data'] as $key=>$value){
+            if($return_data['data'][$key]['express_status'] == 2)
+            {
+                $return_data['data'][$key]['edit'] = "<a class=\"complete\" href=\"javascript:;\"><span class=\"label label-success\">完 成</span></a>";
+            }
+            elseif ($return_data['data'][$key]['express_status'] == 3)
+            {
+                $return_data['data'][$key]['edit'] = "<a class=\"complete\" href=\"javascript:;return false;\" ><span class=\"label label-default\">完 成</span></a>";
+            }
+
+            if($return_data['data'][$key]['express_status'] == 2){
+                $return_data['data'][$key]['express_status'] = "<div style='color:red'>进行中</div>";
+            }
+            else if($return_data['data'][$key]['express_status'] == 3){
+                $return_data['data'][$key]['express_status'] = "<div style='color:lightseagreen'>已完成</div>";
+            }
             $return_data['data'][$key]['look'] = "<img src='".__ROOT__."/Public/assets/advanced-datatable/examples/examples_support/details_open.png'>";
+
+
+
         }
         return $return_data;
     }
@@ -77,5 +95,15 @@ class PickupDAOImpl implements IPickupDAO{
         header("Content-Type:text/xml");
         header("Content-Disposition:attachment;filename='data.xls'");
         $write->save('php://output');
+    }
+
+    //更新订单状态
+    public function updateStatus($pickup_id){
+        $model = M("pickup");
+        $data['pickup_id'] = $pickup_id;
+        $data['express_status'] = 3;
+        $model->save($data);
+        return 1;
+
     }
 }

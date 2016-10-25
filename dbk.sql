@@ -3,8 +3,8 @@
 create table dbk_weixin_user(
   openid varchar(100) comment '用户在微信上的id',
   nickname varchar(100) comment '用户昵称',
-  headimgurl varchar comment '用户头像url',
-  register_time time comment '注册时间',
+  headimgurl varchar(300) comment '用户头像url',
+  register_time datetime comment '注册时间',
   constraint pk_dbk_user primary key(openid)
 )default character set utf8;
 
@@ -38,7 +38,7 @@ create table dbk_admin(
 #代取件表
 create table dbk_pickup(
 	pickup_id int not null auto_increment comment '订单id',
-    user_id int comment '用户id',
+    openid varchar(100) comment '用户id',
     receiver_name varchar(10) comment '收件人姓名',
     receiver_phone varchar(12) comment '收件人手机号码',
     dormitory_id int unsigned comment '寝室id',
@@ -51,13 +51,14 @@ create table dbk_pickup(
 	`time`  datetime not null comment '下单时间',
 	express_status tinyint not null comment ' 0：等待接单  1：已接单  2：正在配送 3:已完成',
 	constraint pk_dbk_pickup primary key(pickup_id),
-    constraint fk_dbk_dormitory_pickup foreign key(dormitory_id) references dbk_dormitory(dormitory_id)
+    constraint fk_dbk_dormitory_pickup foreign key(dormitory_id) references dbk_dormitory(dormitory_id),
+    constraint fk_dbk_openid_pickup foreign key(openid) references dbk_weixin_user(openid)
 )  default character set utf8 ;
 
 #代寄件
 create table dbk_send(
 	send_id int not null auto_increment comment '订单id',
-	user_id int comment '用户id',
+	openid varchar(100) comment '用户id',
     sender_name varchar(10) comment '寄件人姓名',
     sender_phone varchar(12) comment '寄件人手机号码',
     dormitory_id int unsigned comment '寝室id',
@@ -66,7 +67,8 @@ create table dbk_send(
     `time` datetime  not null comment '下单时间',
     sender_status tinyint not null comment '寄件状态  0:未接单 1:已接单 2：正在寄件 3：完成寄件' ,
     constraint pk_dbk_send primary key(send_id),
-    constraint  fk_dbk_dormitory_send foreign key(dormitory_id) references dbk_dormitory(dormitory_id)
+    constraint  fk_dbk_dormitory_send foreign key(dormitory_id) references dbk_dormitory(dormitory_id),
+    constraint fk_dbk_openid_send foreign key(openid) references dbk_weixin_user(openid)
 )  default character set utf8;
 
 #建立代收件视图
@@ -77,7 +79,7 @@ as
         dbk_pickup.dormitory_id, dbk_pickup.express_code, dbk_pickup.express_company,
         dbk_pickup.express_sms, dbk_pickup.express_status, dbk_pickup.express_type,
         dbk_pickup.pickup_id, dbk_pickup.price, dbk_pickup.receiver_name, dbk_pickup.receiver_phone,
-        dbk_pickup.remarks, dbk_pickup.time, dbk_pickup.user_id
+        dbk_pickup.remarks, dbk_pickup.time, dbk_pickup.openid
  from dbk_school, dbk_dormitory, dbk_pickup
  where dbk_school.school_id = dbk_dormitory.school_id and dbk_dormitory.dormitory_id = dbk_pickup.dormitory_id;
 
@@ -88,7 +90,7 @@ as
 		    dbk_dormitory.dormitory_address,
         dbk_send.dormitory_id, dbk_send.sender_goods, dbk_send.sender_status,
         dbk_send.send_id, dbk_send.sender_name, dbk_send.sender_phone,
-        dbk_send.remarks, dbk_send.time, dbk_send.user_id
+        dbk_send.remarks, dbk_send.time, dbk_send.openid
  from dbk_school, dbk_dormitory, dbk_send
  where dbk_school.school_id = dbk_dormitory.school_id and dbk_dormitory.dormitory_id = dbk_send.dormitory_id;
 
