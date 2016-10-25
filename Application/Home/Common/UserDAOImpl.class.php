@@ -18,6 +18,7 @@ class UserDAOImpl implements IUserDAO{
         }
         else{
             $data['openid'] = $openid;
+            $data['register_time'] = date("Y-m-d H:i:s");
             if($model->data($data)->add()){
                 session("weixin_user",$openid);
             }

@@ -16,7 +16,7 @@ class IndexController extends Controller{
         "grant_type=authorization_code";
         $content = file_get_contents($weixin_token_url);
 
-        $weixin_user = json_decode($content);
+        $weixin_user = json_decode($content,true);
 
         //查看用户是否已经写入数据库，没有则写入
         $object = new Common\UserDAOImpl();
