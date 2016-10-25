@@ -19,7 +19,7 @@ class SendController extends Controller
     }
 
     //获取代寄件订单
-    public function  get(){
+    public function  getdata(){
         if(!session("?admin_id")) {
             header('Location:'.U("Admin/Index/index"));
         }
