@@ -1,6 +1,7 @@
 <?php
 namespace Home\Controller;
 use Think\Controller;
+use Home\Common;
 class OrderController extends Controller{
     public function index(){
         $this->display();

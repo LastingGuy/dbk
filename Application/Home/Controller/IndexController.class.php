@@ -1,6 +1,7 @@
 <?php
 namespace Home\Controller;
 use Think\Controller;
+use Home\Common;
 class IndexController extends Controller{
     public function index()
     {
@@ -14,6 +15,13 @@ class IndexController extends Controller{
         "code=$weixin_code&".
         "grant_type=authorization_code";
         $content = file_get_contents($weixin_token_url);
+
+        $weixin_user = json_decode($content);
+
+        //查看用户是否已经写入数据库，没有则写入
+        $object = new Common\UserDAOImpl();
+        $object->login($weixin_user['openid']);
+        $this->redirect('home/order/index');
     }
 
     public function order()

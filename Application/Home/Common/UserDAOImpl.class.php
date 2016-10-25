@@ -10,8 +10,18 @@ namespace Home\Common;
 class UserDAOImpl implements IUserDAO{
 
     //用户登录验证
-    public function login($user_id,$user_passwd,$openid){
-        
+    public function login($openid){
+
+        $model = D("weixin_user");
+        if($model->where("$openid = $openid")->find()){
+            session("weixin_user",$openid);
+        }
+        else{
+            $data['openid'] = $openid;
+            if($model->data($data)->add()){
+                session("weixin_user",$openid);
+            }
+        }
     }
 
     public function weixinLogin(){

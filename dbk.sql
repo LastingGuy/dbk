@@ -1,11 +1,11 @@
 
 #用户
-create table dbk_user(
-  user_id varchar(13) comment '用户id，使用手机进行注册',
+create table dbk_weixin_user(
   openid varchar(100) comment '用户在微信上的id',
-  user_passwd varchar(50) comment '用户密码',
+  nickname varchar(100) comment '用户昵称',
+  headimgurl varchar comment '用户头像url',
   register_time time comment '注册时间',
-  constraint pk_dbk_user primary key(user_id)
+  constraint pk_dbk_user primary key(openid)
 )default character set utf8;
 
 #学校
