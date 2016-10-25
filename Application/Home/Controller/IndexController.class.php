@@ -26,6 +26,7 @@ class IndexController extends Controller{
 
     public function order()
     {
+        echo 'test';
         echo session('openid');
         //$this->display();
     }
