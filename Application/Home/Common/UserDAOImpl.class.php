@@ -10,7 +10,7 @@ namespace Home\Common;
 class UserDAOImpl implements IUserDAO{
 
     //用户登录验证
-    public function login($openid)
+    public function login()
     {
 
         $weixin_code = I("get.code");
@@ -24,6 +24,7 @@ class UserDAOImpl implements IUserDAO{
         $weixin_user = json_decode($content,true);
         if($weixin_user != null)
         {
+            $openid = $weixin_user['openid'];
             session('access_token',$weixin_user['access_token']);
             $model = D("weixin_user");
             if($model->where("openid = '$openid'")->find()){
