@@ -6,7 +6,7 @@ class IndexController extends Controller{
     //登陆
     public function index()
     {
-        if(IS_GET)
+        if(I("get.code")!='')
         {
             //查看用户是否已经写入数据库，没有则写入
             $object = new Common\UserDAOImpl();
@@ -28,11 +28,11 @@ class IndexController extends Controller{
     //订单界面
     public function order()
     {
-        // if(!session('?weixin_user'))
-        // {
-        //     $this->error('请登录！');
-        // }
-        // else
+        if(!session('?weixin_user'))
+        {
+            $this->error('请登录！');
+        }
+        else
         {
             $this->display();
         }
