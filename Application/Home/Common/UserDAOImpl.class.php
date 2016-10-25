@@ -54,7 +54,7 @@ class UserDAOImpl implements IUserDAO{
         }
         else
         {
-            $openid = session('!weixin_user');
+            $openid = session('weixin_user');
             $access_token = session('access_token');
 
             $url = "https://api.weixin.qq.com/sns/userinfo?access_token=".$access_token.
