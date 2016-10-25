@@ -28,7 +28,7 @@ class PickupDAOImpl implements IPickupDAO{
             }
             elseif ($return_data['data'][$key]['express_status'] == 3)
             {
-                $return_data['data'][$key]['edit'] = "<a class=\"complete\" href=\"javascript:;return false;\" ><span class=\"label label-default\">完 成</span></a>";
+                $return_data['data'][$key]['edit'] = "<a><span class=\"label label-default\">完 成</span></a>";
             }
 
             if($return_data['data'][$key]['express_status'] == 2){

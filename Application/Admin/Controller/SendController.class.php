@@ -41,4 +41,14 @@ class SendController extends Controller
         $object = new Common\SendDAOImpl();
         $object->export();
     }
+
+    //修改订单状态
+    public function updateStatus(){
+        $send_id = I("get.send_id");
+
+        $object = new Common\SendDAOImpl();
+        $data['result'] = $object->updateStatus($send_id);
+
+        $this->ajaxReturn($data);
+    }
 }

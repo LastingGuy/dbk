@@ -137,6 +137,7 @@
             autoWidth: false,
             //open server side
             serverSide: true,
+            stateSave: true,
             "ajax": {
                 "url": "{:U('admin/pickup/get')}"
             },
@@ -202,7 +203,7 @@
                     function (data) {
                         if (data['result'] == 1) {
                             jqInputs [9] = "<div style='color:green'>已完成</div>";
-                            jqInputs [10] = "<a class=\"complete\" href=\"javascript:;return false;\" ><span class=\"label label-default\">完 成</span></a>";
+                            jqInputs [10] = "<a><span class=\"label label-default\">完 成</span></a>";
 
                             oTable.fnUpdate(jqInputs[9].value, nRow, 9, false);
                             oTable.fnUpdate(jqInputs[10].value, nRow, 10, false);
