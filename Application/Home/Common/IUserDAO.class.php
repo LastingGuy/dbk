@@ -10,4 +10,5 @@ namespace Home\Common;
 interface IUserDAO{
     //用户登录验证，微信登录
     public function login($openid);
+    public function getUserInfo();
 }

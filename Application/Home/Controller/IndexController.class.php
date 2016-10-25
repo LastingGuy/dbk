@@ -3,27 +3,23 @@ namespace Home\Controller;
 use Think\Controller;
 use Home\Common;
 class IndexController extends Controller{
+    //登陆
     public function index()
     {
-        $weixin_code = I("get.code");
-        $weixin_state = I("get.state");
-        $weixin_appid = I("get.appid");
-
-        $weixin_token_url = "https://api.weixin.qq.com/sns/oauth2/access_token?".
-        "appid=wx9b82294bfe34589e&".
-        "secret=20af5faa385f8bce23e8920dfbbb545b&".
-        "code=$weixin_code&".
-        "grant_type=authorization_code";
-        $content = file_get_contents($weixin_token_url);
-
-        $weixin_user = json_decode($content,true);
 
         //查看用户是否已经写入数据库，没有则写入
         $object = new Common\UserDAOImpl();
-        $object->login($weixin_user['openid']);
-        $this->redirect('home/index/order');
+        if($object->login())
+        {
+            $this->redirect('home/index/order');
+        }
+        else
+        {
+            $this->error('请登录！');
+        }
     }
 
+    //订单界面
     public function order()
     {
         $this->display();

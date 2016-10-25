@@ -345,7 +345,7 @@ a:hover{
   padding-bottom: 100%;
   overflow: hidden;
 
-  background:white url(../images/123.png) no-repeat;
+  background:white url(../img/123.png) no-repeat;
   background-size: 100%;
   border-radius: 50%;
 }
