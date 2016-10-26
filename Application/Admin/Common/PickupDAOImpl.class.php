@@ -64,12 +64,12 @@ class PickupDAOImpl implements IPickupDAO{
         $model = D('pickup_view');
 
         $tomorrow = mktime(0,0,0,date("m"),date("d")-1,date("Y"));
-        $today_begin = date("Y-m-d", $tomorrow)." 17:00;00";
+        $today_begin = date("Y-m-d", $tomorrow)." 16:30;00";
 
         $date = date('Y-m-d');
-        $today_end = $date." 17:00:00";
+        $today_end = $date." 16:30:00";
         
-        $data = $model->where("school_id='$school' and time<='$today_end' and time>='$today_begin'")->getField("pickup_id,receiver_name,receiver_phone,express_company,express_type,
+        $data = $model->where("school_id='$school' and time<='$today_end' and time>'$today_begin'")->getField("pickup_id,receiver_name,receiver_phone,express_company,express_type,
             price,dormitory_address,express_sms,express_code,remarks,time,express_status",true);
 
         //填充表格信息
