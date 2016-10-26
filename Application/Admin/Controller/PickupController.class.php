@@ -40,12 +40,21 @@ class PickupController extends Controller
     //导出数据
     public function export()
     {
+        if(!session("?admin_id")) {
+            header('Location:'.U("Admin/Index/index"));
+        }
+
         $object = new Common\PickupDAOImpl();
         $object->export();
     }
 
     //根据自定义时间导出数据
     public function exportUserDefined(){
+
+        if(!session("?admin_id")) {
+            header('Location:'.U("Admin/Index/index"));
+        }
+
         $begin_time = I('get.begin_time');
         $end_time = I('get.end_time');
 
@@ -55,6 +64,10 @@ class PickupController extends Controller
     
     //修改订单状态
     public function updateStatus(){
+        if(!session("?admin_id")) {
+            header('Location:'.U("Admin/Index/index"));
+        }
+        
         $pickup_id = I("get.pickup_id");
 
         $object = new Common\PickupDAOImpl();

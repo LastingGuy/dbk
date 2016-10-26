@@ -20,6 +20,7 @@ class SendController extends Controller
 
     //获取代寄件订单
     public function  getdata(){
+
         if(!session("?admin_id")) {
             header('Location:'.U("Admin/Index/index"));
         }
@@ -38,12 +39,19 @@ class SendController extends Controller
     //导出数据
     public function export()
     {
+        if(!session("?admin_id")) {
+            header('Location:'.U("Admin/Index/index"));
+        }
         $object = new Common\SendDAOImpl();
         $object->export();
     }
 
     //根据自定义时间导出数据
     public function exportUserDefined(){
+        if(!session("?admin_id")) {
+            header('Location:'.U("Admin/Index/index"));
+        }
+
         $begin_time = I('get.begin_time');
         $end_time = I('get.end_time');
 
@@ -53,6 +61,10 @@ class SendController extends Controller
 
     //修改订单状态
     public function updateStatus(){
+        if(!session("?admin_id")) {
+            header('Location:'.U("Admin/Index/index"));
+        }
+
         $send_id = I("get.send_id");
 
         $object = new Common\SendDAOImpl();
