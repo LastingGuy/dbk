@@ -16,8 +16,8 @@ class PickupDAOImpl implements IPickupDAO{
         $model = M('pickup_view');
 
         $return_data['draw'] = $param["draw"];
-        $return_data['recordsTotal'] = $model->count();
-        $return_data['recordsFiltered'] = $model->count();
+        $return_data['recordsTotal'] = $model->where("school_id='$school'")->count();
+        $return_data['recordsFiltered'] = $return_data['recordsTotal'];
 
         //获取订单
         $return_data['data'] = $model->where("school_id='$school'")->order("pickup_id")->limit($param['start'],$param['length'])->select();
