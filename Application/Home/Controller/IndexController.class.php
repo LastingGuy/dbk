@@ -28,11 +28,11 @@ class IndexController extends Controller{
     //订单界面
     public function order()
     {
-        // if(!session('?weixin_user'))
-        // {
-        //     $this->error('请登录！');
-        // }
-        // else
+        if(!session('?weixin_user'))
+        {
+            $this->error('请登录！');
+        }
+        else
         {
             $this->display();
         }
@@ -70,6 +70,10 @@ class IndexController extends Controller{
 
             //写入数据库
             $data['receiver_name'] = $data['rename'];
+            if(!$this->isMobile($data['tel']))
+            {
+                $this->ajaxReturn('请填写正确的手机号！');
+            }
             $data['receiver_phone'] = $data['tel'];
             $data['dormitory_id'] = $data['dor'];
             $data['express_company'] = $data['express'];
@@ -137,6 +141,10 @@ class IndexController extends Controller{
 
             ///写入数据库
             $data['sender_name'] = $data['rename'];
+            if(!$this->isMobile($data['tel']))
+            {
+                $this->ajaxReturn('请填写正确的手机号！');
+            }
             $data['sender_phone'] = $data['tel'];
             $data['dormitory_id'] = $data['dor'];
             $data['sender_goods'] = $data['delivery'];
@@ -165,6 +173,17 @@ class IndexController extends Controller{
         {
            print('提交失败！');
         }
+    }
+
+
+    //判断是否为手机号码
+    private function isMobile($mobile) 
+    {
+        if (!is_numeric($mobile)) 
+        {
+            return false;
+        }
+        return preg_match('#^13[\d]{9}$|^14[5,7]{1}\d{8}$|^15[^4]{1}\d{8}$|^17[0,6,7,8]{1}\d{8}$|^18[\d]{9}$#', $mobile) ? true : false;
     }
 
 }
