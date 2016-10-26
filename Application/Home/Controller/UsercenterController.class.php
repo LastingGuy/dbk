@@ -12,7 +12,7 @@ class UsercenterController extends Controller
 {
     public function index()
     {
-               //查看用户是否已经写入数据库，没有则写入
+        //查看用户是否已经写入数据库，没有则写入
         $object = new Common\UserDAOImpl();
         if($object->login())
         {
