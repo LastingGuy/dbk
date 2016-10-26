@@ -12,6 +12,11 @@ class UsercenterController extends Controller
 {
     public function index()
     {
+        // test
+        // $openid = 'oF6atwNyAc4wlpgNVWTdQi4kj7Po';
+        // session('weixin_user',$openid);
+
+
         //查看用户是否已经写入数据库，没有则写入
         $object = new Common\UserDAOImpl();
         if($object->login())
@@ -54,7 +59,7 @@ class UsercenterController extends Controller
         {
             // test
             // $openid = 'oF6atwMLdDGJg_5NHyy0PBfeg0RU';
-            
+            // session('weixin_user',$openid);
             $openid = session('weixin_user');
 
             $orders = $this->getOrders($openid,0,0);
@@ -109,6 +114,50 @@ class UsercenterController extends Controller
         {
             $this->error('请登录！');
         }
+    }
+
+    //获得订单详情
+    public function orderdetail()
+    {
+        if(session('?weixin_user'))
+        {
+            $type = I('get.type');
+            $id = I('get.id');
+            $page = I('get.page');
+            $openid = session('weixin_user');
+            C("READ_DATA_MAP",true); //启用模板映射
+            $data = array();
+            switch($type)
+            {
+                ///type 为1查询代取快递订单 2查询待寄快递订单
+                case 0:
+                    $model = D('orderdetail');
+                    $data = $model->where("pickup_id='$id' and openid='$openid'")->select();
+                    break;
+                case 1:
+                    $model = D('sendView');
+                    $data = $model->where("send_id='$id' and openid='$openid'")->select();
+                    break;
+                default:
+                    $this->error('无效订单');
+            }
+            if(count($data)==0)
+            {
+                 $this->error('无效订单');
+            }
+            else
+            {
+                // print_r($data);
+                $this->assign('page',$page);
+                $this->assign('data',$data[0]);
+                $this->display();
+            }
+        }
+        else
+        {
+            $this->error('请登录！');
+        }
+        
     }
 
     
