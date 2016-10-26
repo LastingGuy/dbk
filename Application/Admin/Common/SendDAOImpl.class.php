@@ -15,8 +15,8 @@ class SendDAOImpl implements ISendDAO{
         $model = M('send_view');
 
         $return_data['draw'] = $param["draw"];
-        $return_data['recordsTotal'] = $model->count();
-        $return_data['recordsFiltered'] = $model->count();
+        $return_data['recordsTotal'] = $model->where("school_id='$school'")->count();
+        $return_data['recordsFiltered'] = $return_data['recordsTotal'];
 
         //获取订单
         $return_data['data'] = $model->where("school_id='$school'")->order("send_id")->limit($param['start'],$param['length'])->select();
@@ -82,13 +82,44 @@ class SendDAOImpl implements ISendDAO{
             }
             $i++;
         }
-        /* for ($i = 2;$i <= count($data) + 1;$i++) {
-              $j = 0;
-              foreach ($data[$i - 2] as $key=>$value) {
-                  $excel->getActiveSheet()->setCellValue("$letter[$j]$i","$value");
-                  $j++;
-              }
-          }*/
+
+        $write = new \PHPExcel_Writer_Excel5($excel);
+        header("Content-Type:text/xml");
+        header("Content-Disposition:attachment;filename='data.xls'");
+        $write->save('php://output');
+    }
+
+    //根据自定义时间下载
+    public function exportUserDefined($begin, $end){
+
+        $school = session("admin_school");
+
+        $excel = new \PHPExcel();
+        //Excel表格式,这里简略写了8列
+        $letter = array('A','B','C','D','E','F','G','H');
+        //表头数组
+        $tableheader = array('订单号','姓名','手机号码','寝室','寄件物品','备注','下单时间','状态');
+        //填充表头信息
+        for($i = 0;$i < count($tableheader);$i++) {
+            $excel->getActiveSheet()->setCellValue("$letter[$i]1","$tableheader[$i]");
+        }
+        //表格数组
+        $model = D('send_view');
+
+        $data = $model->where("school_id='$school' and time<='$end' and time>'$begin'")->getField("send_id,sender_name,sender_phone,dormitory_address,sender_goods,
+            remarks,time,sender_status",true);
+
+        //填充表格信息
+        $i = 2;
+        foreach($data as $key => $value){
+            $j = 0;
+
+            foreach ($value as $key2=>$value2){
+                $excel->getActiveSheet()->setCellValue("$letter[$j]$i","$value2");
+                $j++;
+            }
+            $i++;
+        }
 
         $write = new \PHPExcel_Writer_Excel5($excel);
         header("Content-Type:text/xml");

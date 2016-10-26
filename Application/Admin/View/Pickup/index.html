@@ -19,9 +19,8 @@
     <link href="__ROOT__/Public/css/bootstrap.min.css" rel="stylesheet"><!-- BOOTSTRAP CSS -->
     <link href="__ROOT__/Public/css/bootstrap-reset.css" rel="stylesheet"><!-- BOOTSTRAP CSS -->
     <link href="__ROOT__/Public/assets/font-awesome/css/font-awesome.css" rel="stylesheet"><!-- FONT AWESOME ICON CSS -->
-    <link href="__ROOT__/Public/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet"><!-- BOOTSTRAP ADVANCE DATATABLE  CSS -->
     <link href="__ROOT__/Public/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet"><!-- BOOTSTRAP ADVANCE DATATABLE CSS -->
-    <link rel="stylesheet" href="__ROOT__/Public/assets/data-tables/DT_bootstrap.css"><!-- BOOTSTRAP DATATABLE CSS -->
+    <link rel="stylesheet" type="text/css" href="__ROOT__/Public/assets/bootstrap-datetimepicker/css/datetimepicker.css"><!-- DATETIMEPICKER PLUGIN CSS -->
     <link href="__ROOT__/Public/css/style.css" rel="stylesheet"><!-- THEME BASIC CSS -->
     <link href="__ROOT__/Public/css/style-responsive.css" rel="stylesheet"><!-- THEME RESPONSIVE CSS -->
     <!--[if lt IE 9]>
@@ -61,8 +60,9 @@
                             <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">工 具 <i class="fa fa-angle-down"></i>
                             </button>
                             <ul class="dropdown-menu pull-right">
-                                <li><a href="{:U('admin/pickup/export')}">导出Excel</a></li>
-
+                                <li><a href="{:U('admin/pickup/export')}">今日配送Excel</a></li>
+                                <li><a href="javascript:;" data-toggle="modal"
+                                       data-target="#myModal">自定义Excel</a></li>
                             </ul>
                         </div>
                     </div>
@@ -97,6 +97,67 @@
     <!-- END FOOTER -->
 </section>
 <!-- END SECTION -->
+<!-- 模态框（Modal）-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    选择日期
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form action="#" class="form-horizontal tasi-form">
+                    <div class="form-group">
+                    <label class="control-label col-md-3">
+                        &nbsp;&nbsp;开 始 时 间
+                    </label>
+                    <div class="col-md-6 col-xs-11">
+                        <div class="input-group date dtp" >
+                            <input id="begin_time" type="text" class="form-control" readonly="" size="16">
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-info date-set">
+                              <i class="fa fa-calendar">
+                              </i>
+                            </button>
+                          </span>
+                        </div>
+                    </div>
+                </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3">
+                            &nbsp;&nbsp;截 止 时 间
+                    </label>
+                    <div class="col-md-6 col-xs-11">
+                        <div class="input-group date dtp" >
+                            <input id="end_time" type="text" class="form-control" readonly="" size="16">
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-info date-set">
+                              <i class="fa fa-calendar">
+                              </i>
+                            </button>
+                          </span>
+                        </div>
+                    </div>
+                </div>
+                </form>
+             </div>
+            <div class="modal-footer">
+                <button id="close" type="button" class="btn btn-default"
+                        data-dismiss="modal">关 闭
+                </button>
+                <button type="button" class="btn btn-primary" onclick="exportUserDefined()">
+                    提 交
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 
 <!-- BEGIN JS -->
 <script language="javascript" src="__ROOT__/Public/assets/advanced-datatable/media/js/jquery.js"></script><!-- ADVANCE DATATABLE JS -->
@@ -106,8 +167,12 @@
 <script src="__ROOT__/Public/js/jquery.nicescroll.js" ></script><!-- NICESCROLL JS -->
 <script src="__ROOT__/Public/js/respond.min.js" ></script><!-- RESPOND JS -->
 <script language="javascript" src="__ROOT__/Public/assets/advanced-datatable/media/js/jquery.dataTables.js"></script><!-- ADVANCE DATATABLE JS -->
-<script  src="__ROOT__/Public/assets/data-tables/DT_bootstrap.js"></script><!-- DATATABLE JS -->
+<script  src="__ROOT__/Public/assets/data-tables/dataTables.bootstrap.min.js"></script><!-- DATATABLE JS -->
+<script src="__ROOT__/Public/assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script><!-- BOOTSTRAP DATETIMEPICKER JS  -->
+<script src="__ROOT__/Public/assets/bootstrap-datetimepicker/js/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 <script src="__ROOT__/Public/js/common-scripts.js" ></script><!-- BASIC COMMON JS  -->
+
+
 <script >
     $("#express_module").addClass("active");
     $("#pickup_manage").addClass("active");
@@ -134,6 +199,8 @@
          * Initialse DataTables, with no sorting on the 'details' column
          */
         var oTable = $('#hidden-table-info').dataTable({
+            paging: true,//分页
+            "pagingType": "simple_numbers",
             autoWidth: false,
             //open server side
             serverSide: true,
@@ -169,7 +236,7 @@
                     "sNext": "下一页",
                     "sLast": "末页"
                 }
-            }
+            },
         });
 
 
@@ -177,7 +244,7 @@
          * Note that the indicator for showing whi ch row is open is not controlled by DataTables,
          * rather it is done here
          */
-        $('#hidden-table-info tbody td img').live('click', function (e) {
+        $('#hidden-table-info tbody td img').on('click', function (e) {
             var nTr = $(this).parents('tr')[0];
             if (oTable.fnIsOpen(nTr)) {
                 /* This row is already open - close it */
@@ -191,7 +258,7 @@
             }
         });
 
-        $('#hidden-table-info a.complete').live('click', function (e) {
+        $('#hidden-table-info a.complete').on('click', function (e) {
             e.preventDefault();
             var nRow = $(this).parents('tr')[0];
             var jqInputs = $('td', nRow);
@@ -214,7 +281,31 @@
         });
     });
 
+    if (top.location != location) {
+        top.location.href = document.location.href;
+    }
+    $(function () {
+        window.prettyPrint && prettyPrint();
 
+        $('.dtp').datetimepicker({
+            language: "zh-CN",
+            format: "yyyy-mm-dd hh:ii",
+            startView: "month",
+            minView: "hour",
+            maxView: "decade",
+            todayHighlight: true,
+            autoclose: true,
+            minuteStep:30
+        });
+
+    });
+
+    function exportUserDefined(){
+        $begin_time = $('#begin_time').val();
+        $end_time = $('#end_time').val();
+
+        window.open("{:U('admin/pickup/exportUserDefined')}"+"?begin_time="+$begin_time+"&end_time="+$end_time);
+    }
 </script>
 <!-- END JS -->
 </body>

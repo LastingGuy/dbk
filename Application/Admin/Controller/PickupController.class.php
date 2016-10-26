@@ -44,6 +44,15 @@ class PickupController extends Controller
         $object->export();
     }
 
+    //根据自定义时间导出数据
+    public function exportUserDefined(){
+        $begin_time = I('get.begin_time');
+        $end_time = I('get.end_time');
+
+        $object = new Common\PickupDAOImpl();
+        $object->exportUserDefined($begin_time,$end_time);
+    }
+    
     //修改订单状态
     public function updateStatus(){
         $pickup_id = I("get.pickup_id");

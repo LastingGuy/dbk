@@ -42,6 +42,15 @@ class SendController extends Controller
         $object->export();
     }
 
+    //根据自定义时间导出数据
+    public function exportUserDefined(){
+        $begin_time = I('get.begin_time');
+        $end_time = I('get.end_time');
+
+        $object = new Common\SendDAOImpl();
+        $object->exportUserDefined($begin_time,$end_time);
+    }
+
     //修改订单状态
     public function updateStatus(){
         $send_id = I("get.send_id");
