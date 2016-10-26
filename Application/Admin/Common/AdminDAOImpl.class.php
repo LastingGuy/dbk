@@ -23,9 +23,8 @@ class AdminDAOImpl implements IAdminDAO{
     //增加权限
     public  function  addSession($user_id){
         $model = D("admin");
-        $condition['user_id'] = $user_id;
+        $condition['admin_id'] = $user_id;
         $school = $model->where($condition)->getField('admin_school');
-
         //获取学校名称
         $model = D("school");
         $school_name = $model->where("school_id='$school'")->getField('school_name');
