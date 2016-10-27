@@ -51,9 +51,9 @@ class SendDAOImpl implements ISendDAO{
 
         $excel = new \PHPExcel();
         //Excel表格式,这里简略写了8列
-        $letter = array('A','B','C','D','E','F','G','H');
+        $letter = array('A','B','C','D','E','F','G','H','I');
         //表头数组
-        $tableheader = array('订单号','姓名','手机号码','寝室','寄件物品','备注','下单时间','状态');
+        $tableheader = array('订单号','姓名','手机号码','寝室','寄件物品','寄件地址','备注','下单时间','状态');
         //填充表头信息
         for($i = 0;$i < count($tableheader);$i++) {
             $excel->getActiveSheet()->setCellValue("$letter[$i]1","$tableheader[$i]");
@@ -69,7 +69,7 @@ class SendDAOImpl implements ISendDAO{
         $today_end = $date." 16:00:00";
         
         $data = $model->where("school_id='$school' and time<='$today_end' and time>'$today_begin'")->getField("send_id,sender_name,sender_phone,dormitory_address,sender_goods,
-            remarks,time,sender_status",true);
+            destination,remarks,time,sender_status",true);
 
         //填充表格信息
         $i = 2;
@@ -84,8 +84,8 @@ class SendDAOImpl implements ISendDAO{
         }
 
         $write = new \PHPExcel_Writer_Excel5($excel);
-        header("Content-Type:text/xml");
-        header("Content-Disposition:attachment;filename='data.xls'");
+        header("Content-Type:text/xls");
+        header("Content-Disposition:attachment;filename=data.xls");
         $write->save('php://output');
     }
 

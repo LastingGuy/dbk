@@ -90,7 +90,7 @@ as
 		    dbk_dormitory.dormitory_address,
         dbk_send.dormitory_id, dbk_send.sender_goods, dbk_send.sender_status,
         dbk_send.send_id, dbk_send.sender_name, dbk_send.sender_phone,
-        dbk_send.remarks, dbk_send.time, dbk_send.openid
+        dbk_send.remarks, dbk_send.time, dbk_send.openid, dbk_send.destination
  from dbk_school, dbk_dormitory, dbk_send
  where dbk_school.school_id = dbk_dormitory.school_id and dbk_dormitory.dormitory_id = dbk_send.dormitory_id;
 

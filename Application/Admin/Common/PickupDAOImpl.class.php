@@ -84,8 +84,8 @@ class PickupDAOImpl implements IPickupDAO{
         }
 
         $write = new \PHPExcel_Writer_Excel5($excel);
-        header("Content-Type:text/xml");
-        header("Content-Disposition:attachment;filename='data.xls'");
+        header("Content-Type:text/xls");
+        header("Content-Disposition:attachment;filename=data.xls");
         $write->save('php://output');
     }
 
