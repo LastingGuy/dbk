@@ -165,12 +165,14 @@
                         <td><textarea name="remarks" id="remarks"></textarea> </td>
                     </tr>
                 </table>
-                <input type="submit" value="提交信息" id="Pickup" onclick="sendpickuporder(); return false;">
+                <input type="submit" value="提交信息" id="Pickupbtn" onclick="sendpickuporder(); return false;">
             </form>
         </div><!-- menuSelect -->
 <script>
     function sendpickuporder()
     {
+        $("#Pickupbtn").attr('disabled','disabled');
+
         var city = $("#secArea").val();
         var school = $("#secSchool").val();
         var rename = $("#rename").val();
@@ -246,7 +248,7 @@
         
         $.post("{:U('index/newRecvOrder')}",
         {
-            'city':city,'school':school,'rename':rename,
+        'city':city,'school':school,'rename':rename,
         'tel':telephone,'address':dbuild,
         'express':express,'express_type':express_type,
         'price':price,'express_sms':express_sms,
@@ -257,11 +259,14 @@
                 alert(t);
                 if(t=='提交成功')
                     self.location='../usercenter/usercenter';
+                else
+                    $("#Pickupbtn").removeAttr('disabled');
         }).error
         (
             function()
             {
                 alert('提交失败！');
+                $("#Pickupbtn").removeAttr('disabled');
             }
         )
 
@@ -310,12 +315,13 @@
                         <td><textarea name="sremark" id="sending_remark"></textarea> </td>
                     </tr>
                 </table>
-                <input type="submit" value="提交信息" id="newSendOrder" onclick="sendSendOrder();return false;">
+                <input type="submit" value="提交信息" id="newSendOrderbtn" onclick="sendSendOrder();return false;">
             </form>
         </div><!-- menuSelect -->
 <script>
     function sendSendOrder()
     {
+        $("#newSendOrderbtn").attr('disabled','disabled');
         var city = $("#secArea").val();
         var school = $("#secSchool").val();
         var rename = $("#sender_name").val();
@@ -383,11 +389,14 @@
                 alert(t);
                 if(t=='提交成功')
                     self.location='../usercenter/usercenter';
+                else
+                    $("#newSendOrderbtn").attr('disabled','disabled');
             }).error
             (
                 function()
                 {
                     alert('提交失败！!');
+                    $("#newSendOrderbtn").attr('disabled','disabled');
                 }
             )
 
