@@ -163,10 +163,15 @@ a:hover{
 
 .goBack .fixWidth a{
     display: inline-block;
-    width: 40px;
+    width: 80px;
     height: 100%;
 }
-
+.goBack .fixWidth .deleteOrder
+{
+    width: 40px;
+    height: 100%;
+    float: right
+}
 
 
 .detailSection{

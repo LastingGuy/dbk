@@ -38,7 +38,12 @@
 		<div class="contain orderDetail">
 
 
-    <div class="goBack"><div class="fixWidth"><a href="{$page}"></a></div></div>
+    <div class="goBack">
+      <div class="fixWidth">
+        <a href="{$page}"></a>
+        <div class="deleteOrder"><a href="deleteorder?id={$data.id}&type=0&page={$page}">删除订单</a></div>
+      </div>
+    </div>
 
      <div class="detailSection">
        <div class="fixWidth">

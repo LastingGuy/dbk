@@ -21,7 +21,7 @@ class UsercenterController extends Controller
         $object = new Common\UserDAOImpl();
         if($object->login())
         {
-            $this->redirect('home/usercenter/usercenter');
+            $this->redirect('usercenter');
         }
         else
         {
@@ -160,6 +160,49 @@ class UsercenterController extends Controller
         
     }
 
+    //删除订单
+    public function deleteorder()
+    {
+        if(session('?weixin_user'))
+        {
+            $type = I('get.type');
+            $id = I('get.id');
+            $page = I('get.page');
+            $openid = session('weixin_user');
+            if($id=='')
+            {
+                $this->error('删除失败');
+            }
+
+            switch($type)
+            {
+                case 0:
+                    $model = M('pickup');
+                    if($model->where("openid='$openid' and pickup_id='$id'")->delete())
+                    {
+                        $this->redirect($page);
+                    }
+                    else
+                    {
+                        $this->error('删除失败');
+                    }
+
+                case 1:
+                    $model = M('send');
+                    if($model->where("openid='$openid' and send_id='$id'")->delete())
+                    {
+                        $this->redirect($page);
+                    }
+                    else
+                    {
+                        $this->error('删除失败');
+                    }
+                default:
+                    $this->error('删除失败');
+
+            }
+        }
+    }
     
     ///获得订单
     private function getOrders($openid,$type,$status)

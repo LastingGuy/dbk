@@ -81,10 +81,10 @@ class IndexController extends Controller{
             $data['openid'] = session('weixin_user');
             
             //验证是否已经提交该订单
-            if(!$this->isUniqueOrder($data,0))
-            {
-                $this->ajaxReturn('已提交相同订单');
-            }
+            // if(!$this->isUniqueOrder($data,0))
+            // {
+            //     $this->ajaxReturn('已提交相同订单');
+            // }
 
             $data['time'] = date('Y-m-d H:i:s');
             $data['express_status'] = 2;
@@ -160,11 +160,11 @@ class IndexController extends Controller{
             $data['openid'] = session('weixin_user');
 
             //验证订单是否重复
-            if(!$this->isUniqueOrder($data,1))
-            {
-                $this->ajaxReturn('已提交相同订单');
-            }
-            
+            // if(!$this->isUniqueOrder($data,1))
+            // {
+            //     $this->ajaxReturn('已提交相同订单');
+            // }
+
             $data['sender_status'] = 2;
             $data['time'] = date('Y-m-d H:i:s');
 
