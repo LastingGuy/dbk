@@ -24,10 +24,17 @@
     <link href="__ROOT__/Public/css/style.css" rel="stylesheet"><!-- THEME BASIC CSS -->
     <link href="__ROOT__/Public/css/style-responsive.css" rel="stylesheet"><!-- THEME RESPONSIVE CSS -->
     <!--[if lt IE 9]>
+
     <script src="__ROOT__/Public/js/html5shiv.js"></script>
     <script src="__ROOT__/Public/js/respond.min.js"></script>
     <![endif]-->
     <!-- END STYLESHEET -->
+
+    <style type="text/css">
+        div.modal{
+            z-index: 1000;
+        }
+    </style>
 </head>
 <body>
 <!-- BEGIN SECTION -->
@@ -94,6 +101,7 @@
     <!-- END FOOTER -->
 </section>
 <!-- END SECTION -->
+
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
      aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -154,6 +162,7 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
+
 <!-- BEGIN JS -->
 <script language="javascript" src="__ROOT__/Public/assets/advanced-datatable/media/js/jquery.js"></script><!-- ADVANCE DATATABLE JS -->
 <script src="__ROOT__/Public/js/bootstrap.min.js" ></script><!-- BOOTSTRAP JS -->
