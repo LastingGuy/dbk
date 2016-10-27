@@ -244,7 +244,7 @@
          * Note that the indicator for showing whi ch row is open is not controlled by DataTables,
          * rather it is done here
          */
-        $('#hidden-table-info tbody td img').on('click', function (e) {
+        $('#hidden-table-info tbody td img').live('click', function (e) {
             var nTr = $(this).parents('tr')[0];
             if (oTable.fnIsOpen(nTr)) {
                 /* This row is already open - close it */
@@ -258,7 +258,7 @@
             }
         });
 
-        $('#hidden-table-info a.complete').on('click', function (e) {
+        $('#hidden-table-info a.complete').live('click', function (e) {
             e.preventDefault();
             var nRow = $(this).parents('tr')[0];
             var jqInputs = $('td', nRow);
