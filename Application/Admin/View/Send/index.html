@@ -30,11 +30,6 @@
     <![endif]-->
     <!-- END STYLESHEET -->
 
-    <style type="text/css">
-        div.modal{
-            z-index: 1000;
-        }
-    </style>
 </head>
 <body>
 <!-- BEGIN SECTION -->
@@ -63,8 +58,13 @@
                 </header>
                 <div class="panel-body">
                     <div class="clearfix">
+                        <div class="btn-group ">
+                            <button type="button" class="btn btn-danger" data-toggle="modal"
+                                    data-target="#myModal2">一键完成
+                            </button>
+                        </div>
                         <div class="btn-group pull-right">
-                            <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">工 具 <i class="fa fa-angle-down"></i>
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">导 出 工 具 <i class="fa fa-angle-down"></i>
                             </button>
                             <ul class="dropdown-menu pull-right">
                                 <li><a href="{:U('admin/pickup/export')}">今日配送Excel</a></li>
@@ -122,7 +122,7 @@
                             &nbsp;&nbsp;开 始 时 间
                         </label>
                         <div class="col-md-6 col-xs-11">
-                            <div class="input-group date dtp" >
+                            <div class="input-group date dtp">
                                 <input id="begin_time" type="text" class="form-control" readonly="" size="16">
                           <span class="input-group-btn">
                             <button type="button" class="btn btn-info date-set">
@@ -138,7 +138,7 @@
                             &nbsp;&nbsp;截 止 时 间
                         </label>
                         <div class="col-md-6 col-xs-11">
-                            <div class="input-group date dtp" >
+                            <div class="input-group date dtp">
                                 <input id="end_time" type="text" class="form-control" readonly="" size="16">
                           <span class="input-group-btn">
                             <button type="button" class="btn btn-info date-set">
@@ -156,6 +156,66 @@
                         data-dismiss="modal">关 闭
                 </button>
                 <button type="button" class="btn btn-primary" onclick="exportUserDefined()">
+                    提 交
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    一键完成 —— 选择日期
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form action="#" class="form-horizontal tasi-form">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+                            &nbsp;&nbsp;开 始 时 间
+                        </label>
+                        <div class="col-md-6 col-xs-11">
+                            <div class="input-group date dtp" id="complete_start">
+                                <input id="begin_time2" type="text" class="form-control" readonly="" size="16">
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-info date-set">
+                              <i class="fa fa-calendar">
+                              </i>
+                            </button>
+                          </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+                            &nbsp;&nbsp;截 止 时 间
+                        </label>
+                        <div class="col-md-6 col-xs-11">
+                            <div class="input-group date dtp"  id="complete_end">
+                                <input id="end_time2" type="text" class="form-control" readonly="" size="16">
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-info date-set">
+                              <i class="fa fa-calendar">
+                              </i>
+                            </button>
+                          </span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="close2" type="button" class="btn btn-default"
+                        data-dismiss="modal">关 闭
+                </button>
+                <button type="button" class="btn btn-primary" onclick="completeAll()">
                     提 交
                 </button>
             </div>
@@ -194,13 +254,14 @@
 
         return sOut;
     }
-
+    var oTable;
     $(document).ready(function() {
 
         /*
          * Initialse DataTables, with no sorting on the 'details' column
          */
-        var oTable = $('#hidden-table-info').dataTable( {
+        oTable = $('#hidden-table-info').dataTable( {
+            bDeferRender: true,
             "pagingType": "simple_numbers",
             autoWidth : false,
             //open server side
@@ -268,15 +329,7 @@
                         'send_id': jqInputs[1].innerHTML
                     },
                     function (data) {
-                        if (data['result'] == 1) {
-                            jqInputs [6] = "<div style='color:green'>已完成</div>";
-                            jqInputs [7] = "<a><span class=\"label label-default\">完 成</span></a>";
-
-                            oTable.fnUpdate(jqInputs[6].value, nRow, 6, false);
-                            oTable.fnUpdate(jqInputs[7].value, nRow, 7, false);
-
-                            oTable.fnDraw();
-                        }
+                        oTable.fnDraw(false);
                     });
         });
 
@@ -298,7 +351,31 @@
             autoclose: true,
             minuteStep:30
         });
+        Date.prototype.Format = function(fmt)
+        { //author: meizz   
+            var o = {
+                "M+" : this.getMonth()+1,                 //月份   
+                "d+" : this.getDate(),                    //日   
+                "h+" : this.getHours(),                   //小时   
+                "m+" : this.getMinutes(),                 //分   
+                "s+" : this.getSeconds(),                 //秒   
+                "q+" : Math.floor((this.getMonth()+3)/3), //季度   
+                "S"  : this.getMilliseconds()             //毫秒   
+            };
+            if(/(y+)/.test(fmt))
+                fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+            for(var k in o)
+                if(new RegExp("("+ k +")").test(fmt))
+                    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+            return fmt;
+        };
 
+        var end_time = new Date();
+        end_time.setHours(16);
+        end_time.setMinutes(0);
+        var start_time = new Date(end_time.getTime()- 24*60*60*1000);
+        $('#begin_time2').val(start_time.Format("yyyy-MM-dd hh:mm"));
+        $('#end_time2').val(end_time.Format("yyyy-MM-dd hh:mm"));
     });
 
     function exportUserDefined(){
@@ -306,6 +383,18 @@
         $end_time = $('#end_time').val();
 
         window.open("{:U('admin/send/exportUserDefined')}"+"?begin_time="+$begin_time+"&end_time="+$end_time);
+    }
+
+    function completeAll(){
+        $.post("{:U('admin/send/complete')}", {
+                    start_time: $('#begin_time2').val(),
+                    end_time: $('#end_time2').val()
+                },
+                function(){
+                    $('#close2').click();
+                    oTable.fnDraw(false);
+                });
+
     }
 </script>
 <!-- END JS -->

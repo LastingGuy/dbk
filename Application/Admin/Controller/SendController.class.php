@@ -72,4 +72,17 @@ class SendController extends Controller
 
         $this->ajaxReturn($data);
     }
+
+    //完成订单
+    public function complete(){
+        if(!session("?admin_id")) {
+            header('Location:'.U("Admin/Index/index"));
+        }
+        $start_time = I('post.start_time');
+        $end_time = I('post.end_time');
+        $object = new Common\SendDAOImpl();
+        $data['result'] = $object->completeDuringTheTime($start_time, $end_time);
+
+        $this->ajaxReturn($data);
+    }
 }
