@@ -36,7 +36,7 @@
 
 
 </head>
-<body>
+<body onload="setDefaultInfo()">
 <div class="contain takeExpress">
 
     <div class="noticeBar"> <p>代步客--为高校便捷而生</p>  <i class="closeBtn"></i></div>
@@ -72,7 +72,8 @@
                     <tr>
                         <th><i class="red">*</i>学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校</th>
                         <td>
-                            <select name="city" id="secArea" class="schoolSelect"></select>  <!-- 从floorData.js中读取 -->
+                            <select name="city" id="secArea" class="schoolSelect" > 
+                            </select>  <!-- 从floorData.js中读取 -->
                             <select name="school" id="secSchool" class="schoolSelect"></select><!-- 从floorData.js中读取 -->
                         </td>
                     </tr>
@@ -106,9 +107,9 @@
                         <th><i class="red">*</i>寝室楼号</th>
                         <td>
                             <select name="dbuild" id="secFloor"></select> <!-- 从floorData.js中读取 -->
-                            <!--<div class="defaultAdd">
+                            <div class="defaultAdd">
                                 <input type="checkbox" name="" id="pickupDefaultInfo"  value="true"><label for="defaultAddNormal">设为默认地址</label>
-                            </div>-->
+                            </div>
                         </td>
                     </tr>
 
@@ -184,7 +185,7 @@
         var express_sms = $("#express_sms").val();
         var fetch_code = $("#fetch_code").val();
         var remarks = $("#remarks").val();
-        var isDefault = $("#pickupDefaultInfo").val();
+        var isDefault = $("#pickupDefaultInfo").prop("checked")
 
 
         if(city=="")
@@ -304,9 +305,9 @@
                         <th><i class="red">*</i>寝室楼号</th>
                         <td>
                             <select name="" id="secFloor2"></select> <!-- 从floorData.js中读取 -->
-                            <!--<div class="defaultAdd">
+                            <div class="defaultAdd">
                                 <input type="checkbox" name="" id="sendDefaultInfo" value="true"><label for="defaultAddNormal">设为默认地址</label>
-                            </div>-->
+                            </div>
                         </td>
                     </tr>
 
@@ -342,7 +343,7 @@
         var delivery = $("#delivery").val();
         var destination = $('#sending_destination').val();
         var remarks = $("#sending_remark").val();
-        var isDefault = $("sendDefaultInfo").val();
+        var isDefault = $("#sendDefaultInfo").prop("checked")
 
         if(city=="")
         {
@@ -443,6 +444,39 @@
                return false; 
             }
     }
+
+    //初始化默认信息
+    function setDefaultInfo()
+    {
+        if({$isSetDefault})
+        {
+            $("#rename").val("{$name}");
+            $("#sender_name").val("{$name}");
+
+            $("#telephone").val("{$phone}");
+            $("#sender_phone").val("{$phone}");
+            setSelectChecked("secArea","{$city}")
+            setSelectChecked('secSchool',"{$school}")
+            setSelectChecked('secFloor',"{$dor}")
+            setSelectChecked('secFloor2',"{$dor}")
+        }
+    }
+
+    function setSelectChecked(selectId, checkValue){  
+    var select = document.getElementById(selectId);  
+    for(var i=0; i<select.options.length; i++)
+    {  
+        if(select.options[i].innerHTML == checkValue)
+        {  
+            select.options[i].selected = true;  
+            
+            $("#"+selectId).trigger("change");  
+
+            break;  
+        }  
+
+    }  
+};
 </script>
 
 <script src="__PUBLIC__/js/page.js" type="text/javascript"></script><!-- 轮播图/价格切换特效等 -->

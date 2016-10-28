@@ -6,6 +6,11 @@ class IndexController extends Controller{
     //登陆
     public function index()
     {
+        // test
+        // $openid = 'oF6atwNyAc4wlpgNVWTdQi4kj7Po';
+        // session('weixin_user',$openid);
+        // $this->redirect('home/index/order');
+
         if(I("get.code")!='')
         {
             //查看用户是否已经写入数据库，没有则写入
@@ -34,6 +39,7 @@ class IndexController extends Controller{
         }
         else
         {
+            $this->getDefaultInfo();
             $this->display();
         }
     }
@@ -96,6 +102,17 @@ class IndexController extends Controller{
             {
                 if($pickup->add($data))
                 {
+                    if($data['default']=='true')
+                    {
+                        $info = array(
+                            'default_name'=>$data['receiver_name'],
+                            'default_phone'=>$data['receiver_phone'],
+                            'default_city'=>$city,
+                            'default_school'=>$school,
+                            'default_dormitory'=>$address
+                        );
+                        $this->saveDefaultInfo( $data['openid'],$info);
+                    }
                     $this->ajaxReturn('提交成功'); 
                 }
                 else
@@ -173,21 +190,30 @@ class IndexController extends Controller{
             {
                 if($send->add($data))
                 {
-                    print('提交成功');
+                    if($data['default']=='true')
+                    {
+                        $info = array(
+                            'default_name'=>$data['sender_name'],
+                            'default_phone'=>$data['sender_phone'],
+                            'default_city'=>$city,
+                            'default_school'=>$school,
+                            'default_dormitory'=>$address
+                        );
+                    $this->ajaxReturn('提交成功');
                 }
                 else
                 {
-                    print('提交失败');
+                    $this->ajaxReturn('提交失败');
                 }
             }
             else
             {
-                print($send->getError());
+                $this->ajaxReturn($send->getError());
             }
         }
         else
         {
-           print('提交失败！');
+           $this->ajaxReturn('提交失败！');
         }
     }
 
@@ -203,9 +229,12 @@ class IndexController extends Controller{
     }
 
     //验证是否存在相同订单
+    //$data is an array of the order data, it contains
+    //every feild except time and express_status in table pickup or send;
+    //$type is defined to check which kind of order(0 for pickup order, 1 for send order)
+    //it retruns whether there is a same order in db
     private function isUniqueOrder($data,$type)
     {
-        ///type 0:代取订单  1:待寄订单
         $r = array();
         switch($type)
         {
@@ -229,6 +258,55 @@ class IndexController extends Controller{
             return true;
         }
 
+    }
+
+    //设置默认地址
+    //$data is an array of the default address info of user,
+    //it contains:
+    //  $data['openid'],
+    //  $data['default_name'],
+    //  $data['default_phone'],
+    //  $data['default_city'],
+    //  $data['default_school'],
+    //  $data['default_dormitory']
+    //and every element is required
+    private function saveDefaultInfo($openid,$data)
+    {
+        $defaultInfoModel = M('defaultinfo');
+        $count = $defaultInfoModel->where("openid='$openid'")->count();
+        
+        if($count==0)
+        {
+            ///there is not the default info of this user, add it to db.
+            $data['openid'] = $openid;
+            $defaultInfoModel->data($data)->add();
+        }
+        else
+        {
+            ///there has already the default info of this user ,so replace it by the new info
+            $defaultInfoModel->where("openid='$openid'")->save($data);
+        }
+    }
+
+    //获得默认地址
+    private function getDefaultInfo()
+    {
+        $openid = session('weixin_user');
+        $model = M('defaultinfo');
+        $data = $model->where("openid='$openid'")->select();
+        if(count($data)>0)
+        {
+            $this->assign('isSetDefault','true');
+            $this->assign('city',$data[0]['default_city']);
+            $this->assign('school',$data[0]['default_school']);
+            $this->assign('dor',$data[0]['default_dormitory']);
+            $this->assign('phone',$data[0]['default_phone']);
+            $this->assign('name',$data[0]['default_name']);
+        }
+        else
+        {
+            $this->assign('isSetDefault','false');
+        }
     }
 
 }

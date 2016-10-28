@@ -185,14 +185,14 @@
     $secFloor.change(function(){//绑定第二个select
       var n = $secArea.find(':selected').index();
       var q = $secSchool.find(':selected').index();
-      var q = $secFloor.find(':selected').index();
+      var k = $secFloor.find(':selected').index();
       SelectFloor(n,q,k);
     });
 
     $secFloor2.change(function(){//绑定第二个select
       var n = $secArea.find(':selected').index();
       var q = $secSchool.find(':selected').index();
-      var q = $secFloor2.find(':selected').index();
+      var k = $secFloor2.find(':selected').index();
       SelectFloor(n,q,k);
     });
 

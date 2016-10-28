@@ -32,6 +32,10 @@ class UsercenterController extends Controller
     //用户中心主页
     public function usercenter()
     {
+
+        //test
+        // $this->display();
+
         $user = new Common\UserDAOImpl();
         if( $user->getUserInfo())
         {
