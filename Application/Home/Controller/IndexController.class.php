@@ -17,7 +17,7 @@ class IndexController extends Controller{
             $object = new Common\UserDAOImpl();
             if($object->login())
             {
-                $this->redirect('usercenter');
+                $this->redirect('order');
             }
             else
             {
