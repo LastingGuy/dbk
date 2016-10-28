@@ -150,8 +150,7 @@ class PickupDAOImpl implements IPickupDAO{
     public function completeDuringTheTime($begin_time, $end_time){
         $object = M('pickup_view');
         $data['express_status'] = 3;
-        $object->where("time>='$begin_time' and time<='$end_time'")->save($data);
-        var_dump($object->getLastSql());
+        $object->execute("update dbk_pickup_view set express_status=3 where time>='$begin_time' and time<='$end_time'");
         return 1;
     }
 }
