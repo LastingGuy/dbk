@@ -19,9 +19,8 @@
     <link href="__ROOT__/Public/css/bootstrap.min.css" rel="stylesheet"><!-- BOOTSTRAP CSS -->
     <link href="__ROOT__/Public/css/bootstrap-reset.css" rel="stylesheet"><!-- BOOTSTRAP CSS -->
     <link href="__ROOT__/Public/assets/font-awesome/css/font-awesome.css" rel="stylesheet"><!-- FONT AWESOME ICON CSS -->
-    <link href="__ROOT__/Public/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet"><!-- BOOTSTRAP ADVANCE DATATABLE  CSS -->
     <link href="__ROOT__/Public/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet"><!-- BOOTSTRAP ADVANCE DATATABLE CSS -->
-    <link rel="stylesheet" href="__ROOT__/Public/assets/data-tables/DT_bootstrap.css"><!-- BOOTSTRAP DATATABLE CSS -->
+    <link rel="stylesheet" type="text/css" href="__ROOT__/Public/assets/bootstrap-datetimepicker/css/datetimepicker.css"><!-- DATETIMEPICKER PLUGIN CSS -->
     <link href="__ROOT__/Public/css/style.css" rel="stylesheet"><!-- THEME BASIC CSS -->
     <link href="__ROOT__/Public/css/style-responsive.css" rel="stylesheet"><!-- THEME RESPONSIVE CSS -->
     <!--[if lt IE 9]>
@@ -56,6 +55,23 @@
                      </span>
                 </header>
                 <div class="panel-body">
+
+                    <div class="clearfix">
+                        <div class="btn-group ">
+                            <button type="button" class="btn btn-danger" data-toggle="modal"
+                                    data-target="#myModal2">一键完成
+                            </button>
+                        </div>
+                        <div class="btn-group pull-right">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">导 出 工 具 <i class="fa fa-angle-down"></i>
+                            </button>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a href="{:U('admin/pickup/export')}">今日配送Excel</a></li>
+                                <li><a href="javascript:;" data-toggle="modal"
+                                       data-target="#myModal">自定义Excel</a></li>
+                            </ul>
+                        </div>
+                    </div>
                     <div class="adv-table table-responsive">
                         <table  class="display table table-bordered" id="hidden-table-info">
                             <thead>
@@ -70,6 +86,7 @@
                                 <th>快递价格</th>
                                 <th>下单时间</th>
                                 <th>状 态</th>
+                                <th>编 辑</th>
                             </tr>
                             </thead>
                         </table>
@@ -86,6 +103,127 @@
     <!-- END FOOTER -->
 </section>
 <!-- END SECTION -->
+<!-- 模态框（Modal）-->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    选择日期
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form action="#" class="form-horizontal tasi-form">
+                    <div class="form-group">
+                    <label class="control-label col-md-3">
+                        &nbsp;&nbsp;开 始 时 间
+                    </label>
+                    <div class="col-md-6 col-xs-11">
+                        <div class="input-group date dtp">
+                            <input id="begin_time" type="text" class="form-control" readonly="" size="16">
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-info date-set">
+                              <i class="fa fa-calendar">
+                              </i>
+                            </button>
+                          </span>
+                        </div>
+                    </div>
+                </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-3">
+                            &nbsp;&nbsp;截 止 时 间
+                    </label>
+                    <div class="col-md-6 col-xs-11">
+                        <div class="input-group date dtp">
+                            <input id="end_time" type="text" class="form-control" readonly="" size="16">
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-info date-set">
+                              <i class="fa fa-calendar">
+                              </i>
+                            </button>
+                          </span>
+                        </div>
+                    </div>
+                </div>
+                </form>
+             </div>
+            <div class="modal-footer">
+                <button id="close" type="button" class="btn btn-default"
+                        data-dismiss="modal">关 闭
+                </button>
+                <button type="button" class="btn btn-primary" onclick="exportUserDefined()">
+                    提 交
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    一键完成 —— 选择日期
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form action="#" class="form-horizontal tasi-form">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+                            &nbsp;&nbsp;开 始 时 间
+                        </label>
+                        <div class="col-md-6 col-xs-11">
+                            <div class="input-group date dtp" id="complete_start">
+                                <input id="begin_time2" type="text" class="form-control" readonly="" size="16">
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-info date-set">
+                              <i class="fa fa-calendar">
+                              </i>
+                            </button>
+                          </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+                            &nbsp;&nbsp;截 止 时 间
+                        </label>
+                        <div class="col-md-6 col-xs-11">
+                            <div class="input-group date dtp"  id="complete_end">
+                                <input id="end_time2" type="text" class="form-control" readonly="" size="16">
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-info date-set">
+                              <i class="fa fa-calendar">
+                              </i>
+                            </button>
+                          </span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="close2" type="button" class="btn btn-default"
+                        data-dismiss="modal">关 闭
+                </button>
+                <button type="button" class="btn btn-primary" onclick="completeAll()">
+                    提 交
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 
 <!-- BEGIN JS -->
 <script language="javascript" src="__ROOT__/Public/assets/advanced-datatable/media/js/jquery.js"></script><!-- ADVANCE DATATABLE JS -->
@@ -95,11 +233,15 @@
 <script src="__ROOT__/Public/js/jquery.nicescroll.js" ></script><!-- NICESCROLL JS -->
 <script src="__ROOT__/Public/js/respond.min.js" ></script><!-- RESPOND JS -->
 <script language="javascript" src="__ROOT__/Public/assets/advanced-datatable/media/js/jquery.dataTables.js"></script><!-- ADVANCE DATATABLE JS -->
-<script  src="__ROOT__/Public/assets/data-tables/DT_bootstrap.js"></script><!-- DATATABLE JS -->
+<script  src="__ROOT__/Public/assets/data-tables/dataTables.bootstrap.min.js"></script><!-- DATATABLE JS -->
+<script src="__ROOT__/Public/assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script><!-- BOOTSTRAP DATETIMEPICKER JS  -->
+<script src="__ROOT__/Public/assets/bootstrap-datetimepicker/js/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 <script src="__ROOT__/Public/js/common-scripts.js" ></script><!-- BASIC COMMON JS  -->
+
+
 <script >
-    $("#order_module").addClass("active");
-    $("#query_order").addClass("active");
+    $("#express_module").addClass("active");
+    $("#pickup_manage").addClass("active");
 
     /* DATATABLE MODIFICATION SCRIPT */
     /* Formating function for row details */
@@ -117,30 +259,37 @@
         return sOut;
     }
 
+    var oTable;
+
     $(document).ready(function() {
 
         /*
          * Initialse DataTables, with no sorting on the 'details' column
          */
-        var oTable = $('#hidden-table-info').dataTable( {
-            autoWidth : false,
+            oTable = $('#hidden-table-info').dataTable({
+            bDeferRender: true,
+            paging: true,//分页
+            "pagingType": "simple_numbers",
+            autoWidth: false,
             //open server side
             serverSide: true,
+            stateSave: true,
             "ajax": {
-                "url":"{:U('admin/pickup/get')}"
+                "url": "{:U('admin/pickup/getdata')}"
             },
             "searching": true,
             columns: [
-                { "data": "look", "orderable":false},
-                { "data": "pickup_id", "orderable":false},
-                { "data": "user_id", "orderable":true},
-                { "data": "receiver_name", "orderable":false },
-                { "data": "receiver_phone", "orderable":true },
-                { "data": "express_company", "orderable":true },
-                { "data": "express_type", "orderable":true },
-                { "data": "price", "orderable":false },
-                { "data": "time", "orderable":false },
-                { "data": "express_status", "orderable":false },
+                {"data": "look", "orderable": false},
+                {"data": "pickup_id", "orderable": false},
+                {"data": "openid", "orderable": true},
+                {"data": "receiver_name", "orderable": false},
+                {"data": "receiver_phone", "orderable": true},
+                {"data": "express_company", "orderable": true},
+                {"data": "express_type", "orderable": true},
+                {"data": "price", "orderable": false},
+                {"data": "time", "orderable": false},
+                {"data": "express_status", "orderable": false},
+                {"data": "edit", "orderable": false},
             ],
             "oLanguage": {
                 "sProcessing": "正在加载中......",
@@ -156,30 +305,107 @@
                     "sNext": "下一页",
                     "sLast": "末页"
                 }
-            }
+            },
         });
 
 
         /* Add event listener for opening and closing details
-         * Note that the indicator for showing which row is open is not controlled by DataTables,
+         * Note that the indicator for showing whi ch row is open is not controlled by DataTables,
          * rather it is done here
          */
-        $('#hidden-table-info tbody td img').live('click', function () {
+        $('#hidden-table-info tbody td img').live('click', function (e) {
             var nTr = $(this).parents('tr')[0];
-            if ( oTable.fnIsOpen(nTr) )
-            {
+            if (oTable.fnIsOpen(nTr)) {
                 /* This row is already open - close it */
                 this.src = "__ROOT__/Public/assets/advanced-datatable/examples/examples_support/details_open.png";
-                oTable.fnClose( nTr );
+                oTable.fnClose(nTr);
             }
-            else
-            {
+            else {
                 /* Open this row */
                 this.src = "__ROOT__/Public/assets/advanced-datatable/examples/examples_support/details_close.png";
-                oTable.fnOpen( nTr, fnFormatDetails(oTable, nTr), 'details' );
+                oTable.fnOpen(nTr, fnFormatDetails(oTable, nTr), 'details');
             }
-        } );
-    } );
+        });
+
+        $('#hidden-table-info a.complete').live('click', function (e) {
+            e.preventDefault();
+            var nRow = $(this).parents('tr')[0];
+            var jqInputs = $('td', nRow);
+
+            //修改状态
+            $.get("{:U('admin/pickup/updateStatus')}", {
+                        'pickup_id': jqInputs[1].innerHTML
+                    },
+                    function (data) {
+
+                        oTable.fnDraw(false);
+
+                    });
+        });
+    });
+
+    if (top.location != location) {
+        top.location.href = document.location.href;
+    }
+    $(function () {
+        window.prettyPrint && prettyPrint();
+
+        $('.dtp').datetimepicker({
+            language: "zh-CN",
+            format: "yyyy-mm-dd hh:ii",
+            startView: "month",
+            minView: "hour",
+            maxView: "decade",
+            todayHighlight: true,
+            autoclose: true,
+            minuteStep:30
+        });
+
+        Date.prototype.Format = function(fmt)
+        { //author: meizz   
+            var o = {
+                "M+" : this.getMonth()+1,                 //月份   
+                "d+" : this.getDate(),                    //日   
+                "h+" : this.getHours(),                   //小时   
+                "m+" : this.getMinutes(),                 //分   
+                "s+" : this.getSeconds(),                 //秒   
+                "q+" : Math.floor((this.getMonth()+3)/3), //季度   
+                "S"  : this.getMilliseconds()             //毫秒   
+            };
+            if(/(y+)/.test(fmt))
+                fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+            for(var k in o)
+                if(new RegExp("("+ k +")").test(fmt))
+                    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+            return fmt;
+        };
+
+        var start_time = new Date();
+        start_time.setHours(16);
+        start_time.setMinutes(0);
+        var end_time = new Date(start_time.getTime()- 24*60*60*1000);
+        $('#begin_time2').val(start_time.Format("yyyy-MM-dd hh:mm"));
+        $('#end_time2').val(end_time.Format("yyyy-MM-dd hh:mm"));
+    });
+
+    function exportUserDefined(){
+        $begin_time = $('#begin_time').val();
+        $end_time = $('#end_time').val();
+
+        window.open("{:U('admin/pickup/exportUserDefined')}"+"?begin_time="+$begin_time+"&end_time="+$end_time);
+    }
+
+    function completeAll(){
+        $.post("{:U('admin/pickup/complete')}", {
+                    start_time: $('#begin_time2').val(),
+                    end_time: $('#end_time2').val()
+                },
+                function(){
+                    $('#close2').click();
+                    oTable.fnDraw(false);
+                });
+
+    }
 </script>
 <!-- END JS -->
 </body>

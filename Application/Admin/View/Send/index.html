@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,23 +12,29 @@
     <!-- BEGIN SHORTCUT ICON -->
     <link rel="shortcut icon" href="__ROOT__/Public/img/favicon.ico">
     <!-- END SHORTCUT ICON -->
-    <title>查询订单 - 普林派特ERP管理系统</title>
+    <title>管理寄件 - 代步客管理系统</title>
 
 
     <!-- BEGIN STYLESHEET -->
     <link href="__ROOT__/Public/css/bootstrap.min.css" rel="stylesheet"><!-- BOOTSTRAP CSS -->
     <link href="__ROOT__/Public/css/bootstrap-reset.css" rel="stylesheet"><!-- BOOTSTRAP CSS -->
     <link href="__ROOT__/Public/assets/font-awesome/css/font-awesome.css" rel="stylesheet"><!-- FONT AWESOME ICON CSS -->
-    <link href="__ROOT__/Public/assets/advanced-datatable/media/css/demo_page.css" rel="stylesheet"><!-- BOOTSTRAP ADVANCE DATATABLE  CSS -->
     <link href="__ROOT__/Public/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet"><!-- BOOTSTRAP ADVANCE DATATABLE CSS -->
-    <link rel="stylesheet" href="__ROOT__/Public/assets/data-tables/DT_bootstrap.css"><!-- BOOTSTRAP DATATABLE CSS -->
+    <link rel="stylesheet" type="text/css" href="__ROOT__/Public/assets/bootstrap-datetimepicker/css/datetimepicker.css"><!-- DATETIMEPICKER PLUGIN CSS -->
     <link href="__ROOT__/Public/css/style.css" rel="stylesheet"><!-- THEME BASIC CSS -->
     <link href="__ROOT__/Public/css/style-responsive.css" rel="stylesheet"><!-- THEME RESPONSIVE CSS -->
     <!--[if lt IE 9]>
+
     <script src="__ROOT__/Public/js/html5shiv.js"></script>
     <script src="__ROOT__/Public/js/respond.min.js"></script>
     <![endif]-->
     <!-- END STYLESHEET -->
+
+    <style type="text/css">
+        div.modal{
+            z-index: 1000;
+        }
+    </style>
 </head>
 <body>
 <!-- BEGIN SECTION -->
@@ -57,6 +62,17 @@
                      </span>
                 </header>
                 <div class="panel-body">
+                    <div class="clearfix">
+                        <div class="btn-group pull-right">
+                            <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">工 具 <i class="fa fa-angle-down"></i>
+                            </button>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a href="{:U('admin/pickup/export')}">今日配送Excel</a></li>
+                                <li><a href="javascript:;" data-toggle="modal"
+                                       data-target="#myModal">自定义Excel</a></li>
+                            </ul>
+                        </div>
+                    </div>
                     <div class="adv-table table-responsive">
                         <table  class="display table table-bordered" id="hidden-table-info">
                             <thead>
@@ -68,6 +84,7 @@
                                 <th>手机号码</th>
                                 <th>下单时间</th>
                                 <th>状 态</th>
+                                <th>编 辑</th>
                             </tr>
                             </thead>
                         </table>
@@ -85,6 +102,67 @@
 </section>
 <!-- END SECTION -->
 
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    选择日期
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form action="#" class="form-horizontal tasi-form">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+                            &nbsp;&nbsp;开 始 时 间
+                        </label>
+                        <div class="col-md-6 col-xs-11">
+                            <div class="input-group date dtp" >
+                                <input id="begin_time" type="text" class="form-control" readonly="" size="16">
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-info date-set">
+                              <i class="fa fa-calendar">
+                              </i>
+                            </button>
+                          </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">
+                            &nbsp;&nbsp;截 止 时 间
+                        </label>
+                        <div class="col-md-6 col-xs-11">
+                            <div class="input-group date dtp" >
+                                <input id="end_time" type="text" class="form-control" readonly="" size="16">
+                          <span class="input-group-btn">
+                            <button type="button" class="btn btn-info date-set">
+                              <i class="fa fa-calendar">
+                              </i>
+                            </button>
+                          </span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="close" type="button" class="btn btn-default"
+                        data-dismiss="modal">关 闭
+                </button>
+                <button type="button" class="btn btn-primary" onclick="exportUserDefined()">
+                    提 交
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
 <!-- BEGIN JS -->
 <script language="javascript" src="__ROOT__/Public/assets/advanced-datatable/media/js/jquery.js"></script><!-- ADVANCE DATATABLE JS -->
 <script src="__ROOT__/Public/js/bootstrap.min.js" ></script><!-- BOOTSTRAP JS -->
@@ -93,11 +171,13 @@
 <script src="__ROOT__/Public/js/jquery.nicescroll.js" ></script><!-- NICESCROLL JS -->
 <script src="__ROOT__/Public/js/respond.min.js" ></script><!-- RESPOND JS -->
 <script language="javascript" src="__ROOT__/Public/assets/advanced-datatable/media/js/jquery.dataTables.js"></script><!-- ADVANCE DATATABLE JS -->
-<script  src="__ROOT__/Public/assets/data-tables/DT_bootstrap.js"></script><!-- DATATABLE JS -->
+<script  src="__ROOT__/Public/assets/data-tables/dataTables.bootstrap.min.js"></script><!-- DATATABLE JS -->
+<script src="__ROOT__/Public/assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script><!-- BOOTSTRAP DATETIMEPICKER JS  -->
+<script src="__ROOT__/Public/assets/bootstrap-datetimepicker/js/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 <script src="__ROOT__/Public/js/common-scripts.js" ></script><!-- BASIC COMMON JS  -->
 <script >
-    $("#order_module").addClass("active");
-    $("#query_order").addClass("active");
+    $("#express_module").addClass("active");
+    $("#send_manage").addClass("active");
 
     /* DATATABLE MODIFICATION SCRIPT */
     /* Formating function for row details */
@@ -107,6 +187,7 @@
         var sOut = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
         sOut += '<tr><td>学 校：</td><td>'+aData['school_name']+'</td></tr>';
         sOut += '<tr><td>寝 室：</td><td>'+aData['dormitory_address']+'</td></tr>';
+        sOut += '<tr><td>寄件地址：</td><td>'+aData['destination']+'</td></tr>';
         sOut += '<tr><td>寄件物品：</td><td>'+aData['sender_goods']+'</td></tr>';
         sOut += '<tr><td>备 注：</td><td>'+aData['remarks']+'</td></tr>';
         sOut += '</table>';
@@ -120,21 +201,24 @@
          * Initialse DataTables, with no sorting on the 'details' column
          */
         var oTable = $('#hidden-table-info').dataTable( {
+            "pagingType": "simple_numbers",
             autoWidth : false,
             //open server side
             serverSide: true,
+            stateSave: true,
             "ajax": {
-                "url":"{:U('admin/send/get')}"
+                "url":"{:U('admin/send/getdata')}"
             },
             "searching": true,
             columns: [
                 { "data": "look", "orderable":false},
                 { "data": "send_id", "orderable":true},
-                { "data": "user_id", "orderable":false },
+                { "data": "openid", "orderable":false },
                 { "data": "sender_name", "orderable":true },
                 { "data": "sender_phone", "orderable":true },
                 { "data": "time", "orderable":true },
                 { "data": "sender_status", "orderable":false },
+                { "data": "edit", "orderable": false}
             ],
             "oLanguage": {
                 "sProcessing": "正在加载中......",
@@ -173,7 +257,56 @@
                 oTable.fnOpen( nTr, fnFormatDetails(oTable, nTr), 'details' );
             }
         } );
+
+        $('#hidden-table-info a.complete').live('click', function (e) {
+            e.preventDefault();
+            var nRow = $(this).parents('tr')[0];
+            var jqInputs = $('td', nRow);
+
+            //修改状态
+            $.get("{:U('admin/send/updateStatus')}", {
+                        'send_id': jqInputs[1].innerHTML
+                    },
+                    function (data) {
+                        if (data['result'] == 1) {
+                            jqInputs [6] = "<div style='color:green'>已完成</div>";
+                            jqInputs [7] = "<a><span class=\"label label-default\">完 成</span></a>";
+
+                            oTable.fnUpdate(jqInputs[6].value, nRow, 6, false);
+                            oTable.fnUpdate(jqInputs[7].value, nRow, 7, false);
+
+                            oTable.fnDraw();
+                        }
+                    });
+        });
+
     } );
+
+    if (top.location != location) {
+        top.location.href = document.location.href;
+    }
+    $(function () {
+        window.prettyPrint && prettyPrint();
+
+        $('.dtp').datetimepicker({
+            language: "zh-CN",
+            format: "yyyy-mm-dd hh:ii",
+            startView: "month",
+            minView: "hour",
+            maxView: "decade",
+            todayHighlight: true,
+            autoclose: true,
+            minuteStep:30
+        });
+
+    });
+
+    function exportUserDefined(){
+        $begin_time = $('#begin_time').val();
+        $end_time = $('#end_time').val();
+
+        window.open("{:U('admin/send/exportUserDefined')}"+"?begin_time="+$begin_time+"&end_time="+$end_time);
+    }
 </script>
 <!-- END JS -->
 </body>

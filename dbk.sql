@@ -1,4 +1,13 @@
 
+#用户
+create table dbk_weixin_user(
+  openid varchar(100) comment '用户在微信上的id',
+  nickname varchar(100) comment '用户昵称',
+  headimgurl varchar(300) comment '用户头像url',
+  register_time datetime comment '注册时间',
+  constraint pk_dbk_user primary key(openid)
+)default character set utf8;
+
 #学校
 create table dbk_school(
 	school_id int unsigned auto_increment comment '学校id',
@@ -14,7 +23,6 @@ create table dbk_dormitory(
     dormitory_address varchar(20) comment '寝室地址',
     constraint pk_dbk_dormitory primary key(dormitory_id),
     constraint fk_dbk_dormitory foreign key(school_id) references dbk_school(school_id)
-
 )  default character set utf8;
 
 #管理员
@@ -30,9 +38,9 @@ create table dbk_admin(
 #代取件表
 create table dbk_pickup(
 	pickup_id int not null auto_increment comment '订单id',
-    user_id int comment '用户id',
+    openid varchar(100) comment '用户id',
     receiver_name varchar(10) comment '收件人姓名',
-    receiver_phone int(12) comment '收件人手机号码',
+    receiver_phone varchar(12) comment '收件人手机号码',
     dormitory_id int unsigned comment '寝室id',
     express_type varchar(50) not null comment '快递类型',
     express_company varchar(20) not null comment '快递公司',
@@ -44,15 +52,15 @@ create table dbk_pickup(
 	express_status tinyint not null comment ' 0：等待接单  1：已接单  2：正在配送 3:已完成',
 	constraint pk_dbk_pickup primary key(pickup_id),
     constraint fk_dbk_dormitory_pickup foreign key(dormitory_id) references dbk_dormitory(dormitory_id),
-      constraint  fk_dbk_school_pickup foreign key(school_id) references dbk_dormitory(school_id)
+    constraint fk_dbk_openid_pickup foreign key(openid) references dbk_weixin_user(openid)
 )  default character set utf8 ;
 
 #代寄件
 create table dbk_send(
 	send_id int not null auto_increment comment '订单id',
-	user_id int comment '用户id',
+	openid varchar(100) comment '用户id',
     sender_name varchar(10) comment '寄件人姓名',
-    sender_phone int(12) comment '寄件人手机号码',
+    sender_phone varchar(12) comment '寄件人手机号码',
     dormitory_id int unsigned comment '寝室id',
     sender_goods varchar(300) not null comment '寄件物品',
     remarks varchar(300) comment '备注',
@@ -60,33 +68,29 @@ create table dbk_send(
     sender_status tinyint not null comment '寄件状态  0:未接单 1:已接单 2：正在寄件 3：完成寄件' ,
     constraint pk_dbk_send primary key(send_id),
     constraint  fk_dbk_dormitory_send foreign key(dormitory_id) references dbk_dormitory(dormitory_id),
-    constraint  fk_dbk_school_send foreign key(school_id) references dbk_dormitory(school_id)
+    constraint fk_dbk_openid_send foreign key(openid) references dbk_weixin_user(openid)
 )  default character set utf8;
 
 #建立代收件视图
 create view dbk_pickup_view
 as
- select dbk_school.school_city, dbk_school.school_name,
-		dbk_dormitory.dormitory_address,
+ select dbk_school.school_id, dbk_school.school_city, dbk_school.school_name,
+		    dbk_dormitory.dormitory_address,
         dbk_pickup.dormitory_id, dbk_pickup.express_code, dbk_pickup.express_company,
         dbk_pickup.express_sms, dbk_pickup.express_status, dbk_pickup.express_type,
         dbk_pickup.pickup_id, dbk_pickup.price, dbk_pickup.receiver_name, dbk_pickup.receiver_phone,
-        dbk_pickup.remarks, dbk_pickup.school_id, dbk_pickup.time, dbk_pickup.user_id
+        dbk_pickup.remarks, dbk_pickup.time, dbk_pickup.openid
  from dbk_school, dbk_dormitory, dbk_pickup
- where dbk_school.school_id = dbk_dormitory.school_id and dbk_dormitory.dormitory_id = dbk_pickup.dormitory_id
-
-
-
-
+ where dbk_school.school_id = dbk_dormitory.school_id and dbk_dormitory.dormitory_id = dbk_pickup.dormitory_id;
 
 #建立代寄件视图
 create view dbk_send_view
 as
- select dbk_school.school_city, dbk_school.school_name,
-		dbk_dormitory.dormitory_address,
+ select  dbk_school.school_id, dbk_school.school_city, dbk_school.school_name,
+		    dbk_dormitory.dormitory_address,
         dbk_send.dormitory_id, dbk_send.sender_goods, dbk_send.sender_status,
         dbk_send.send_id, dbk_send.sender_name, dbk_send.sender_phone,
-        dbk_send.remarks, dbk_send.school_id, dbk_send.time, dbk_send.user_id
+        dbk_send.remarks, dbk_send.time, dbk_send.openid, dbk_send.destination
  from dbk_school, dbk_dormitory, dbk_send
  where dbk_school.school_id = dbk_dormitory.school_id and dbk_dormitory.dormitory_id = dbk_send.dormitory_id;
 
@@ -95,8 +99,8 @@ as
 insert into dbk_school(school_name,school_city) values('浙江大学城市学院','杭州市');
 insert into dbk_school(school_name,school_city) values('树人大学','杭州市');
 insert into dbk_school(school_name,school_city) values('浙江工业大学(朝晖校区)','杭州市');
-insert into dbk_school(school_name,school_city) values('武汉科技大学城市学院','武汉');
-insert into dbk_school(school_name,school_city) values('浙江师范大学','金华');
+insert into dbk_school(school_name,school_city) values('武汉科技大学城市学院','武汉市');
+insert into dbk_school(school_name,school_city) values('浙江师范大学','金华市');
 
 
 #导入寝室

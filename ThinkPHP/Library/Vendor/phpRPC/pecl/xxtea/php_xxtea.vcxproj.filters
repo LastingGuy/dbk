@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{640b7a90-897f-41cd-be26-3633677ec089}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm</Extensions>
+    </Filter>
+    <Filter Include="Source Files\lib_xxtea">
+      <UniqueIdentifier>{e03da08d-2a00-4f61-a69d-1e761076bf33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{351ca998-4752-440b-9c59-e4c22f59ba41}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc</Extensions>
+    </Filter>
+    <Filter Include="Header Files\lib_xxtea">
+      <UniqueIdentifier>{f861ab3c-925b-4b1e-95e8-68717a50c030}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{ba78870a-5dfb-4168-b620-5cdd39fec687}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="php_xxtea.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="xxtea.c">
+      <Filter>Source Files\lib_xxtea</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="php_xxtea.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xxtea.h">
+      <Filter>Header Files\lib_xxtea</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
