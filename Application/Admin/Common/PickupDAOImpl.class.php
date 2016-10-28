@@ -24,11 +24,11 @@ class PickupDAOImpl implements IPickupDAO{
         foreach($return_data['data'] as $key=>$value){
             if($return_data['data'][$key]['express_status'] == 2)
             {
-                $return_data['data'][$key]['edit'] = "<a class=\"complete\" href=\"javascript:;\"><span class=\"label label-success\">完 成</span></a>";
+                $return_data['data'][$key]['edit'] = "<a class=\" complete \" href=\"javascript:;\"><span class=\"label label-success\">完 成</span></a>";
             }
             elseif ($return_data['data'][$key]['express_status'] == 3)
             {
-                $return_data['data'][$key]['edit'] = "<a><span class=\"label label-default\">完 成</span></a>";
+                $return_data['data'][$key]['edit'] = "<a class=\" complete \" href=\"javascript:;\"><span class=\"label label-danger\">未完成</span></a>";
             }
 
             if($return_data['data'][$key]['express_status'] == 2){
@@ -132,9 +132,26 @@ class PickupDAOImpl implements IPickupDAO{
     public function updateStatus($pickup_id){
         $model = M("pickup");
         $data['pickup_id'] = $pickup_id;
-        $data['express_status'] = 3;
-        $model->save($data);
-        return 1;
+        $express_status = $model->where("pickup_id=$pickup_id")->getField('express_status');
+        if($express_status==2){
+            $data['express_status'] = 3;
+            $model->save($data);
+            return 1;
+        }
+        else if($express_status==3){
+            $data['express_status'] = 2;
+            $model->save($data);
+            return 2;
+        }
 
+    }
+
+    //完成指定时间内的订单
+    public function completeDuringTheTime($begin_time, $end_time){
+        $object = M('pickup_view');
+        $data['express_status'] = 3;
+        $object->where("time>='$begin_time' and time<='$end_time'")->save($data);
+        var_dump($object->getLastSql());
+        return 1;
     }
 }
