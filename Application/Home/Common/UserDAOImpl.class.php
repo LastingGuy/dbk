@@ -20,6 +20,7 @@ class UserDAOImpl implements IUserDAO{
         "code=$weixin_code&".
         "grant_type=authorization_code";
         $content = file_get_contents($weixin_token_url);
+        print_r($content);
 
         $weixin_user = json_decode($content,true);
         if($weixin_user != null)
