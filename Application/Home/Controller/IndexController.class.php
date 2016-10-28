@@ -137,14 +137,12 @@ class IndexController extends Controller{
     public function newSendOrder()
     {
         //验证是否登陆
-        if(!session('?weixin_user'))
-        {
+        if (!session('?weixin_user')) {
             $this->ajaxReturn('请登陆！');
         }
 
 
-        if(IS_POST)
-        {
+        if (IS_POST) {
             $send = D('send');
             $data = I('post.');
 
@@ -155,20 +153,16 @@ class IndexController extends Controller{
             ///获得寝室id
             $DOR = D('DormitoryView'); //实例化寝室模型
             $dor = $DOR->field('dormitory_id')->where("school_name='$school' and school_city='$city' and dormitory_address = '$address'")->select();
-            if(count($dor)>0)
-            {
+            if (count($dor) > 0) {
                 $dor = $dor[0]['dormitory_id'];
                 $data['dor'] = $dor;
-            }
-            else
-            {
+            } else {
                 $this->ajaxReturn('请填写正确的收货人地址');
             }
 
             ///写入数据库
             $data['sender_name'] = $data['rename'];
-            if(!$this->isMobile($data['tel']))
-            {
+            if (!$this->isMobile($data['tel'])) {
                 $this->ajaxReturn('请填写正确的手机号！');
             }
             $data['sender_phone'] = $data['tel'];
@@ -186,34 +180,26 @@ class IndexController extends Controller{
             $data['time'] = date('Y-m-d H:i:s');
 
             // var_dump($data);
-            if($send->create($data))
-            {
-                if($send->add($data))
-                {
-                    if($data['default']=='true')
-                    {
+            if ($send->create($data)) {
+                if ($send->add($data)) {
+                    if ($data['default'] == 'true') {
                         $info = array(
-                            'default_name'=>$data['sender_name'],
-                            'default_phone'=>$data['sender_phone'],
-                            'default_city'=>$city,
-                            'default_school'=>$school,
-                            'default_dormitory'=>$address
+                            'default_name' => $data['sender_name'],
+                            'default_phone' => $data['sender_phone'],
+                            'default_city' => $city,
+                            'default_school' => $school,
+                            'default_dormitory' => $address
                         );
-                    $this->ajaxReturn('提交成功');
+                        $this->ajaxReturn('提交成功');
+                    } else {
+                        $this->ajaxReturn('提交失败');
+                    }
+                } else {
+                    $this->ajaxReturn($send->getError());
                 }
-                else
-                {
-                    $this->ajaxReturn('提交失败');
-                }
+            } else {
+                $this->ajaxReturn('提交失败！');
             }
-            else
-            {
-                $this->ajaxReturn($send->getError());
-            }
-        }
-        else
-        {
-           $this->ajaxReturn('提交失败！');
         }
     }
 
