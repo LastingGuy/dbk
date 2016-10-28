@@ -25,6 +25,7 @@ class UserDAOImpl implements IUserDAO{
         if($weixin_user != null)
         {
             $openid = $weixin_user['openid'];
+            $ajaxReturn($openid)
             session('access_token',$weixin_user['access_token']);
             $model = D("weixin_user");
             if($model->where("openid = '$openid'")->find()){
