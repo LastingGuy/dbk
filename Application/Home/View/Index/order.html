@@ -107,7 +107,7 @@
                         <td>
                             <select name="dbuild" id="secFloor"></select> <!-- 从floorData.js中读取 -->
                             <!--<div class="defaultAdd">
-                                <input type="checkbox" name="" id="defaultAddNormal" checked="checked"><label for="defaultAddNormal">设为默认地址</label>
+                                <input type="checkbox" name="" id="pickupDefaultInfo"  value="true"><label for="defaultAddNormal">设为默认地址</label>
                             </div>-->
                         </td>
                     </tr>
@@ -184,41 +184,49 @@
         var express_sms = $("#express_sms").val();
         var fetch_code = $("#fetch_code").val();
         var remarks = $("#remarks").val();
+        var isDefault = $("#pickupDefaultInfo").val();
 
 
         if(city=="")
         {
             alert('请选择城市！');
+            $("#Pickupbtn").removeAttr('disabled');
             return;
         }
         else if(school=="")
         {
             alert('请选择学校！');
+            $("#Pickupbtn").removeAttr('disabled');
             return;
         }
         else if(rename=="")
         {
             alert('请输入收件人姓名！');
+            $("#Pickupbtn").removeAttr('disabled');
             return; 
         }
         else if(telephone=="")
         {
             alert('请输入手机号码！');
+            $("#Pickupbtn").removeAttr('disabled');
             return;
         }
         else if(dbuild=="")
         {
-            alert('请选择寝室楼！')
+            alert('请选择寝室楼！');
+            $("#Pickupbtn").removeAttr('disabled');
             return;
         }
         else if(express=="")
         {
-            alert('请选择快递公司！')
+            alert('请选择快递公司！');
+            $("#Pickupbtn").removeAttr('disabled');
             return;
         }
         else if(express_type=="")
         {
-            alert('请选择快递类型！')
+            alert('请选择快递类型！');
+            $("#Pickupbtn").removeAttr('disabled');
             return;
         }
         else if(false)
@@ -229,12 +237,14 @@
         }
         else if(express_sms=='')
         {
-            alert('快递短信不能为空！')
+            alert('快递短信不能为空！');
+            $("#Pickupbtn").removeAttr('disabled');
             return;
         }
         else if(fetch_code=='')
         {
-            alert('提取码/货架号/手机号 不能为空！')
+            alert('提取码/货架号/手机号 不能为空！');
+            $("#Pickupbtn").removeAttr('disabled');
             return;
         }
 
@@ -242,6 +252,7 @@
         if(!isMobile(telephone))
         {
             alert('请输入正确的手机号！');
+            $("#Pickupbtn").removeAttr('disabled');
             return;
         }
 
@@ -252,7 +263,8 @@
         'tel':telephone,'address':dbuild,
         'express':express,'express_type':express_type,
         'price':price,'express_sms':express_sms,
-        'fetch_code':fetch_code,'remarks':remarks
+        'fetch_code':fetch_code,'remarks':remarks,
+        'default':isDefault
         },
         function(t)
         {
@@ -293,7 +305,7 @@
                         <td>
                             <select name="" id="secFloor2"></select> <!-- 从floorData.js中读取 -->
                             <!--<div class="defaultAdd">
-                                <input type="checkbox" name="" id="defaultAddNormal" checked="checked"><label for="defaultAddNormal">设为默认地址</label>
+                                <input type="checkbox" name="" id="sendDefaultInfo" value="true"><label for="defaultAddNormal">设为默认地址</label>
                             </div>-->
                         </td>
                     </tr>
@@ -330,46 +342,55 @@
         var delivery = $("#delivery").val();
         var destination = $('#sending_destination').val();
         var remarks = $("#sending_remark").val();
+        var isDefault = $("sendDefaultInfo").val();
 
         if(city=="")
         {
             alert('请选择城市！');
+            $("#newSendOrderbtn").removeAttr('disabled');
             return;
         }
         else if(school=="")
         {
             alert('请选择学校！');
+            $("#newSendOrderbtn").removeAttr('disabled');
             return;
         }
         else if(rename=="")
         {
             alert('请输入寄件人姓名！');
+            $("#newSendOrderbtn").removeAttr('disabled');
             return; 
         }
         else if(telephone=="")
         {
             alert('请输入手机号码！');
+            $("#newSendOrderbtn").removeAttr('disabled');
             return;
         }
         else if(dbuild=="")
         {
             alert('请选择寝室楼！');
+            $("#newSendOrderbtn").removeAttr('disabled');
             return;
         }
         else if(delivery=="")
         {
             alert('请选择快递物品！');
+            $("#newSendOrderbtn").removeAttr('disabled');
             return;
         }
         else if(destination=="")
         {
             alert('请填写寄件地址！');
+            $("#newSendOrderbtn").removeAttr('disabled');
             return;
         }
 
         if(!isMobile(telephone))
         {
             alert('请输入正确的手机号！');
+            $("#newSendOrderbtn").removeAttr('disabled');
             return;
         }
 
@@ -382,7 +403,8 @@
             'tel':telephone,'address':dbuild,
             'delivery':delivery,
             'destination':destination,
-            'remarks':remarks
+            'remarks':remarks,
+            'default':isDefault
             },
             function(t)
             {
@@ -390,13 +412,13 @@
                 if(t=='提交成功')
                     self.location='../usercenter/usercenter';
                 else
-                    $("#newSendOrderbtn").attr('disabled','disabled');
+                    $("#newSendOrderbtn").removeAttr('disabled');
             }).error
             (
                 function()
                 {
                     alert('提交失败！!');
-                    $("#newSendOrderbtn").attr('disabled','disabled');
+                    $("#newSendOrderbtn").removeAttr('disabled');
                 }
             )
 
