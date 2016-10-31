@@ -138,16 +138,16 @@
                         <td>
                             <select name="express_type" id="express_type" class="expressSize">
                                 <option value="">请选择</option>
-                                <option value="size1">小件(<1kg)</option>
-                                <option value="size2">中件(<3kg)</option>
-                                <option value="size3">大件(>3kg)</option>
+                                <option value="size1">中小件(<2kg)</option>
+                                <option value="size2">大件(>2kg)</option>
+                                <option value="size3">超大件(>3kg)</option>
                             </select>
                         </td>
                     </tr>
 
                     <tr>
                         <th><i class="red">*</i>价&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;格</th>
-                        <td><i class="price" name="price" id="price">0</i>元</td>
+                        <td><i class="price" name="price" id="price">0元</i></td>
                     </tr>
 
                     <tr>
@@ -180,7 +180,7 @@
         var telephone = $("#telephone").val();
         var dbuild = $("#secFloor").val();
         var express = $("#express").find("option:selected").text();
-        var express_type = $("#express_type").find("option:selected").text();
+        var express_type = $("#express_type").find("option:selected").val();
         var price = $("#price").text();
         var express_sms = $("#express_sms").val();
         var fetch_code = $("#fetch_code").val();
