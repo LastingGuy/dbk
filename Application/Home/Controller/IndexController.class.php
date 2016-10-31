@@ -74,6 +74,18 @@ class IndexController extends Controller{
                 $this->ajaxReturn('请填写正确的收货人地址');
             }
 
+            //计算价格
+            $price = $this->charge($data['express_type']);
+            if($price==false)
+            {
+                $this->ajaxReturn('订单错误!');
+            }
+            else
+            {
+                $data['price'] = $price;;
+            }
+
+            
             //写入数据库
             $data['receiver_name'] = $data['rename'];
             if(!$this->isMobile($data['tel']))
@@ -86,11 +98,6 @@ class IndexController extends Controller{
             $data['express_code'] = $data['fetch_code']; 
             $data['openid'] = session('weixin_user');
             
-            //验证是否已经提交该订单
-            // if(!$this->isUniqueOrder($data,0))
-            // {
-            //     $this->ajaxReturn('已提交相同订单');
-            // }
 
             $data['time'] = date('Y-m-d H:i:s');
             $data['express_status'] = 2;
@@ -295,5 +302,25 @@ class IndexController extends Controller{
         }
     }
 
+
+    //计算价格
+    private function charge(&$type)
+    {
+
+        switch($type)
+        {
+            case 'size1':
+                $type='中小件(<2kg)';
+                return 1;
+            case 'size2':
+                $type='大件(>2kg)';
+                return 2;
+            case 'size3':
+                $type='超大件(>3kg)';
+                return 5;
+            default:
+                return false;
+        }
+    }
 }
 ?>
