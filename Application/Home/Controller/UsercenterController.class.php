@@ -10,13 +10,24 @@ Deccription:用户中心
 */
 class UsercenterController extends Controller
 {
-    public function index()
+    private $orderDAO;
+    private $userDAO;
+    public function __construct()
     {
+        parent::__construct();
+
         // test
         // $openid = 'oF6atwNyAc4wlpgNVWTdQi4kj7Po';
         // session('weixin_user',$openid);
 
 
+        $this->orderDAO = new Common\OrderDAOlmpl();
+
+    }
+
+    public function index()
+    {
+        
         //查看用户是否已经写入数据库，没有则写入
         $object = new Common\UserDAOImpl();
         if($object->login())
@@ -165,46 +176,42 @@ class UsercenterController extends Controller
     }
 
     //删除订单
+    //return code:
+    //0:没有登陆
+    //1：删除成功
+    //2：id不正确
+    //4:无此订单
+    //5:该时段订单无法删除
+    //6:删除失败
     public function deleteorder()
     {
         if(session('?weixin_user'))
         {
-            $type = I('get.type');
-            $id = I('get.id');
-            $page = I('get.page');
-            $openid = session('weixin_user');
+            $type = I('post.type');
+            $id = I('post.id');
+            $result = array();
+            // $result['error_code'] = '123';
             if($id=='')
             {
-                $this->error('删除失败');
+                $this->ajaxReturn('2');
             }
+
 
             switch($type)
             {
                 case 0:
-                    $model = M('pickup');
-                    if($model->where("openid='$openid' and pickup_id='$id'")->delete())
-                    {
-                        $this->redirect($page);
-                    }
-                    else
-                    {
-                        $this->error('删除失败');
-                    }
-
+                    $this->ajaxReturn($this->orderDAO->deletePickupOrder($id));
+                    // $this->ajaxReturn($result);
                 case 1:
-                    $model = M('send');
-                    if($model->where("openid='$openid' and send_id='$id'")->delete())
-                    {
-                        $this->redirect($page);
-                    }
-                    else
-                    {
-                        $this->error('删除失败');
-                    }
+                    $this->ajaxReturn($this->orderDAO->deleteSendOrder($id));
                 default:
-                    $this->error('删除失败');
+                    $this->ajaxReturn('6');
 
             }
+        }
+        else
+        {
+            $this->ajaxReturn('1');
         }
     }
     
@@ -222,22 +229,7 @@ class UsercenterController extends Controller
             return false;
         }
 
-        if($type==0)
-        {
-            $pickupModel = M('pickup');
-            if($status==0)
-            {
-                $datas = $pickupModel->where("openid='$openid'")->order('time desc')->select();
-                return $datas;
-            }
-            else
-            {
-                $datas = $pickupModel->where("openid='$openid' and express_status='$status'")->order('pickup_id desc')->select();
-                return $datas;
-            }
-        }
-
-
+        return $this->orderDAO->getOrders($type,$status);
     }
 }
 ?>
