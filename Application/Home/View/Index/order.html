@@ -72,9 +72,10 @@
                     <tr>
                         <th><i class="red">*</i>学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校</th>
                         <td>
-                            <select name="city" id="secArea" class="schoolSelect" > 
-                            </select>  <!-- 从floorData.js中读取 -->
-                            <select name="school" id="secSchool" class="schoolSelect"></select><!-- 从floorData.js中读取 -->
+                            <select name="city" id="city" onchange="getSchools()"> 
+                                <option value="">请选择城市</option>
+                            </select>
+                            <select name="school" id="school" onchange="getDors()"></select><!-- 从floorData.js中读取 -->
                         </td>
                     </tr>
                 </table>
@@ -106,7 +107,7 @@
                     <tr>
                         <th><i class="red">*</i>寝室楼号</th>
                         <td>
-                            <select name="dbuild" id="secFloor"></select> <!-- 从floorData.js中读取 -->
+                            <select name="dbuild" id="dor1"></select> <!-- 从floorData.js中读取 -->
                             <div class="defaultAdd">
                                 <input type="checkbox" name="" id="pickupDefaultInfo"  value="true"><label for="defaultAddNormal">设为默认地址</label>
                             </div>
@@ -174,11 +175,11 @@
     {
         $("#Pickupbtn").attr('disabled','disabled');
 
-        var city = $("#secArea").val();
-        var school = $("#secSchool").val();
+        var city = $("#city").val();
+        var school = $("#school").val();
         var rename = $("#rename").val();
         var telephone = $("#telephone").val();
-        var dbuild = $("#secFloor").val();
+        var dbuild = $("#dor1").val();
         var express = $("#express").find("option:selected").text();
         var express_type = $("#express_type").find("option:selected").val();
         var price = $("#price").text();
@@ -304,7 +305,7 @@
                     <tr>
                         <th><i class="red">*</i>寝室楼号</th>
                         <td>
-                            <select name="" id="secFloor2"></select> <!-- 从floorData.js中读取 -->
+                            <select name="" id="dor2"></select> <!-- 从floorData.js中读取 -->
                             <div class="defaultAdd">
                                 <input type="checkbox" name="" id="sendDefaultInfo" value="true"><label for="defaultAddNormal">设为默认地址</label>
                             </div>
@@ -335,11 +336,11 @@
     function sendSendOrder()
     {
         $("#newSendOrderbtn").attr('disabled','disabled');
-        var city = $("#secArea").val();
-        var school = $("#secSchool").val();
+        var city = $("#city").val();
+        var school = $("#school").val();
         var rename = $("#sender_name").val();
         var telephone = $("#sender_phone").val();
-        var dbuild = $("#secFloor2").val();
+        var dbuild = $("#dor2").val();
         var delivery = $("#delivery").val();
         var destination = $('#sending_destination').val();
         var remarks = $("#sending_remark").val();
@@ -400,7 +401,7 @@
             "{:U('index/newSendOrder')}"
             ,
             {
-                'city':city,'school':school,'rename':rename,
+            'city':city,'school':school,'rename':rename,
             'tel':telephone,'address':dbuild,
             'delivery':delivery,
             'destination':destination,
@@ -448,6 +449,7 @@
     //初始化默认信息
     function setDefaultInfo()
     {
+        getCitys();
         if({$isSetDefault})
         {
             $("#rename").val("{$name}");
@@ -455,32 +457,102 @@
 
             $("#telephone").val("{$phone}");
             $("#sender_phone").val("{$phone}");
-            setSelectChecked("secArea","{$city}")
-            setSelectChecked('secSchool',"{$school}")
-            setSelectChecked('secFloor',"{$dor}")
-            setSelectChecked('secFloor2',"{$dor}")
+            setSelectChecked("city","{$city}")
+            setSelectChecked('school',"{$school}")
+            setSelectChecked('dor1',"{$dor}")
+            setSelectChecked('dor2',"{$dor}")
         }
+
+
     }
 
-    function setSelectChecked(selectId, checkValue){  
-    var select = document.getElementById(selectId);  
-    for(var i=0; i<select.options.length; i++)
+    function setSelectChecked(selectId, checkValue)
     {  
-        if(select.options[i].innerHTML == checkValue)
+        var select = document.getElementById(selectId);  
+        for(var i=0; i<select.options.length; i++)
         {  
-            select.options[i].selected = true;  
-            
-            $("#"+selectId).trigger("change");  
+            if(select.options[i].innerHTML == checkValue)
+            {  
+                select.options[i].selected = true;  
+                
+                $("#"+selectId).trigger("change");  
 
-            break;  
-        }  
+                break;  
+            }  
 
-    }  
-};
+        }  
+    }
+
+    function getCitys()
+    {
+       $.ajax({
+            url:"../interface/getCitys",
+            success:
+                function(data,status)
+                {
+                    if(status=='success')
+                    {
+                            document.getElementById('city').innerHTML= data['city'];
+                            document.getElementById('school').innerHTML= data['school'];
+                            document.getElementById('dor1').innerHTML= data['dor'];
+                            document.getElementById('dor2').innerHTML= data['dor'];
+                    }
+
+                },
+            async:false,
+
+       })
+       
+    }
+
+    function getSchools()
+    {
+        city = $('#city').val();
+        $.ajax({
+            url:"../interface/getSchools",
+            async:false,
+            data:
+            {
+                'city':city
+            },
+            success:
+            function(data,status)
+            {
+                if(status=='success')
+                {
+                    document.getElementById('school').innerHTML= data['school'];
+                    document.getElementById('dor1').innerHTML= data['dor'];
+                    document.getElementById('dor2').innerHTML= data['dor'];  
+                }
+            }
+        })
+    }
+
+    function getDors()
+    {
+        school = $("#school").val();
+        $.ajax({
+            url:"../interface/getDors",
+            async:false,
+            data:
+            {
+                'school':school
+            },
+            success:
+            function(data,status)
+            {
+                if(status=='success')
+                {
+                    document.getElementById('dor1').innerHTML= data;
+                    document.getElementById('dor2').innerHTML= data;
+                }
+            }
+        })
+    }
 </script>
 
 <script src="__PUBLIC__/js/page.js" type="text/javascript"></script><!-- 轮播图/价格切换特效等 -->
-<script src="__PUBLIC__/js/floorData.js" type="text/javascript"></script><!-- 地区-学校-楼幢信息 -->
+<!--<script src="__PUBLIC__/js/floorData.js" type="text/javascript"></script> 地区-学校-楼幢信息 -->
 
 
 </body>
