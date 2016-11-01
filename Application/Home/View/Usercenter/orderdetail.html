@@ -41,7 +41,7 @@
     <div class="goBack">
       <div class="fixWidth">
         <a href="{$page}"></a>
-        <div class="deleteOrder"><a href="deleteorder?id={$data.id}&type=0&page={$page}">删除订单</a></div>
+        <div class="deleteOrder" onclick="deleteOrder()">删除订单</div>
       </div>
     </div>
 
@@ -105,6 +105,41 @@
 
 
 		</div><!-- contain -->
-		
+    <script>
+      function deleteOrder()
+      {
+        if(confirm("确认是否删除(操作不可恢复)!"))
+        {
+          $.post('deleteorder',
+          {
+            type:0,
+            id:{$data.id}
+          },
+          function(t)
+          {
+            switch(t)
+            {
+              case 0:
+                alert('请登陆!');
+                break;
+              case 1:
+                alert('删除成功!');
+                self.location="{$page}";
+                break;
+              case 5:
+                alert('16:00之前不可删除前日16:00之前订单，16:00之后不可删除当日16：00之前订单!');
+                break;
+              default:
+                alert('删除失败!');
+            }
+          }).error(
+            function()
+            {
+              alert('删除失败!');
+            }
+          )
+        }
+      }
+    </script>
 	</body>
 </html>

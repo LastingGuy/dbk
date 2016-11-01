@@ -25,6 +25,16 @@ create table dbk_dormitory(
     constraint fk_dbk_dormitory foreign key(school_id) references dbk_school(school_id)
 )  default character set utf8;
 
+#dbk_express_company 快递公司
+create table dbk_express_company(
+	school_id  int unsigned comment '学校id',
+    express_company_name varchar(100) comment '快递公司名字',
+    constraint pk_dbk_express_company primary key(school_id,express_company_name),    
+    constraint fk_dbk_express_company_school foreign key school_id references dbk_school(school_id)
+)default character set utf8;
+ 
+
+
 #管理员
 create table dbk_admin(
   admin_id varchar(20) not null comment '管理员id',
