@@ -44,7 +44,7 @@ class OrderDAOlmpl implements IOrderDAO
         $today = getdate();
         $stamp = mktime(self::judgeTime,0,0,$today['mon'],$today['mday'],$today['year']);
 
-        if($today['hourse']<self::judgeTime)
+        if($today['hours']<self::judgeTime)
         {
             $stamp -= 24 * 60 * 60;
         }
