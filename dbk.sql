@@ -40,6 +40,7 @@ create table dbk_admin(
   admin_id varchar(20) not null comment '管理员id',
   admin_passwd varchar(20) not null comment '管理员密码',
   admin_school int unsigned comment '学校id',
+  admin_type tinyint unsigned default 0 comment '管理员类型：0普通某校管理员  1超级管理员',
   constraint pk_dbk_admin primary key(admin_id),
   constraint fk_dbk_admin foreign key(admin_school) references dbk_school(school_id)
 )default character set utf8;

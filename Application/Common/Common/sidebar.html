@@ -11,7 +11,26 @@
                 </span>
                 </a>
             </li>
-            <!--<if condition="($privilege['gOrderQ'] eq 1) or ($privilege['gOrderE'] eq 1) ">-->
+            <if condition="($admin_type eq 1)">
+                <!-- 数据统计 -->
+                <li class="sub-menu">
+                    <a href="javascript:;" id="data_module">
+                        <i class="fa fa-sitemap">
+                        </i>
+                            <span>
+                              数据统计
+                            </span>
+                    </a>
+                    <ul class="sub">
+                        <li id="data_statistics">
+                            <a href="{:U('admin/data/index')}">
+                                数据统计
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </if>
+            <if condition="($admin_type eq 0)">
                 <!-- 快递订单管理 -->
                 <li class="sub-menu">
                     <a href="javascript:;" id="express_module">
@@ -35,6 +54,7 @@
                         </li>
                     </ul>
                 </li>
+            </if>
         </ul>
 
     </div>
