@@ -50,8 +50,8 @@
                 <div class="orderNumber">订单号：{$vo.pickup_id}</div>
                 <a href="orderdetail?id={$vo.pickup_id}&type=0&page=allorder">
                   <div class="orderState">
-                    <h1>取件码/货架号/手机号   {$vo.express_code}</h1>
-                    
+                    <h1>取件码/货架号/手机尾号   </h1>
+                    <h2>&nbsp&nbsp{$vo.express_code}</h2>
                     <div class="status">
                       <p>下单时间：<i class="red">{$vo.time}</i></p>
                       <p>完成状态：
