@@ -213,6 +213,14 @@ a:hover{
     color: gray;
 }
 
+.orderState h2{
+    height: 35px;
+    line-height: 35px;
+    padding-left: 45px;
+    font-size: 15px;
+    color: gray;
+}
+
 .orderState .status{
     background: url(../img/progress.jpg) no-repeat;
     padding-left: 25px;
