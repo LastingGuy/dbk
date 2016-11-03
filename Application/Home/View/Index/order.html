@@ -118,7 +118,7 @@
                         <th><i class="red">*</i>快递公司</th>
                         <td>
                             <select name="express" id="express">
-                                <option value="">请选择</option>
+                                <!--<option value="">请选择</option>
                                 <option value="">申通</option>
                                 <option value="">圆通</option>
                                 <option value="">中通</option>
@@ -129,7 +129,7 @@
                                 <option value="">天天</option>
                                 <option value="">EMS</option>
                                 <option value="">二食堂快递</option>
-                                <option value="">其他（请在特殊备注处写明）</option>
+                                <option value="">其他（请在特殊备注处写明）</option>-->
                             </select>
                         </td>
                     </tr>
@@ -492,10 +492,12 @@
                 {
                     if(status=='success')
                     {
-                            document.getElementById('city').innerHTML= data['city'];
-                            document.getElementById('school').innerHTML= data['school'];
-                            document.getElementById('dor1').innerHTML= data['dor'];
-                            document.getElementById('dor2').innerHTML= data['dor'];
+                            document.getElementById('city').innerHTML= makeOptions(data['citys'],'city');
+                            document.getElementById('school').innerHTML= makeOptions(data['schools'],'school');
+                            document.getElementById('dor1').innerHTML= makeOptions(data['dors'],'dor');
+                            document.getElementById('dor2').innerHTML= makeOptions(data['dors'],'dor');
+                            document.getElementById('express').innerHTML=
+                            "<option value=''>请选择</option>" +makeOptions(data['express'],'express_company_name');
                     }
 
                 },
@@ -520,9 +522,11 @@
             {
                 if(status=='success')
                 {
-                    document.getElementById('school').innerHTML= data['school'];
-                    document.getElementById('dor1').innerHTML= data['dor'];
-                    document.getElementById('dor2').innerHTML= data['dor'];  
+                    document.getElementById('school').innerHTML= makeOptions(data['schools'],'school');
+                    document.getElementById('dor1').innerHTML= makeOptions(data['dors'],'dor');
+                    document.getElementById('dor2').innerHTML= makeOptions(data['dors'],'dor');  
+                    document.getElementById('express').innerHTML= 
+                    "<option value=''>请选择</option>" +makeOptions(data['express'],'express_company_name');
                 }
             }
         })
@@ -532,7 +536,7 @@
     {
         school = $("#school").val();
         $.ajax({
-            url:"../interface/getDors",
+            url:"../interface/getDorsAndExpress",
             async:false,
             data:
             {
@@ -543,11 +547,34 @@
             {
                 if(status=='success')
                 {
-                    document.getElementById('dor1').innerHTML= data;
-                    document.getElementById('dor2').innerHTML= data;
+                    document.getElementById('dor1').innerHTML= makeOptions(data['dors'],'dor');
+                    document.getElementById('dor2').innerHTML= makeOptions(data['dors'],'dor');
+                    document.getElementById('express').innerHTML= 
+                    "<option value=''>请选择</option>" +makeOptions(data['express'],'express_company_name');
                 }
             }
         })
+    }
+
+    function makeOptions(data,key)
+    {
+        if(data.length==0)
+        {
+            str = "<option value=''>暂无数据</option>";
+        }
+        else
+        {
+            str = "";
+            data.forEach(
+                function(value)
+                {
+                    v = value[key];
+                    str+="<option value='"+v+"'>"+v+"</option>";
+                }
+            )
+           
+        }
+         return str;
     }
 </script>
 
