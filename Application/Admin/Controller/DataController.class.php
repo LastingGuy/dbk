@@ -31,4 +31,25 @@ class DataController extends Controller {
         $this->display();
     }
 
+    public function getCity(){
+        $object = new Common\DataDAOImpl();
+        $this->ajaxReturn($object->getCity());
+    }
+
+    public function getSchool(){
+        $city = I("post.city");
+        $object = new Common\DataDAOImpl();
+        $this->ajaxReturn($object->getSchoolByCity($city));
+    }
+
+     public function getDataBySchool(){
+         $school = I("post.school");
+         $object = new Common\DataDAOImpl();
+         $result['all_pickup_orders'] = $object->getNrOfPickupOrders($school);
+         $result['today_pickup_orders'] = $object->getTodayNrOfPickupOrders($school);
+         $result['all_send_orders'] = $object->getNrOfSendOrders($school);
+         $result['today_send_orders'] = $object->getTodayNrOfSendOrders($school);
+
+         $this->ajaxReturn($result);
+     }
 }
