@@ -12,14 +12,14 @@ class PickupController extends Controller
 {
     public function index()
     {
-        //准备权限
-        $this->assign("admin_school",session("admin_school"));
-        $this->assign("admin_type",session("admin_type"));
-        
         if(!session("?admin_id")) {
             header('Location:'.U("Admin/Index/index"));
         }
 
+        //准备权限
+        $this->assign("admin_school",session("admin_school"));
+        $this->assign("admin_type",session("admin_type"));
+        
         $this->display();
     }
 
