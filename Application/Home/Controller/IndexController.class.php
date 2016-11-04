@@ -75,8 +75,8 @@ class IndexController extends Controller{
             }
 
             //计算价格
-            $price = $this->charge($data['express_type']);
-            if($price==false)
+            $price = $this->charge($school,$data['express_type']);
+            if($price==-100)
             {
                 $this->ajaxReturn('订单错误!');
             }
@@ -317,20 +317,25 @@ class IndexController extends Controller{
 
 
     //计算价格
-    private function charge(&$type)
+    private function charge($school,&$type)
     {
+        $charge = getPrice($school,$type);
+        if($charge==-1)
+        {
+            $charge=5;
+        }
 
         switch($type)
         {
             case 'size1':
                 $type='中小件(<2kg)';
-                return 1;
+                return $charge;
             case 'size2':
                 $type='大件(>2kg)';
-                return 2;
+                return $charge;
             case 'size3':
                 $type='超大件(>3kg)';
-                return 5;
+                return $charge;
             default:
                 return false;
         }

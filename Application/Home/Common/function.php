@@ -118,4 +118,36 @@
 
         return $express;
     }
+
+    //获得价格
+    // 参数：
+    //      $school:学校名称
+    //      $size:快递类型 
+    //返回 
+    //      -1 自定义计价
+    //      -100 无效订单 
+    function getPrice($school,$size)
+    {
+        $model = M('school');
+        $data = $model->where("school_name='%s'",$school)->find();
+        if($data==false)
+        {
+            return -100;
+        }
+        else
+        {
+            switch($size)
+            {
+                case 'size1':
+                    return $data['small_price'];
+                case 'size2':
+                    return $data['mid_price'];
+                case 'size3':
+                    return $data['large_price'];
+                default:
+                    return -100;
+            }
+        }
+
+    }
 ?>
