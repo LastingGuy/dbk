@@ -26,12 +26,13 @@ create table dbk_dormitory(
 )  default character set utf8;
 
 #dbk_express_company 快递公司
-create table dbk_express_company(
-	school_id  int unsigned comment '学校id',
-    express_company_name varchar(100) comment '快递公司名字',
-    constraint pk_dbk_express_company primary key(school_id,express_company_name),    
-    constraint fk_dbk_express_company_school foreign key(school_id) references dbk_school(school_id)
-)default character set utf8;
+CREATE TABLE `dbk_express_company` (
+  `express_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `school_id` int(10) unsigned NOT NULL,
+  `express_company_name` varchar(100) NOT NULL DEFAULT '' COMMENT '快递公司名字',
+  PRIMARY KEY (`express_id`),
+  CONSTRAINT `fk_school_id_express_company` FOREIGN KEY (`school_id`) REFERENCES `dbk_school` (`school_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8
  
 
 

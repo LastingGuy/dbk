@@ -18,7 +18,6 @@ class InterfaceController extends Controller
     }
 
     //获得全部城市
-    //ajax返回 <option value=id>城市名</option> 格式
     public function getCitys()
     {
        $this->ajaxReturn(getCitys_local());
@@ -33,10 +32,31 @@ class InterfaceController extends Controller
     public function getDors()
     {
         $school = I('get.school');
-        
+        // $school = "浙江大学城市学院";
         $this->ajaxReturn(getDormitory_local($school));
     }
+    public function getExpress()
+    {
+         $school = I('get.school');
+        //  $school = '浙江大学城市学院';
+         $this->ajaxReturn(getExpress_local($school));
+    }
 
+    public function getDorsAndExpress()
+    {
+         $school = I('get.school');
+        //  $school = '浙江大学城市学院';
+         $dors = getDormitory_local($school);
+         $express = getExpress_local($school);
+
+         $return = array
+         (
+             'dors'=>$dors,
+             'express'=>$express
+         );
+         $this->ajaxReturn($return);
+
+    }
 
 
 }
