@@ -137,7 +137,7 @@
                     <tr>
                         <th><i class="red">*</i>快递类型</th>
                         <td>
-                            <select name="express_type" id="express_type" class="expressSize">
+                            <select name="express_type" id="express_type" class="expressSize" onchange="getCharge()">
                                 <option value="">请选择</option>
                                 <option value="size1">中小件(<2kg)</option>
                                 <option value="size2">大件(>2kg)</option>
@@ -498,6 +498,7 @@
                             document.getElementById('dor2').innerHTML= makeOptions(data['dors'],'dor');
                             document.getElementById('express').innerHTML=
                             "<option value=''>请选择</option>" +makeOptions(data['express'],'express_company_name');
+                            
                     }
 
                 },
@@ -527,6 +528,7 @@
                     document.getElementById('dor2').innerHTML= makeOptions(data['dors'],'dor');  
                     document.getElementById('express').innerHTML= 
                     "<option value=''>请选择</option>" +makeOptions(data['express'],'express_company_name');
+                    getCharge();
                 }
             }
         })
@@ -551,9 +553,39 @@
                     document.getElementById('dor2').innerHTML= makeOptions(data['dors'],'dor');
                     document.getElementById('express').innerHTML= 
                     "<option value=''>请选择</option>" +makeOptions(data['express'],'express_company_name');
+                    getCharge();
                 }
             }
         })
+    }
+
+    function getCharge()
+    {
+        var school = $("#school").val();
+        var type = $("#express_type").find("option:selected").val();
+
+        if(type=="")
+        {
+            $('#price').text('0元');
+            return;
+        }
+
+        $.get(
+            "../interface/charge",
+            {
+                'school':school,
+                'type':type
+            },
+            function(data)
+            {
+                $('#price').text(data);
+            }
+        ).error(
+            function()
+            {
+                $('#price').text('暂无价格信息');
+            }
+        )
     }
 
     function makeOptions(data,key)

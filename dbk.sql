@@ -9,12 +9,26 @@ create table dbk_weixin_user(
 )default character set utf8;
 
 #学校
-create table dbk_school(
-	school_id int unsigned auto_increment comment '学校id',
-	school_name varchar(50) comment '学校名',
-    school_city varchar(30) comment '学校所在城市',
-    constraint pk_dbk_school primary key(school_id)
-)default character set utf8;
+-- the old
+-- create table dbk_school(
+-- 	school_id int unsigned auto_increment comment '学校id',
+-- 	school_name varchar(50) comment '学校名',
+--     school_city varchar(30) comment '学校所在城市',
+--     constraint pk_dbk_school primary key(school_id)
+-- )default character set utf8;
+
+
+-- the new
+CREATE TABLE `dbk_school` (
+  `school_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '学校id',
+  `school_name` varchar(50) DEFAULT NULL COMMENT '学校名',
+  `school_city` varchar(30) DEFAULT NULL COMMENT '学校所在城市',
+  `small_price` float DEFAULT '0',
+  `mid_price` float DEFAULT '0',
+  `large_price` float DEFAULT '0',
+  PRIMARY KEY (`school_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8
+
 
 #寝室
 create table dbk_dormitory(
@@ -41,6 +55,7 @@ create table dbk_admin(
   admin_id varchar(20) not null comment '管理员id',
   admin_passwd varchar(20) not null comment '管理员密码',
   admin_school int unsigned comment '学校id',
+  admin_type tinyint unsigned default 0 comment '管理员类型：0普通某校管理员  1超级管理员',
   constraint pk_dbk_admin primary key(admin_id),
   constraint fk_dbk_admin foreign key(admin_school) references dbk_school(school_id)
 )default character set utf8;

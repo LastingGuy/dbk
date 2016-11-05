@@ -75,8 +75,8 @@ class IndexController extends Controller{
             }
 
             //计算价格
-            $price = $this->charge($data['express_type']);
-            if($price==false)
+            $price = $this->charge($school,$data['express_type']);
+            if($price==-100)
             {
                 $this->ajaxReturn('订单错误!');
             }
@@ -149,7 +149,8 @@ class IndexController extends Controller{
         }
 
 
-        if (IS_POST) {
+        if (IS_POST) 
+        {
             $send = D('send');
             $data = I('post.');
 
@@ -187,9 +188,12 @@ class IndexController extends Controller{
             $data['time'] = date('Y-m-d H:i:s');
 
             // var_dump($data);
-            if ($send->create($data)) {
-                if ($send->add($data)) {
-                    if ($data['default'] == 'true') {
+            if ($send->create($data)) 
+            {
+                if ($send->add($data)) 
+                {
+                    if ($data['default'] == 'true') 
+                    {
                         $info = array(
                             'default_name' => $data['sender_name'],
                             'default_phone' => $data['sender_phone'],
@@ -197,16 +201,25 @@ class IndexController extends Controller{
                             'default_school' => $school,
                             'default_dormitory' => $address
                         );
-                        $this->ajaxReturn('提交成功');
-                    } else {
-                        $this->ajaxReturn('提交失败');
-                    }
-                } else {
-                    $this->ajaxReturn($send->getError());
+
+                        $this->saveDefaultInfo( $data['openid'],$info);
+                        
+                    } 
+                   $this->ajaxReturn('提交成功');
+                } 
+                else 
+                {
+                    $this->ajaxReturn('提交失败');
                 }
-            } else {
-                $this->ajaxReturn('提交失败！');
+            } 
+            else 
+            {
+                $this->ajaxReturn($pickup->getError());
             }
+        }
+        else 
+        {
+            $this->ajaxReturn('提交失败');
         }
     }
 
@@ -304,20 +317,25 @@ class IndexController extends Controller{
 
 
     //计算价格
-    private function charge(&$type)
+    private function charge($school,&$type)
     {
+        $charge = getPrice($school,$type);
+        if($charge==-1)
+        {
+            $charge=5;
+        }
 
         switch($type)
         {
             case 'size1':
                 $type='中小件(<2kg)';
-                return 1;
+                return $charge;
             case 'size2':
                 $type='大件(>2kg)';
-                return 2;
+                return $charge;
             case 'size3':
                 $type='超大件(>3kg)';
-                return 5;
+                return $charge;
             default:
                 return false;
         }
