@@ -44,9 +44,13 @@ class OrderDAOlmpl implements IOrderDAO
         $today = getdate();
         $stamp = mktime(self::judgeTime,0,0,$today['mon'],$today['mday'],$today['year']);
 
-        if($today['hours']<self::judgeTime)
+        if($today['hours']<self::judgeTime || $today['wday']=6)
         {
             $stamp -= 24 * 60 * 60;
+            if($today['wday']==0)
+            {
+                $stamp -= 24 * 60 * 60;
+            }
         }
         $deadLine = date('Y-m-d H:i:s',$stamp);
 
@@ -74,9 +78,13 @@ class OrderDAOlmpl implements IOrderDAO
         $today = getdate();
         $stamp = mktime(self::judgeTime,0,0,$today['mon'],$today['mday'],$today['year']);
 
-        if($today['hourse']<self::judgeTime)
+        if($today['hours']<self::judgeTime || $today['wday']=6)
         {
             $stamp -= 24 * 60 * 60;
+            if($today['wday']==0)
+            {
+                $stamp -= 24 * 60 * 60;
+            }
         }
         $deadLine = date('Y-m-d H:i:s',$stamp);
 
