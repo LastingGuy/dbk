@@ -17,8 +17,8 @@ class UsercenterController extends Controller
         parent::__construct();
 
         // test
-        $openid = 'oF6atwNyAc4wlpgNVWTdQi4kj7Po';
-        session('weixin_user',$openid);
+        // $openid = 'oF6atwNyAc4wlpgNVWTdQi4kj7Po';
+        // session('weixin_user',$openid);
 
 
         $this->orderDAO = new Common\OrderDAOlmpl();
@@ -45,7 +45,7 @@ class UsercenterController extends Controller
     {
 
         //test
-        $this->display();
+        // $this->display();
 
         $user = new Common\UserDAOImpl();
         if( $user->getUserInfo())
