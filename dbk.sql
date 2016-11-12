@@ -88,14 +88,19 @@ create table dbk_send(
     sender_name varchar(10) comment '寄件人姓名',
     sender_phone varchar(12) comment '寄件人手机号码',
     dormitory_id int unsigned comment '寝室id',
+    recv_name varchar(45) NOT NULL COMMENT '收件人姓名',
+    recv_phone varchar(11) NOT NULL COMMENT '收件人手机',
     sender_goods varchar(300) not null comment '寄件物品',
+    destination varchar(1000) NOT NULL COMMENT '目的地',
     remarks varchar(300) comment '备注',
-    `time` datetime  not null comment '下单时间',
+    time datetime  not null comment '下单时间',
     sender_status tinyint not null comment '寄件状态  0:未接单 1:已接单 2：正在寄件 3：完成寄件' ,
     constraint pk_dbk_send primary key(send_id),
     constraint  fk_dbk_dormitory_send foreign key(dormitory_id) references dbk_dormitory(dormitory_id),
     constraint fk_dbk_openid_send foreign key(openid) references dbk_weixin_user(openid)
 )  default character set utf8;
+
+
 
 #建立代收件视图
 create view dbk_pickup_view

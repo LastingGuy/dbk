@@ -140,7 +140,7 @@ class IndexController extends Controller{
         }
     }
 
-    //创建代取快递订单
+    //创建代寄快递订单
     public function newSendOrder()
     {
         //验证是否登陆
@@ -165,15 +165,20 @@ class IndexController extends Controller{
                 $dor = $dor[0]['dormitory_id'];
                 $data['dor'] = $dor;
             } else {
-                $this->ajaxReturn('请填写正确的收货人地址');
+                $this->ajaxReturn('请填写正确的寄件人地址');
             }
 
             ///写入数据库
             $data['sender_name'] = $data['rename'];
+            $data['recv_name'] = $data['recvname'];
             if (!$this->isMobile($data['tel'])) {
-                $this->ajaxReturn('请填写正确的手机号！');
+                $this->ajaxReturn('请填写正确的寄件人手机号！');
+            }
+            if (!$this->isMobile($data['recvtelephone'])) {
+                $this->ajaxReturn('请填写正确的收件人手机号！');
             }
             $data['sender_phone'] = $data['tel'];
+            $data['recv_phone'] = $data['recvtelephone'];
             $data['dormitory_id'] = $data['dor'];
             $data['sender_goods'] = $data['delivery'];
             $data['openid'] = session('weixin_user');

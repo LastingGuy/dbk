@@ -293,12 +293,12 @@
             <form action="">
                 <table>
                     <tr>
-                        <th><i class="red">*</i>寄件姓名</th>
+                        <th><i class="red">*</i>寄件人姓名</th>
                         <td><input type="text" id="sender_name"></td>
                     </tr>
 
                     <tr>
-                        <th><i class="red">*</i>手机号码</th>
+                        <th><i class="red">*</i>寄件人手机号码</th>
                         <td><input type="text" id="sender_phone"></td>
                     </tr>
 
@@ -310,6 +310,16 @@
                                 <input type="checkbox" name="" id="sendDefaultInfo" value="true"><label for="defaultAddNormal">设为默认地址</label>
                             </div>
                         </td>
+                    </tr>
+
+                     <tr>
+                        <th><i class="red">*</i>收件人姓名</th>
+                        <td><input type="text" name="rename" id="recvname"></td>
+                    </tr>
+
+                    <tr>
+                        <th><i class="red">*</i>收件人手机号码</th>
+                        <td><input type="text" name="telephone" id="recvtelephone"></td>
                     </tr>
 
 
@@ -344,7 +354,9 @@
         var delivery = $("#delivery").val();
         var destination = $('#sending_destination').val();
         var remarks = $("#sending_remark").val();
-        var isDefault = $("#sendDefaultInfo").prop("checked")
+        var isDefault = $("#sendDefaultInfo").prop("checked");
+        var recvname = $('#recvname').val();
+        var recvtelephone = $('#recvtelephone').val();
 
         if(city=="")
         {
@@ -366,7 +378,7 @@
         }
         else if(telephone=="")
         {
-            alert('请输入手机号码！');
+            alert('请输入寄件人手机号码！');
             $("#newSendOrderbtn").removeAttr('disabled');
             return;
         }
@@ -388,10 +400,29 @@
             $("#newSendOrderbtn").removeAttr('disabled');
             return;
         }
+        else if(recvname=="")
+        {
+            alert('请填写收件人姓名');
+            $("#newSendOrderbtn").removeAttr('disabled');
+            return;
+        }
+        else if(recvtelephone=="")
+        {
+            alert('请填写收件人手机号码');
+            $("#newSendOrderbtn").removeAttr('disabled');
+            return;
+        }
 
         if(!isMobile(telephone))
         {
-            alert('请输入正确的手机号！');
+            alert('请正确填写寄件人手机号！');
+            $("#newSendOrderbtn").removeAttr('disabled');
+            return;
+        }
+
+        if(!isMobile(recvtelephone))
+        {
+            alert('请正确填写收件人手机号！');
             $("#newSendOrderbtn").removeAttr('disabled');
             return;
         }
@@ -404,6 +435,8 @@
             'city':city,'school':school,'rename':rename,
             'tel':telephone,'address':dbuild,
             'delivery':delivery,
+            'recvname':recvname,
+            'recvtelephone':recvtelephone,
             'destination':destination,
             'remarks':remarks,
             'default':isDefault
