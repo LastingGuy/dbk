@@ -210,7 +210,7 @@ class IndexController extends Controller{
                         $this->saveDefaultInfo( $data['openid'],$info);
                         
                     } 
-                    \Think\Log::record($send->getLastSQL(),'INFO');
+                    \Think\Log::write($send->getLastSQL(),'INFO');
                     $this->ajaxReturn('提交成功');
                 } 
                 else 
