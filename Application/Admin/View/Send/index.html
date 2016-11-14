@@ -67,7 +67,7 @@
                             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">导 出 工 具 <i class="fa fa-angle-down"></i>
                             </button>
                             <ul class="dropdown-menu pull-right">
-                                <li><a href="{:U('admin/pickup/export')}">今日配送Excel</a></li>
+                                <li><a href="{:U('admin/send/export')}">今日配送Excel</a></li>
                                 <li><a href="javascript:;" data-toggle="modal"
                                        data-target="#myModal">自定义Excel</a></li>
                             </ul>
@@ -81,7 +81,7 @@
                                 <th>订单id</th>
                                 <th>用户id</th>
                                 <th>寄件人姓名</th>
-                                <th>手机号码</th>
+                                <th>寄件人手机</th>
                                 <th>下单时间</th>
                                 <th>状 态</th>
                                 <th>编 辑</th>
@@ -249,6 +249,8 @@
         sOut += '<tr><td>寝 室：</td><td>'+aData['dormitory_address']+'</td></tr>';
         sOut += '<tr><td>寄件地址：</td><td>'+aData['destination']+'</td></tr>';
         sOut += '<tr><td>寄件物品：</td><td>'+aData['sender_goods']+'</td></tr>';
+        sOut += '<tr><td>收件人姓名：</td><td>'+aData['recv_name']+'</td></tr>';
+        sOut += '<tr><td>收件人电话：</td><td>'+aData['recv_phone']+'</td></tr>';
         sOut += '<tr><td>备 注：</td><td>'+aData['remarks']+'</td></tr>';
         sOut += '</table>';
 
