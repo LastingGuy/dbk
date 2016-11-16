@@ -527,8 +527,8 @@
                     {
                             document.getElementById('city').innerHTML= makeOptions(data['citys'],'city');
                             document.getElementById('school').innerHTML= makeOptions(data['schools'],'school');
-                            document.getElementById('dor1').innerHTML= makeOptions(data['dors'],'dor');
-                            document.getElementById('dor2').innerHTML= makeOptions(data['dors'],'dor');
+                            document.getElementById('dor1').innerHTML= "<option value=''>请选择</option>" +makeOptions(data['dors'],'dor');
+                            document.getElementById('dor2').innerHTML= "<option value=''>请选择</option>" +makeOptions(data['dors'],'dor');
                             document.getElementById('express').innerHTML=
                             "<option value=''>请选择</option>" +makeOptions(data['express'],'express_company_name');
                             
@@ -557,8 +557,8 @@
                 if(status=='success')
                 {
                     document.getElementById('school').innerHTML= makeOptions(data['schools'],'school');
-                    document.getElementById('dor1').innerHTML= makeOptions(data['dors'],'dor');
-                    document.getElementById('dor2').innerHTML= makeOptions(data['dors'],'dor');  
+                    document.getElementById('dor1').innerHTML="<option value=''>请选择</option>" + makeOptions(data['dors'],'dor');
+                    document.getElementById('dor2').innerHTML="<option value=''>请选择</option>" + makeOptions(data['dors'],'dor');  
                     document.getElementById('express').innerHTML= 
                     "<option value=''>请选择</option>" +makeOptions(data['express'],'express_company_name');
                     getCharge();
@@ -582,8 +582,8 @@
             {
                 if(status=='success')
                 {
-                    document.getElementById('dor1').innerHTML= makeOptions(data['dors'],'dor');
-                    document.getElementById('dor2').innerHTML= makeOptions(data['dors'],'dor');
+                    document.getElementById('dor1').innerHTML="<option value=''>请选择</option>" + makeOptions(data['dors'],'dor');
+                    document.getElementById('dor2').innerHTML="<option value=''>请选择</option>" + makeOptions(data['dors'],'dor');
                     document.getElementById('express').innerHTML= 
                     "<option value=''>请选择</option>" +makeOptions(data['express'],'express_company_name');
                     getCharge();
