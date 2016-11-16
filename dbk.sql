@@ -101,6 +101,15 @@ create table dbk_send(
 )  default character set utf8;
 
 
+#到件通知
+create table dbk_dormitory_dialog
+(
+	dormitory_id int unsigned comment '寝室号',
+    date date comment '拨打日期',
+    time datetime comment '拨打时间',
+    constraint pk_dormitory_dialog primary key(dormitory_id, date),
+    constraint fk_dormitory_dialog_dormitoryid foreign key(dormitory_id) references dbk_dormitory(dormitory_id)
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
 
 #建立代收件视图
 create view dbk_pickup_view
@@ -121,7 +130,8 @@ as
 		    dbk_dormitory.dormitory_address,
         dbk_send.dormitory_id, dbk_send.sender_goods, dbk_send.sender_status,
         dbk_send.send_id, dbk_send.sender_name, dbk_send.sender_phone,
-        dbk_send.remarks, dbk_send.time, dbk_send.openid, dbk_send.destination
+        dbk_send.remarks, dbk_send.time, dbk_send.openid, dbk_send.destination,
+        dbk_send.recv_name, dbk_send.recv_phone
  from dbk_school, dbk_dormitory, dbk_send
  where dbk_school.school_id = dbk_dormitory.school_id and dbk_dormitory.dormitory_id = dbk_send.dormitory_id;
 
