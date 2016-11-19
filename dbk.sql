@@ -136,6 +136,7 @@ as
  where dbk_school.school_id = dbk_dormitory.school_id and dbk_dormitory.dormitory_id = dbk_send.dormitory_id;
 
 
+
 #导入学校
 insert into dbk_school(school_name,school_city) values('浙江大学城市学院','杭州市');
 insert into dbk_school(school_name,school_city) values('树人大学','杭州市');
