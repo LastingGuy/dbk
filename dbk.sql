@@ -10,6 +10,7 @@ create table dbk_weixin_user(
 
 #学校
 -- the old
+
 -- create table dbk_school(
 -- 	school_id int unsigned auto_increment comment '学校id',
 -- 	school_name varchar(50) comment '学校名',
@@ -135,6 +136,21 @@ as
  from dbk_school, dbk_dormitory, dbk_send
  where dbk_school.school_id = dbk_dormitory.school_id and dbk_dormitory.dormitory_id = dbk_send.dormitory_id;
 
+#订单微信支付下单
+create  table dbk_weixin_pay
+(
+  payid int not null auto_increment comment '流水号',
+  trade_no varchar(32) comment '商户订单号',
+  refund_no varchar(32) comment '退款单号,如果该记录是退款记录',
+  openid  varchar(100) comment '用户id',
+  nonce_str varchar(32) comment '随机字符串',
+  sign varchar(32) comment '签名',
+  perpay_id varchar(64) comment '预支付交易会话标识',
+  pay_type tinyint comment '订单类型： 1代拿下单  2代拿退款  3代寄下单  4代寄退款',
+  pay_status  tinyint comment '订单状态 ：0未完成  1已完成',
+  price int comment '支付金额，单位分',
+  time datetime comment '交易时间'
+)
 
 
 #导入学校
