@@ -120,7 +120,8 @@ class InterfaceController extends Controller
 
     //微信支付通知接口
     public function weixinNotify(){
-        
+        $object = new \WxPayNotify();
+        $object->Handle();
     }
 }
 ?>

@@ -48,8 +48,6 @@ CREATE TABLE `dbk_express_company` (
   PRIMARY KEY (`express_id`),
   CONSTRAINT `fk_school_id_express_company` FOREIGN KEY (`school_id`) REFERENCES `dbk_school` (`school_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8
- 
-
 
 #管理员
 create table dbk_admin(
@@ -60,7 +58,6 @@ create table dbk_admin(
   constraint pk_dbk_admin primary key(admin_id),
   constraint fk_dbk_admin foreign key(admin_school) references dbk_school(school_id)
 )default character set utf8;
-
 
 #代取件表
 create table dbk_pickup(
@@ -112,6 +109,16 @@ create table dbk_dormitory_dialog
     constraint fk_dormitory_dialog_dormitoryid foreign key(dormitory_id) references dbk_dormitory(dormitory_id)
 ) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
 
+#收件费用
+create table dbk_school_fee
+(
+  school_id int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '学校id',
+  price float comment '价格',
+  size varchar(20) comment '',
+  description varchar(100) comment'描述'
+  constraint pk_dbk_school_fee PRIMARY KEY(school_id,size),
+  CONSTRAINT fk_dbk_school_fee_school_id FOREIGN KEY(school_id) REFERENCES  dbk_school(school_id)
+)
 #建立代收件视图
 create view dbk_pickup_view
 as
