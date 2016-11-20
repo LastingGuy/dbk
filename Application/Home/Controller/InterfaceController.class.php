@@ -94,6 +94,12 @@ class InterfaceController extends Controller
         $openid = 'oF6atwNyAc4wlpgNVWTdQi4kj7Po';
         session('weixin_user',$openid);
 
+        //插入订单记录到pickup
+
+
+        //插入微信支付流水号
+
+
         //②、统一下单
         $input = new \WxPayUnifiedOrder();
         $input->SetBody("test");
@@ -109,7 +115,12 @@ class InterfaceController extends Controller
         $order = \WxPayApi::unifiedOrder($input);
         var_dump($order);
 
+        //返回数据
     }
 
+    //微信支付通知接口
+    public function weixinNotify(){
+        
+    }
 }
 ?>
