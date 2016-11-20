@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta charset="utf-8">
+    <title>代步客-取快递</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="keywords" content="代步客,校园代取快递,取快递,快递助手">
+    <meta name="description" content="代步客,校园代取快递">
+
+    <link href="__PUBLIC__/css/base.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/phone_style.css" rel="stylesheet">
+    <script src="__PUBLIC__/js/html5.js" type="text/javascript"></script>
+    <script src="__PUBLIC__/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script src="__PUBLIC__/js/swipe.js" type="text/javascript"></script>
+
+    <!--[if lt IE 9]>
+    <script src="__HJS__/html5.js" type="text/javascript"></script>
+    <![endif]-->
+
+    <!--[if IE 8 ]>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/style-ie.css" />
+    <![endif]-->
+
+    <!--[if lt IE 8 ]>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/css/style-ie.css" />
+    <div id="ie7tips"><p>您的浏览器版本过低，请升级到ie10以上或更换Chrome,firefox等浏览器获得流畅的浏览效果！</p></div>
+    <![endif]-->
+
+
+
+
+</head>
+
+<body onload="setDefaultInfo()">
+    <div class="contain takeExpress">
+
+        <div class="noticeBar">
+            <p>双11后一周期间，周六不休息，每天16点前截单</p> <i class="closeBtn"></i></div>
+
+        <!--banner star-->
+        <div class="banner" id="bannerBox">
+            <ul>
+                <li>
+                    <a href="javascript:;"><img class="dis_block" src="__PUBLIC__/img/banner3.jpg"></a>
+                </li>
+                <li>
+                    <a href="javascript:;"><img class="dis_block" src="__PUBLIC__/img/banner1.jpg"></a>
+                </li>
+                <li>
+                    <a href="javascript:;"><img class="dis_block" src="__PUBLIC__/img/banner.jpg"></a>
+                </li>
+            </ul>
+            <ol>
+                <script>
+                $(".banner li").each(function () {
+                    document.write('<li class=""></li>')
+                });
+            </script>
+            </ol>
+        </div>
+        <!--banner end-->
+
+        <div class="school">
+            <div class="fixWidth">
+                <!--<form action="">-->
+
+                <table>
+                    <tr>
+                        <th><i class="red">*</i>学&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;校</th>
+                        <td>
+                            <select name="city" id="city" onchange="getSchools()"> 
+                                <option value="">请选择城市</option>
+                            </select>
+                            <select name="school" id="school" onchange="getDors()"></select>
+                            <!-- 从floorData.js中读取 -->
+                        </td>
+                    </tr>
+                </table>
+
+                <!--</form>-->
+            </div>
+        </div>
+
+        <div class="fixWidth">
+            <ul class="tab">
+                <li class="on">代取件</li>
+                <li>代寄件</li>
+            </ul>
+
+            <!-- 代取件 -->
+            <div class="menuSelect normal">
+                <form action="" method="post">
+                    <table>
+                        <tr>
+                            <th><i class="red">*</i>收件姓名</th>
+                            <td><input type="text" name="rename" id="rename"></td>
+                        </tr>
+
+                        <tr>
+                            <th><i class="red">*</i>手机号码</th>
+                            <td><input type="text" name="telephone" id="telephone"></td>
+                        </tr>
+
+                        <tr>
+                            <th><i class="red">*</i>寝室楼号</th>
+                            <td>
+                                <select name="dbuild" id="dor1"></select>
+                                <!-- 从floorData.js中读取 -->
+                                <div class="defaultAdd">
+                                    <input type="checkbox" name="" id="pickupDefaultInfo" value="true"><label for="defaultAddNormal">设为默认地址</label>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th><i class="red">*</i>快递公司</th>
+                            <td>
+                                <select name="express" id="express">
+                                <!--<option value="">请选择</option>
+                                <option value="">申通</option>
+                                <option value="">圆通</option>
+                                <option value="">中通</option>
+                                <option value="">韵达</option>
+                                <option value="">汇通</option>
+                                <option value="">国通</option>
+                                <option value="">顺丰</option>
+                                <option value="">天天</option>
+                                <option value="">EMS</option>
+                                <option value="">二食堂快递</option>
+                                <option value="">其他（请在特殊备注处写明）</option>-->
+                            </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th><i class="red">*</i>快递类型</th>
+                            <td>
+                                <select name="express_type" id="express_type" class="expressSize" onchange="getCharge()">
+                                <option value="">请选择</option>
+                                <option value="size1">中小件(<2kg)</option>
+                                <option value="size2">大件(>2kg)</option>
+                                <option value="size3">超大件(>3kg)</option>
+                            </select>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th><i class="red">*</i>价&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;格</th>
+                            <td><i class="price" name="price" id="price">0元</i></td>
+                        </tr>
+
+                        <tr>
+                            <th><i class="red">*</i>快递短信
+                                <h5>(可以复制)</h5>
+                            </th>
+                            <td> <textarea name="express_sms" id="express_sms"></textarea> </td>
+                        </tr>
+
+                        <tr>
+                            <th>
+                                <h4><i class="red">*</i> 取件码/货架号/<br>手机尾号</h4>
+                            </th>
+                            <td><input type="text" name="fetch_code" id="fetch_code"></td>
+                        </tr>
+
+
+                        <tr>
+                            <th>特殊备注</th>
+                            <td><textarea name="remarks" id="remarks"></textarea> </td>
+                        </tr>
+                    </table>
+                    <input type="submit" value="提交信息" id="Pickupbtn" onclick="sendpickuporder(); return false;">
+                </form>
+            </div>
+            <!-- menuSelect -->
+            <script>
+    function sendpickuporder()
+    {
+        $("#Pickupbtn").attr('disabled','disabled');
+
+        var city = $("#city").val();
+        var school = $("#school").val();
+        var rename = $("#rename").val();
+        var telephone = $("#telephone").val();
+        var dbuild = $("#dor1").val();
+        var express = $("#express").find("option:selected").text();
+        var express_type = $("#express_type").find("option:selected").val();
+        var price = $("#price").text();
+        var express_sms = $("#express_sms").val();
+        var fetch_code = $("#fetch_code").val();
+        var remarks = $("#remarks").val();
+        var isDefault = $("#pickupDefaultInfo").prop("checked")
+
+
+        if(city=="")
+        {
+            alert('请选择城市！');
+            $("#Pickupbtn").removeAttr('disabled');
+            return;
+        }
+        else if(school=="")
+        {
+            alert('请选择学校！');
+            $("#Pickupbtn").removeAttr('disabled');
+            return;
+        }
+        else if(rename=="")
+        {
+            alert('请输入收件人姓名！');
+            $("#Pickupbtn").removeAttr('disabled');
+            return; 
+        }
+        else if(telephone=="")
+        {
+            alert('请输入手机号码！');
+            $("#Pickupbtn").removeAttr('disabled');
+            return;
+        }
+        else if(dbuild=="")
+        {
+            alert('请选择寝室楼！');
+            $("#Pickupbtn").removeAttr('disabled');
+            return;
+        }
+        else if(express=="")
+        {
+            alert('请选择快递公司！');
+            $("#Pickupbtn").removeAttr('disabled');
+            return;
+        }
+        else if(express_type=="")
+        {
+            alert('请选择快递类型！');
+            $("#Pickupbtn").removeAttr('disabled');
+            return;
+        }
+        else if(false)
+        {
+            //价格占位
+            alert('')
+            return;
+        }
+        else if(express_sms=='')
+        {
+            alert('快递短信不能为空！');
+            $("#Pickupbtn").removeAttr('disabled');
+            return;
+        }
+        else if(fetch_code=='')
+        {
+            alert('提取码/货架号/手机号 不能为空！');
+            $("#Pickupbtn").removeAttr('disabled');
+            return;
+        }
+
+
+        if(!isMobile(telephone))
+        {
+            alert('请输入正确的手机号！');
+            $("#Pickupbtn").removeAttr('disabled');
+            return;
+        }
+
+        
+        $.post("{:U('index/newRecvOrder')}",
+        {
+        'city':city,'school':school,'rename':rename,
+        'tel':telephone,'address':dbuild,
+        'express':express,'express_type':express_type,
+        'price':price,'express_sms':express_sms,
+        'fetch_code':fetch_code,'remarks':remarks,
+        'default':isDefault
+        },
+        function(t)
+        {
+                alert(t);
+                if(t=='提交成功')
+                    self.location='../usercenter/usercenter';
+                else
+                    $("#Pickupbtn").removeAttr('disabled');
+        }).error
+        (
+            function()
+            {
+                alert('提交失败！');
+                $("#Pickupbtn").removeAttr('disabled');
+            }
+        )
+
+    }
+
+</script>
+
+            <!-- 代寄件 -->
+            <div class="menuSelect">
+                <form action="">
+                    <table>
+                        <tr>
+                            <th><i class="red">*</i>寄件人姓名</th>
+                            <td><input type="text" id="sender_name"></td>
+                        </tr>
+
+                        <tr>
+                            <th><i class="red">*</i>寄件人手机号码</th>
+                            <td><input type="text" id="sender_phone"></td>
+                        </tr>
+
+                        <tr>
+                            <th><i class="red">*</i>寝室楼号</th>
+                            <td>
+                                <select name="" id="dor2"></select>
+                                <!-- 从floorData.js中读取 -->
+                                <div class="defaultAdd">
+                                    <input type="checkbox" name="" id="sendDefaultInfo" value="true"><label for="defaultAddNormal">设为默认地址</label>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th><i class="red">*</i>收件人姓名</th>
+                            <td><input type="text" name="rename" id="recvname"></td>
+                        </tr>
+
+                        <tr>
+                            <th><i class="red">*</i>收件人手机号码</th>
+                            <td><input type="text" name="telephone" id="recvtelephone"></td>
+                        </tr>
+
+
+                        <tr>
+                            <th><i class="red">*</i>寄件物品</th>
+                            <td> <textarea name="delivery" id="delivery"></textarea> </td>
+                        </tr>
+
+                        <tr>
+                            <th><i class="red">*</i>收件地址</th>
+                            <td><textarea name="sremark" id="sending_destination"></textarea> </td>
+                        </tr>
+
+
+                        <tr>
+                            <th>特殊备注</th>
+                            <td><textarea name="sremark" id="sending_remark"></textarea> </td>
+                        </tr>
+                    </table>
+                    <input type="submit" value="提交信息" id="newSendOrderbtn" onclick="sendSendOrder();return false;">
+                </form>
+            </div>
+            <!-- menuSelect -->
+            <script>
+    function sendSendOrder()
+    {
+        $("#newSendOrderbtn").attr('disabled','disabled');
+        var city = $("#city").val();
+        var school = $("#school").val();
+        var rename = $("#sender_name").val();
+        var telephone = $("#sender_phone").val();
+        var dbuild = $("#dor2").val();
+        var delivery = $("#delivery").val();
+        var destination = $('#sending_destination').val();
+        var remarks = $("#sending_remark").val();
+        var isDefault = $("#sendDefaultInfo").prop("checked");
+        var recvname = $('#recvname').val();
+        var recvtelephone = $('#recvtelephone').val();
+
+        if(city=="")
+        {
+            alert('请选择城市！');
+            $("#newSendOrderbtn").removeAttr('disabled');
+            return;
+        }
+        else if(school=="")
+        {
+            alert('请选择学校！');
+            $("#newSendOrderbtn").removeAttr('disabled');
+            return;
+        }
+        else if(rename=="")
+        {
+            alert('请输入寄件人姓名！');
+            $("#newSendOrderbtn").removeAttr('disabled');
+            return; 
+        }
+        else if(telephone=="")
+        {
+            alert('请输入寄件人手机号码！');
+            $("#newSendOrderbtn").removeAttr('disabled');
+            return;
+        }
+        else if(dbuild=="")
+        {
+            alert('请选择寝室楼！');
+            $("#newSendOrderbtn").removeAttr('disabled');
+            return;
+        }
+        else if(delivery=="")
+        {
+            alert('请选择快递物品！');
+            $("#newSendOrderbtn").removeAttr('disabled');
+            return;
+        }
+        else if(destination=="")
+        {
+            alert('请填写寄件地址！');
+            $("#newSendOrderbtn").removeAttr('disabled');
+            return;
+        }
+        else if(recvname=="")
+        {
+            alert('请填写收件人姓名');
+            $("#newSendOrderbtn").removeAttr('disabled');
+            return;
+        }
+        else if(recvtelephone=="")
+        {
+            alert('请填写收件人手机号码');
+            $("#newSendOrderbtn").removeAttr('disabled');
+            return;
+        }
+
+        if(!isMobile(telephone))
+        {
+            alert('请正确填写寄件人手机号！');
+            $("#newSendOrderbtn").removeAttr('disabled');
+            return;
+        }
+
+        if(!isMobile(recvtelephone))
+        {
+            alert('请正确填写收件人手机号！');
+            $("#newSendOrderbtn").removeAttr('disabled');
+            return;
+        }
+
+
+        $.post(
+            "{:U('index/newSendOrder')}"
+            ,
+            {
+            'city':city,'school':school,'rename':rename,
+            'tel':telephone,'address':dbuild,
+            'delivery':delivery,
+            'recvname':recvname,
+            'recvtelephone':recvtelephone,
+            'destination':destination,
+            'remarks':remarks,
+            'default':isDefault
+            },
+            function(t)
+            {
+                alert(t);
+                if(t=='提交成功')
+                    self.location='../usercenter/usercenter';
+                else
+                    $("#newSendOrderbtn").removeAttr('disabled');
+            }).error
+            (
+                function()
+                {
+                    alert('提交失败！!');
+                    $("#newSendOrderbtn").removeAttr('disabled');
+                }
+            )
+
+
+    }
+
+</script>
+
+        </div>
+        <!-- fixWidth -->
+    </div>
+    <!-- contain -->
+    <script>
+    function isMobile(phone)
+    {
+        var pattern=/(^(([0\+]\d{2,3}-)?(0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$)|(^0{0,1}1[3|4|5|6|7|8|9][0-9]{9}$)/;
+
+            if(pattern.test(phone)) 
+            { 
+                return true; 
+            }
+            else
+            { 
+               return false; 
+            }
+    }
+
+    //初始化默认信息
+    function setDefaultInfo()
+    {
+        getCitys();
+        if({$isSetDefault})
+        {
+            $("#rename").val("{$name}");
+            $("#sender_name").val("{$name}");
+
+            $("#telephone").val("{$phone}");
+            $("#sender_phone").val("{$phone}");
+            setSelectChecked("city","{$city}")
+            setSelectChecked('school',"{$school}")
+            setSelectChecked('dor1',"{$dor}")
+            setSelectChecked('dor2',"{$dor}")
+        }
+
+
+    }
+
+    function setSelectChecked(selectId, checkValue)
+    {  
+        var select = document.getElementById(selectId);  
+        for(var i=0; i<select.options.length; i++)
+        {  
+            if(select.options[i].innerHTML == checkValue)
+            {  
+                select.options[i].selected = true;  
+                
+                $("#"+selectId).trigger("change");  
+
+                break;  
+            }  
+
+        }  
+    }
+
+    function getCitys()
+    {
+       $.ajax({
+            url:"../interface/getCitys",
+            success:
+                function(data,status)
+                {
+                    if(status=='success')
+                    {
+                            document.getElementById('city').innerHTML= makeOptions(data['citys'],'city');
+                            document.getElementById('school').innerHTML= makeOptions(data['schools'],'school');
+                            document.getElementById('dor1').innerHTML= "<option value=''>请选择</option>" +makeOptions(data['dors'],'dor');
+                            document.getElementById('dor2').innerHTML= "<option value=''>请选择</option>" +makeOptions(data['dors'],'dor');
+                            document.getElementById('express').innerHTML=
+                            "<option value=''>请选择</option>" +makeOptions(data['express'],'express_company_name');
+                            
+                    }
+
+                },
+            async:false,
+
+       })
+       
+    }
+
+    function getSchools()
+    {
+        city = $('#city').val();
+        $.ajax({
+            url:"../interface/getSchools",
+            async:false,
+            data:
+            {
+                'city':city
+            },
+            success:
+            function(data,status)
+            {
+                if(status=='success')
+                {
+                    document.getElementById('school').innerHTML= makeOptions(data['schools'],'school');
+                    document.getElementById('dor1').innerHTML="<option value=''>请选择</option>" + makeOptions(data['dors'],'dor');
+                    document.getElementById('dor2').innerHTML="<option value=''>请选择</option>" + makeOptions(data['dors'],'dor');  
+                    document.getElementById('express').innerHTML= 
+                    "<option value=''>请选择</option>" +makeOptions(data['express'],'express_company_name');
+                    getCharge();
+                }
+            }
+        })
+    }
+
+    function getDors()
+    {
+        school = $("#school").val();
+        $.ajax({
+            url:"../interface/getDorsAndExpress",
+            async:false,
+            data:
+            {
+                'school':school
+            },
+            success:
+            function(data,status)
+            {
+                if(status=='success')
+                {
+                    document.getElementById('dor1').innerHTML="<option value=''>请选择</option>" + makeOptions(data['dors'],'dor');
+                    document.getElementById('dor2').innerHTML="<option value=''>请选择</option>" + makeOptions(data['dors'],'dor');
+                    document.getElementById('express').innerHTML= 
+                    "<option value=''>请选择</option>" +makeOptions(data['express'],'express_company_name');
+                    getCharge();
+                }
+            }
+        })
+    }
+
+    function getCharge()
+    {
+        var school = $("#school").val();
+        var type = $("#express_type").find("option:selected").val();
+
+        if(type=="")
+        {
+            $('#price').text('0元');
+            return;
+        }
+
+        $.get(
+            "../interface/charge",
+            {
+                'school':school,
+                'type':type
+            },
+            function(data)
+            {
+                $('#price').text(data);
+            }
+        ).error(
+            function()
+            {
+                $('#price').text('暂无价格信息');
+            }
+        )
+    }
+
+    function makeOptions(data,key)
+    {
+        if(data.length==0)
+        {
+            str = "<option value=''>暂无数据</option>";
+        }
+        else
+        {
+            str = "";
+            data.forEach(
+                function(value)
+                {
+                    v = value[key];
+                    str+="<option value='"+v+"'>"+v+"</option>";
+                }
+            )
+           
+        }
+         return str;
+    }
+
+    function onBridgeReady()
+    {
+        var timestamp = Date.parse(new Date());
+        timestamp = timestamp / 1000;
+        WeixinJSBridge.invoke(
+            'getBrandWCPayRequest', 
+            {
+                "appId": "wx9b82294bfe34589e",     //公众号名称，由商户传入     
+                "timeStamp":timestamp,         //时间戳，自1970年以来的秒数     
+                "nonceStr" : "e61463f8efa94090b1f366cccfbbb444", //随机串     
+                "package" : "prepay_id=u802345jgfjsdfgsdg888",     
+                "signType" : "MD5",         //微信签名方式：     
+                "paySign" : "70EA570631E4BB79628FBCA90534C63FF7FADD89" //微信签名 
+            },
+            function(res)
+            {     
+                if(res.err_msg == "get_brand_wcpay_request：ok" ) {} 
+                alert(res)
+                    // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
+            }
+        ); 
+    }
+
+    function pay()
+    {
+        if (typeof WeixinJSBridge == "undefined")
+        {
+            if( document.addEventListener )
+            {
+                document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+            }
+            else if (document.attachEvent)
+            {
+                document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+                document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+            }
+        }
+        else
+        {
+            onBridgeReady();
+        }
+    }
+    
+</script>
+
+
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript"></script>
+
+    <script src="__PUBLIC__/js/page.js" type="text/javascript"></script>
+    <!-- 轮播图/价格切换特效等 -->
+    <!--<script src="__PUBLIC__/js/floorData.js" type="text/javascript"></script> 地区-学校-楼幢信息 -->
+
+
+</body>
+
+</html>
