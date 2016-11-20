@@ -145,7 +145,7 @@ class InterfaceController extends Controller
             (
                 'appid'=>$order['appid'],
                 'timestamp'=>time(),
-                'nonce_str'=>$order('nonce_str'),
+                'nonce_str'=>$order['nonce_str'],
                 'perpay_id'=>$order['perpay_id'],
                 'sign'=>$order['sign']
             );
