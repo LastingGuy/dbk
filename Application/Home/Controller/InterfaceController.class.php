@@ -130,7 +130,7 @@ class InterfaceController extends Controller
                 'order_id'=>$result['data']['pickup_id'],
                 'nonce_str'=>$order['nonce_str'],
                 'sign'=>$order['sign'],
-                'perpay_id'=>$order['perpay_id'],
+                'prepay_id'=>$order['prepay_id'],
                 'pay_type'=>1,
                 'pay_status'=>0,
                 'total_fee'=>$input->getTotal_fee(),
@@ -146,7 +146,7 @@ class InterfaceController extends Controller
                 'appid'=>$order['appid'],
                 'timestamp'=>time(),
                 'nonce_str'=>$order['nonce_str'],
-                'perpay_id'=>$order['perpay_id'],
+                'perpay_id'=>$order['prepay_id'],
                 'sign'=>$order['sign']
             );
 
