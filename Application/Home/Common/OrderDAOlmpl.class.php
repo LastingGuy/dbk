@@ -238,7 +238,12 @@ class OrderDAOlmpl implements IOrderDAO
                     );
                     $this->saveDefaultInfo( $data['openid'],$info);
                 }
-                return '提交成功'; 
+                $info = $pickup->where($data)->find();
+                return array
+                (
+                    'success'=>true,
+                    'data'=>$info
+                );
             }
             else
             {
@@ -253,6 +258,7 @@ class OrderDAOlmpl implements IOrderDAO
 
 
     }
+
 
     //判断是否为手机号码
     private function isMobile($mobile) 
