@@ -150,7 +150,7 @@ class InterfaceController extends Controller
                 'sign'=>$order['sign']
             );
 
-            $this->ajax($data);
+            $this->ajaxReturn($data);
             //返回数据
         }
 
