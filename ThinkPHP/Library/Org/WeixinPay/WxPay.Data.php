@@ -193,7 +193,7 @@ class WxPayResults extends WxPayDataBase
 	{
 		$this->values[$key] = $value;
 	}
-	
+
     /**
      * 将xml转为array
      * @param string $xml

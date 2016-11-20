@@ -97,7 +97,7 @@ class InterfaceController extends Controller
         //插入订单记录到pickup
 
 
-        //插入微信支付流水号
+        //插入微信支付
 
 
         //②、统一下单
