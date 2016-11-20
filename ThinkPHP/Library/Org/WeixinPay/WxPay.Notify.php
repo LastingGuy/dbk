@@ -29,7 +29,23 @@ class WxPayNotify extends WxPayNotifyReply
 		}
 		$this->ReplyNotify($needSign);
 	}
-	
+
+	//查询订单
+	public function Queryorder($transaction_id)
+	{
+		$input = new WxPayOrderQuery();
+		$input->SetTransaction_id($transaction_id);
+		$result = WxPayApi::orderQuery($input);
+		if(array_key_exists("return_code", $result)
+			&& array_key_exists("result_code", $result)
+			&& $result["return_code"] == "SUCCESS"
+			&& $result["result_code"] == "SUCCESS")
+		{
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * 
 	 * 回调方法入口，子类可重写该方法
@@ -43,9 +59,36 @@ class WxPayNotify extends WxPayNotifyReply
 	public function NotifyProcess($data, &$msg)
 	{
 		//TODO 用户基础该类之后需要重写该方法，成功的时候返回true，失败返回false
+		if(!array_key_exists("transaction_id", $data)){
+			$msg = "输入参数不正确";
+			\Think\Log::write('测试日志信息，输入参数不正确','WARN');
+			return false;
+		}
+		//查询订单，判断订单真实性
+		if(!$this->Queryorder($data["transaction_id"])){
+			$msg = "订单查询失败";
+			\Think\Log::write('测试日志信息，订单查询失败','WARN');
+			return false;
+		}
 
-		//查看该
-		return true;
+		//查看微信支付订单是否在表中，不在直接返回false
+		$model = M("weixin_pay");
+		$find['out_trade_no'] = $data['out_trade_no'];
+		if($row = $model->find($find)){
+			\Think\Log::write('测试日志信息，找到支付订单','WARN');
+			//找到之后查看是否已经验证过
+			if($row['pay_status'] == 0){
+				\Think\Log::write('测试日志信息，支付订单未验证','WARN');
+				$row['pay_status'] = 1;
+				$row['transaction_id'] = $data['transaction_id'];
+				$row['time_end'] = $data['time_end'];
+				$model->save($row);
+			}
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 	
 	/**
@@ -78,7 +121,7 @@ class WxPayNotify extends WxPayNotifyReply
 	{
 		//如果需要签名
 		if($needSign == true && 
-			$this->GetReturn_code($return_code) == "SUCCESS")
+			$this->GetReturn_code() == "SUCCESS")
 		{
 			$this->SetSign();
 		}

@@ -120,6 +120,7 @@ class InterfaceController extends Controller
 
     //微信支付通知接口
     public function weixinNotify(){
+        \Think\Log::write('测试日志信息，支付通知接口开始','WARN');
         $object = new \WxPayNotify();
         $object->Handle();
     }

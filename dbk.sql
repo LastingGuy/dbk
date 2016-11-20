@@ -156,7 +156,7 @@ create  table dbk_weixin_pay
   sign varchar(32) comment '签名',
   perpay_id varchar(64) comment '预支付交易会话标识',
   pay_type tinyint comment '订单类型： 1代拿下单  2代寄下单 ',
-  pay_status  tinyint comment '订单状态 ：0未完成  1已完成',
+  pay_status  tinyint DEFAULT 0 comment '订单状态 ：0未完成  1已完成',
   total_fee int comment '支付金额，单位分',
   time_start datetime comment '交易起始时间',
   time_end datetime comment '交易结束时间',
