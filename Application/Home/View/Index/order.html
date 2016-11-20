@@ -42,13 +42,13 @@
     <div class="contain takeExpress">
 
         <div class="noticeBar">
-            <p>双11后一周期间，周六不休息，每天16点前截单</p> <i class="closeBtn"></i></div>
+            <p>双11期间单量爆仓，有部分快件无法按时配送，尽请见谅</p> <i class="closeBtn"></i></div>
 
         <!--banner star-->
         <div class="banner" id="bannerBox">
             <ul>
                 <li>
-                    <a href="javascript:;"><img class="dis_block" src="__PUBLIC__/img/banner3.jpg"></a>
+                    <a href="javascript:;"><img class="dis_block" src="__PUBLIC__/img/b.jpg"></a>
                 </li>
                 <li>
                     <a href="javascript:;"><img class="dis_block" src="__PUBLIC__/img/banner1.jpg"></a>
@@ -545,6 +545,8 @@
                             document.getElementById('dor2').innerHTML= "<option value=''>请选择</option>" +makeOptions(data['dors'],'dor');
                             document.getElementById('express').innerHTML=
                             "<option value=''>请选择</option>" +makeOptions(data['express'],'express_company_name');
+                            document.getElementById('express_type').innerHTML =  "<option value=''>请选择</option>"+
+                            makeOptionsdiff(data['typesOfExpress'],'size','description');
                             
                     }
 
@@ -575,6 +577,8 @@
                     document.getElementById('dor2').innerHTML="<option value=''>请选择</option>" + makeOptions(data['dors'],'dor');  
                     document.getElementById('express').innerHTML= 
                     "<option value=''>请选择</option>" +makeOptions(data['express'],'express_company_name');
+                    document.getElementById('express_type').innerHTML =  "<option value=''>请选择</option>"+
+                    makeOptionsdiff(data['typesOfExpress'],'size','description');
                     getCharge();
                 }
             }
@@ -600,6 +604,8 @@
                     document.getElementById('dor2').innerHTML="<option value=''>请选择</option>" + makeOptions(data['dors'],'dor');
                     document.getElementById('express').innerHTML= 
                     "<option value=''>请选择</option>" +makeOptions(data['express'],'express_company_name');
+                    document.getElementById('express_type').innerHTML =  "<option value=''>请选择</option>"+
+                    makeOptionsdiff(data['typesOfExpress'],'size','description');
                     getCharge();
                 }
             }
@@ -637,6 +643,11 @@
 
     function makeOptions(data,key)
     {
+         return makeOptionsdiff(data,key,key);
+    }
+
+    function makeOptionsdiff(data,k1,k2)
+    {
         if(data.length==0)
         {
             str = "<option value=''>暂无数据</option>";
@@ -647,8 +658,9 @@
             data.forEach(
                 function(value)
                 {
-                    v = value[key];
-                    str+="<option value='"+v+"'>"+v+"</option>";
+                    v1 = value[k1];
+                    v2 = value[k2];
+                    str+="<option value='"+v1+"'>"+v2+"</option>";
                 }
             )
            

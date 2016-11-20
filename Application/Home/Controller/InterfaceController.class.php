@@ -54,11 +54,13 @@ class InterfaceController extends Controller
         //  $school = '浙江大学城市学院';
          $dors = getDormitory_local($school);
          $express = getExpress_local($school);
+         $typesOfExpress = getExpressSize_local($school);
 
          $return = array
          (
              'dors'=>$dors,
-             'express'=>$express
+             'express'=>$express,
+             'typesOfExpress'=>$typesOfExpress
          );
          $this->ajaxReturn($return);
 
@@ -69,22 +71,23 @@ class InterfaceController extends Controller
     {
         $school = I('get.school');
         $type = I('get.type');
+        // $school = '浙江大学城市学院';
+        // $type = 'size2';
 
-        $charge = getPrice($school,$type);
+        $charge = getPrice($school,$type,true);
         if($charge==-100)
         {
             $this->ajaxReturn('无价格信息');
         }
         else
         {
-            if($charge==-1)
+            $str = $charge['price'].'元';
+            if($charge['addition']!="")
             {
-                $this->ajaxReturn('底价2元，每增加1千克增加1元');
+                $addition = $charge['addition'];
+                $str.="($addition)";
             }
-            else
-            {
-                $this->ajaxReturn($charge.'元');
-            }
+            $this->ajaxReturn($str);
         }
     }
 
