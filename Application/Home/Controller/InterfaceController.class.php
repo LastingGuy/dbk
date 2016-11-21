@@ -9,11 +9,10 @@ namespace Home\Controller;
 use Think\Controller;
 use Home\Common;
 import("Org.WeixinPay.WxPay#Api",null,".php");
-<<<<<<< HEAD
+
 // import("Org.WeixinPay.WxPay#Notify",null,".php");
 // import("Org.weixinPay.WxPay#JsApiPay",null,".php");
-=======
->>>>>>> origin/debug1
+
 class InterfaceController extends Controller
 {
     //默认跳转至个人中心
