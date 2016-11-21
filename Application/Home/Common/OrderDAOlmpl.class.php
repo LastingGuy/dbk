@@ -78,7 +78,7 @@ class OrderDAOlmpl implements IOrderDAO
         $today = getdate();
         $stamp = mktime(self::judgeTime,0,0,$today['mon'],$today['mday'],$today['year']);
 
-        if($today['hours']<self::judgeTime || $today['wday']=6)
+        if($today['hours']<self::judgeTime || $today['wday']==6)
         {
             $stamp -= 24 * 60 * 60;
             if($today['wday']==0)
