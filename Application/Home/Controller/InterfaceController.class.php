@@ -140,11 +140,11 @@ class InterfaceController extends Controller
 
             $wxpayModel = M('weixinPay');
             $wxpayModel->add($wxpayData);
-            
+            $time = time();
             $data = array
             (
                 'appid'=>$order['appid'],
-                'timestamp'=>time(),
+                'timestamp'=>"$time",
                 'nonce_str'=>$order['nonce_str'],
                 'perpay_id'=>$order['prepay_id'],
                 'sign'=>$order['sign']
