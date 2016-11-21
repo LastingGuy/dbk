@@ -114,7 +114,7 @@ class InterfaceController extends Controller
             $input = new \WxPayUnifiedOrder();
             $input->SetBody("dbk");
             $input->SetAttach("test");
-            $input->SetOut_trade_no($trade_no;
+            $input->SetOut_trade_no($trade_no);
             $input->SetTotal_fee("1");
             $input->SetTime_start(date("YmdHis"));
             $input->SetTime_expire(date("YmdHis", time() + 600));
