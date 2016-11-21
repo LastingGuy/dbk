@@ -218,7 +218,7 @@ class OrderDAOlmpl implements IOrderDAO
         
 
         $data['time'] = date('Y-m-d H:i:s');
-        $data['express_status'] = 2;
+        $data['express_status'] = 1;
 
 
 

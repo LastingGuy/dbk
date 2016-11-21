@@ -97,8 +97,8 @@ class InterfaceController extends Controller
     //微信支付接口
     public function weixinPay()
     {
-        $openid = 'oF6atwNyAc4wlpgNVWTdQi4kj7Po';
-        session('weixin_user',$openid);
+        // $openid = 'oF6atwNyAc4wlpgNVWTdQi4kj7Po';
+        // session('weixin_user',$openid);
 
         //插入订单记录到pickup
         $order = new Common\OrderDAOlmpl();
@@ -143,17 +143,17 @@ class InterfaceController extends Controller
 
             $wxpayModel = M('weixinPay');
             $wxpayModel->add($wxpayData);
-            $time = time();
-            $data = array
-            (
-                'appid'=>$order['appid'],
-                'timestamp'=>"$time",
-                'nonce_str'=>$order['nonce_str'],
-                'perpay_id'=>$order['prepay_id'],
-                'sign'=>$order['sign']
-            );
+            // $time = time();
+            // $data = array
+            // (
+            //     'appid'=>$order['appid'],
+            //     'timestamp'=>"$time",
+            //     'nonce_str'=>$order['nonce_str'],
+            //     'perpay_id'=>$order['prepay_id'],
+            //     'sign'=>$order['sign']
+            // );
 
-            var_dump($data);
+            // var_dump($data);
 
             $tools = new \JsApiPay();
             $str = $tools->GetJsApiParameters($order);
