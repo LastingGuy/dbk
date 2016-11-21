@@ -2,6 +2,8 @@
 require_once "WxPay.Exception.php";
 require_once "WxPay.Config.php";
 require_once "WxPay.Data.php";
+require_once "WxPay.Notify.php";
+require_once "WxPay.JsApiPay.php";
 
 /**
  * 
@@ -93,7 +95,6 @@ class WxPayApi
 		$response = self::postXmlCurl($xml, $url, false, $timeOut);
 		$result = WxPayResults::Init($response);
 		self::reportCostTime($url, $startTimeStamp, $result);//上报请求花费时间
-		
 		return $result;
 	}
 	

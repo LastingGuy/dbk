@@ -69,82 +69,87 @@ class IndexController extends Controller{
         
         if(IS_POST)
         {
-            $data = I('post.');
-            $school = $data['school'];
-            $city = $data['city'];
-            $address = $data['address'];
+            // $data = I('post.');
+            // $school = $data['school'];
+            // $city = $data['city'];
+            // $address = $data['address'];
 
-            ///获得寝室id
-            $DOR = D('DormitoryView'); //实例化寝室模型
-            $dor = $DOR->field('dormitory_id')->where("school_name='$school' and school_city='$city' and dormitory_address = '$address'")->select();
-            if(count($dor)>0)
-            {
-                $dor = $dor[0]['dormitory_id'];
-                $data['dor'] = $dor;
-            }
-            else
-            {
-                $this->ajaxReturn('请填写正确的收货人地址');
-            }
+            // ///获得寝室id
+            // $DOR = D('DormitoryView'); //实例化寝室模型
+            // $dor = $DOR->field('dormitory_id')->where("school_name='$school' and school_city='$city' and dormitory_address = '$address'")->select();
+            // if(count($dor)>0)
+            // {
+            //     $dor = $dor[0]['dormitory_id'];
+            //     $data['dor'] = $dor;
+            // }
+            // else
+            // {
+            //     $this->ajaxReturn('请填写正确的收货人地址');
+            // }
 
-            //计算价格
-            $price = $this->charge($school,$data['express_type']);
-            if($price==-100)
-            {
-                $this->ajaxReturn('订单错误!');
-            }
-            else
-            {
-                $data['price'] = $price;;
-            }
+            // //计算价格
+            // $price = $this->charge($school,$data['express_type']);
+            // if($price==-100)
+            // {
+            //     $this->ajaxReturn('订单错误!');
+            // }
+            // else
+            // {
+            //     $data['price'] = $price;;
+            // }
 
             
-            //写入数据库
-            $data['receiver_name'] = $data['rename'];
-            if(!$this->isMobile($data['tel']))
-            {
-                $this->ajaxReturn('请填写正确的手机号！');
-            }
-            $data['receiver_phone'] = $data['tel'];
-            $data['dormitory_id'] = $data['dor'];
-            $data['express_company'] = $data['express'];
-            $data['express_code'] = $data['fetch_code']; 
-            $data['openid'] = session('weixin_user');
+            // //写入数据库
+            // $data['receiver_name'] = $data['rename'];
+            // if(!$this->isMobile($data['tel']))
+            // {
+            //     $this->ajaxReturn('请填写正确的手机号！');
+            // }
+            // $data['receiver_phone'] = $data['tel'];
+            // $data['dormitory_id'] = $data['dor'];
+            // $data['express_company'] = $data['express'];
+            // $data['express_code'] = $data['fetch_code']; 
+            // $data['openid'] = session('weixin_user');
             
+
 
             $data['time'] = date('Y-m-d H:i:s');
             $data['express_status'] = 1;
 
 
 
-            $pickup = D('pickup');
-            if($pickup->create($data))
-            {
-                if($pickup->add($data))
-                {
-                    if($data['default']=='true')
-                    {
-                        $info = array(
-                            'default_name'=>$data['receiver_name'],
-                            'default_phone'=>$data['receiver_phone'],
-                            'default_city'=>$city,
-                            'default_school'=>$school,
-                            'default_dormitory'=>$address
-                        );
-                        $this->saveDefaultInfo( $data['openid'],$info);
-                    }
-                    $this->ajaxReturn('提交成功'); 
-                }
-                else
-                {
-                    $this->ajaxReturn('提交失败');
-                }
+
+            // $pickup = D('pickup');
+            // if($pickup->create($data))
+            // {
+            //     if($pickup->add($data))
+            //     {
+            //         if($data['default']=='true')
+            //         {
+            //             $info = array(
+            //                 'default_name'=>$data['receiver_name'],
+            //                 'default_phone'=>$data['receiver_phone'],
+            //                 'default_city'=>$city,
+            //                 'default_school'=>$school,
+            //                 'default_dormitory'=>$address
+            //             );
+            //             $this->saveDefaultInfo( $data['openid'],$info);
+            //         }
+            //         $this->ajaxReturn('提交成功'); 
+            //     }
+            //     else
+            //     {
+            //         $this->ajaxReturn('提交失败');
+            //     }
             
-            }
-            else
-            {
-                 $this->ajaxReturn($pickup->getError());
-            }
+            // }
+            // else
+            // {
+            //      $this->ajaxReturn($pickup->getError());
+            // }
+
+            $order = new Common\OrderDAOlmpl();
+            $this->ajaxReturn($order->newRecvOrder());
 
         }
         else

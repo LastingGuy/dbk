@@ -115,10 +115,13 @@ create table dbk_school_fee
   school_id int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '学校id',
   price float comment '价格',
   size varchar(20) comment '',
-  description varchar(100) comment'描述'
+  description varchar(100) comment'描述',
+  addition varchar(100),
   constraint pk_dbk_school_fee PRIMARY KEY(school_id,size),
   CONSTRAINT fk_dbk_school_fee_school_id FOREIGN KEY(school_id) REFERENCES  dbk_school(school_id)
-)
+)ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
+
+
 #建立代收件视图
 create view dbk_pickup_view
 as
@@ -143,22 +146,40 @@ as
  from dbk_school, dbk_dormitory, dbk_send
  where dbk_school.school_id = dbk_dormitory.school_id and dbk_dormitory.dormitory_id = dbk_send.dormitory_id;
 
-#订单微信支付下单
+#微信支付下单
 create  table dbk_weixin_pay
 (
-  payid int not null auto_increment comment '流水号',
   trade_no varchar(32) comment '商户订单号',
-  refund_no varchar(32) comment '退款单号,如果该记录是退款记录',
   openid  varchar(100) comment '用户id',
+  order_id int comment '代拿代寄订单号',
   nonce_str varchar(32) comment '随机字符串',
   sign varchar(32) comment '签名',
   perpay_id varchar(64) comment '预支付交易会话标识',
-  pay_type tinyint comment '订单类型： 1代拿下单  2代拿退款  3代寄下单  4代寄退款',
-  pay_status  tinyint comment '订单状态 ：0未完成  1已完成',
-  price int comment '支付金额，单位分',
-  time datetime comment '交易时间'
+  pay_type tinyint comment '订单类型： 1代拿下单  2代寄下单 ',
+  pay_status  tinyint DEFAULT 0 comment '订单状态 ：0未完成  1已完成',
+  total_fee int comment '支付金额，单位分',
+  time_start datetime comment '交易起始时间',
+  time_end datetime comment '交易结束时间',
+  time_expire datetime comment '交易过期时间',
+  transaction_id varchar(32) comment '微信支付订单号',
+  CONSTRAINT pk_dbk_weixin_pay PRIMARY  KEY(trade_no)
+
 )
 
+#微信支付退款
+create table dbk_weixin_refund
+(
+  refund_no varchar(32) comment '商户退款单号',
+  openid  varchar(100) comment '用户id',
+  trade_no varchar(32) comment '商户订单号',
+  nonce_str varchar(32) comment '随机字符串',
+  sign varchar(32) comment '签名',
+  total_fee int comment '订单金额',
+  refund_fee int comment '退款金额',
+  refund_time datetime comment '退款起始时间',
+  refund_id varchar(28) comment '微信退款单号',
+  CONSTRAINT pk_dbk_weixin_refund PRIMARY  KEY(refund_no)
+)
 
 #导入学校
 insert into dbk_school(school_name,school_city) values('浙江大学城市学院','杭州市');
