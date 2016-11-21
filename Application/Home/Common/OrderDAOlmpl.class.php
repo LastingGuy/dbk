@@ -5,6 +5,7 @@
 *   Date:2016/10/31
 */
 namespace Home\Common;
+import("Org.WeixinPay.WxPay#Api",null,".php");
 
 class OrderDAOlmpl implements IOrderDAO
 {
@@ -40,6 +41,42 @@ class OrderDAOlmpl implements IOrderDAO
     //删除代取订单
     public function deletePickupOrder($id)
     {
+
+        //微信支付申请退款
+        //查看是否有该订单的微信支付
+        $mod = M("weixin_pay");
+        if($pay = $mod->where("order_id=$id and pay_type=1")->find()) {
+
+            //商户退款单号 请汪京陆自己写
+            $out_refund_no = "";
+            //向微信申请退款
+            $input = new \WxPayRefund();
+            $input->SetOut_trade_no($out_refund_no);
+            $input->SetTotal_fee($pay['total_fee']);
+            $input->SetRefund_fee($pay['total_fee']);
+            $input->SetOut_refund_no(\WxPayConfig::MCHID . date("YmdHis"));
+            $input->SetOp_user_id(\WxPayConfig::MCHID);
+            $result = \WxPayApi::refund($input);
+
+            //退款成功
+            if($result['return_code']=="SUCCESS"){
+                //查找是否有退款记录，如果没有退款记录则插入
+                $mod = M("weixin_refund");
+                if (!($refund = $mod->where("trade_no=" + $pay['trade_no'])->find())) {
+                    $refund['refund_no'] = $out_refund_no;
+                    $refund['openid'] = $pay['openid'];
+                    $refund['trade_no'] = $pay['trade_no'];
+                    $refund['total_fee'] = $pay['total_fee'];
+                    $refund['refund_time'] = $result['refund_time'];
+                    $refund['refund_id'] = $result['refund_id'];
+                    $mod->add($refund);
+                }
+            }
+
+        }
+
+
+
         $model = $this->pickupModel;
         $today = getdate();
         $stamp = mktime(self::judgeTime,0,0,$today['mon'],$today['mday'],$today['year']);
