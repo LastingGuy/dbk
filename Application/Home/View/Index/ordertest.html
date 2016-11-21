@@ -42,13 +42,13 @@
     <div class="contain takeExpress">
 
         <div class="noticeBar">
-            <p>双11期间单量爆仓，有部分快件无法按时配送，尽请见谅</p> <i class="closeBtn"></i></div>
+            <p>双11后一周期间，周六不休息，每天16点前截单</p> <i class="closeBtn"></i></div>
 
         <!--banner star-->
         <div class="banner" id="bannerBox">
             <ul>
                 <li>
-                    <a href="javascript:;"><img class="dis_block" src="__PUBLIC__/img/b.jpg"></a>
+                    <a href="javascript:;"><img class="dis_block" src="__PUBLIC__/img/banner3.jpg"></a>
                 </li>
                 <li>
                     <a href="javascript:;"><img class="dis_block" src="__PUBLIC__/img/banner1.jpg"></a>
@@ -269,7 +269,7 @@
         }
 
         
-        $.post("{:U('interface/weixinPay')}",
+        $.post("{:U('index/newRecvOrder')}",
         {
         'city':city,'school':school,'rename':rename,
         'tel':telephone,'address':dbuild,
@@ -280,19 +280,11 @@
         },
         function(t)
         {
-                // alert(t);
-                // if(t=='提交成功')
-                //     self.location='../usercenter/usercenter';
-                // else
-                //     $("#Pickupbtn").removeAttr('disabled');
-
-
-                if(t.length=5)
-                {
-                    weixinpaydata = t;
-                    weixinPay();
-                }
-                $("#Pickupbtn").removeAttr('disabled');
+                alert(t);
+                if(t=='提交成功')
+                    self.location='../usercenter/usercenter';
+                else
+                    $("#Pickupbtn").removeAttr('disabled');
         }).error
         (
             function()
@@ -468,7 +460,6 @@
                     self.location='../usercenter/usercenter';
                 else
                     $("#newSendOrderbtn").removeAttr('disabled');
-
             }).error
             (
                 function()
@@ -554,8 +545,6 @@
                             document.getElementById('dor2').innerHTML= "<option value=''>请选择</option>" +makeOptions(data['dors'],'dor');
                             document.getElementById('express').innerHTML=
                             "<option value=''>请选择</option>" +makeOptions(data['express'],'express_company_name');
-                            document.getElementById('express_type').innerHTML =  "<option value=''>请选择</option>"+
-                            makeOptionsdiff(data['typesOfExpress'],'size','description');
                             
                     }
 
@@ -586,8 +575,6 @@
                     document.getElementById('dor2').innerHTML="<option value=''>请选择</option>" + makeOptions(data['dors'],'dor');  
                     document.getElementById('express').innerHTML= 
                     "<option value=''>请选择</option>" +makeOptions(data['express'],'express_company_name');
-                    document.getElementById('express_type').innerHTML =  "<option value=''>请选择</option>"+
-                    makeOptionsdiff(data['typesOfExpress'],'size','description');
                     getCharge();
                 }
             }
@@ -613,8 +600,6 @@
                     document.getElementById('dor2').innerHTML="<option value=''>请选择</option>" + makeOptions(data['dors'],'dor');
                     document.getElementById('express').innerHTML= 
                     "<option value=''>请选择</option>" +makeOptions(data['express'],'express_company_name');
-                    document.getElementById('express_type').innerHTML =  "<option value=''>请选择</option>"+
-                    makeOptionsdiff(data['typesOfExpress'],'size','description');
                     getCharge();
                 }
             }
@@ -652,11 +637,6 @@
 
     function makeOptions(data,key)
     {
-         return makeOptionsdiff(data,key,key);
-    }
-
-    function makeOptionsdiff(data,k1,k2)
-    {
         if(data.length==0)
         {
             str = "<option value=''>暂无数据</option>";
@@ -667,36 +647,39 @@
             data.forEach(
                 function(value)
                 {
-                    v1 = value[k1];
-                    v2 = value[k2];
-                    str+="<option value='"+v1+"'>"+v2+"</option>";
+                    v = value[key];
+                    str+="<option value='"+v+"'>"+v+"</option>";
                 }
             )
            
         }
          return str;
     }
+
     function onBridgeReady()
     {
+        var timestamp = Date.parse(new Date());
+        timestamp = timestamp / 1000;
         WeixinJSBridge.invoke(
             'getBrandWCPayRequest', 
-            // {
-            //     "appId" :weixinpaydata['appid'],     //公众号名称，由商户传入     
-            //     "timeStamp":weixinpaydata['timestamp'],         //时间戳，自1970年以来的秒数     
-            //     "nonceStr" :weixinpaydata['nonce_str'], //随机串     
-            //     "package" : "prepay_id="+weixinpaydata['prepay_id'],     
-            //     "signType" : "MD5",         //微信签名方式：     
-            //     "paySign" : weixinpaydata['sign'] //微信签名 
-            // }
-            JSON.parse(weixinpaydata),
+            {
+                "appId": "wx9b82294bfe34589e",     //公众号名称，由商户传入     
+                "timeStamp":timestamp,         //时间戳，自1970年以来的秒数     
+                "nonceStr" : "e61463f8efa94090b1f366cccfbbb444", //随机串     
+                "package" : "prepay_id=u802345jgfjsdfgsdg888",     
+                "signType" : "MD5",         //微信签名方式：     
+                "paySign" : "70EA570631E4BB79628FBCA90534C63FF7FADD89" //微信签名 
+            },
             function(res)
             {     
-                if(res.err_msg == "get_brand_wcpay_request：ok" ) {}     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
+                if(res.err_msg == "get_brand_wcpay_request：ok" ) {} 
+                alert(res)
+                    // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
             }
         ); 
     }
 
-    function weixinPay()
+    function pay()
     {
         if (typeof WeixinJSBridge == "undefined")
         {
@@ -715,8 +698,7 @@
             onBridgeReady();
         }
     }
-
-    var weixinpaydata ;
+    
 </script>
 
 

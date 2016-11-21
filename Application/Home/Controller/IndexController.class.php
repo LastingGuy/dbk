@@ -44,6 +44,19 @@ class IndexController extends Controller{
         }
     }
 
+    public function ordertest()
+    {
+        if(!session('?weixin_user'))
+        {
+            $this->error('请登录！');
+        }
+        else
+        {
+            $this->getDefaultInfo();
+            $this->display();
+        }
+    }
+
     #create the order of receiving mail
     public function newRecvOrder()
 	{
@@ -99,8 +112,10 @@ class IndexController extends Controller{
             // $data['openid'] = session('weixin_user');
             
 
-            // $data['time'] = date('Y-m-d H:i:s');
-            // $data['express_status'] = 2;
+
+            $data['time'] = date('Y-m-d H:i:s');
+            $data['express_status'] = 1;
+
 
 
 
