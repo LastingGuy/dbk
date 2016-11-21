@@ -104,10 +104,10 @@ class InterfaceController extends Controller
         $order = new Common\OrderDAOlmpl();
         $result = $order->newRecvOrder();
 
-        if(is_array($result))
+        if($result->getSuccess())
         {
-            //插入微信支付
-            $trade_no = \WxPayConfig::MCHID.date("YmsHis");
+            $orderInfo = $result->getBody();
+            
 
             //②、统一下单
             $input = new \WxPayUnifiedOrder();
@@ -124,13 +124,20 @@ class InterfaceController extends Controller
 
 
             $order = \WxPayApi::unifiedOrder($input);
-
+            if($order['return_code']!='SUCCESS')
+            {
+                $this->ajaxReturn($result->setCode(0)->setSuccess(false)->setMsg($order['return_msg'])->setBody(array())->generate());
+            }
+            else if($order['result_code']!='SUCCESS')
+            {
+                $this->ajaxReturn($result->setCode(0)->setSuccess(false)->setMsg($order['err_code_des'])->setBody(array())->generate());
+            }
 
             $wxpayData = array
             (
                 'trade_no'=>$trade_no,
                 'openid'=>session("weixin_user"),
-                'order_id'=>$result['data']['pickup_id'],
+                'order_id'=>$orderInfo['pickup_id'],
                 'nonce_str'=>$order['nonce_str'],
                 'sign'=>$order['sign'],
                 'prepay_id'=>$order['prepay_id'],
@@ -157,8 +164,12 @@ class InterfaceController extends Controller
 
             $tools = new \JsApiPay();
             $str = $tools->GetJsApiParameters($order);
-            echo $str;
+            $this->ajaxReturn($result->setCode(0)->setBody($str)->generate());
             //返回数据
+        }
+        else
+        {
+            $this->ajaxReturn($result->generate());
         }
 
     }

@@ -216,6 +216,7 @@ class OrderDAOlmpl implements IOrderDAO
         $city = $data['city'];
         $address = $data['address'];
 
+        $response = new ResponseGenerator("NewRecvOrder");
         ///获得寝室id
         $DOR = D('DormitoryView'); //实例化寝室模型
         $dor = $DOR->field('dormitory_id')->where("school_name='$school' and school_city='$city' and dormitory_address = '$address'")->select();
@@ -226,14 +227,14 @@ class OrderDAOlmpl implements IOrderDAO
         }
         else
         {
-            return '请填写正确的收货人地址';
+            return $response->setCode(0)->setMsg('请填写正确的收货人地址');
         }
 
         //计算价格
         $price = $this->charge($school,$data['express_type']);
         if($price==-100)
         {
-            return '订单错误!';
+            return $response->setCode(0)->setMsg('订单错误');
         }
         else
         {
@@ -245,7 +246,7 @@ class OrderDAOlmpl implements IOrderDAO
         $data['receiver_name'] = $data['rename'];
         if(!$this->isMobile($data['tel']))
         {
-            return '请填写正确的手机号！';
+            return $response->setCode(0)->setMsg('请正确填写手机号!');
         }
         $data['receiver_phone'] = $data['tel'];
         $data['dormitory_id'] = $data['dor'];
@@ -276,21 +277,24 @@ class OrderDAOlmpl implements IOrderDAO
                     $this->saveDefaultInfo( $data['openid'],$info);
                 }
                 $info = $pickup->where($data)->find();
-                return array
-                (
-                    'success'=>true,
-                    'data'=>$info
-                );
+                if($info==null)
+                {
+                    return $response->setCode(0)->setSuccess(false)->setMsg('订单错误');
+                }
+                else
+                {
+                    return $response->setCode(1)->setSuccess(true)->setMsg('下单成功')->setBody($info);
+                }
             }
             else
             {
-                return '提交失败';
+                return $response->setCode(0)->setMsg('提交失败');
             }
         
         }
         else
         {
-                return $pickup->getError();
+            return $response->setCode(0)->setMsg($pickup->getError());
         }
 
 
