@@ -81,7 +81,7 @@ class OrderDAOlmpl implements IOrderDAO
         $today = getdate();
         $stamp = mktime(self::judgeTime,0,0,$today['mon'],$today['mday'],$today['year']);
 
-        if($today['hours']<self::judgeTime || $today['wday']=6)
+        if($today['hours']<self::judgeTime || $today['wday']==6)
         {
             $stamp -= 24 * 60 * 60;
             if($today['wday']==0)
@@ -92,8 +92,9 @@ class OrderDAOlmpl implements IOrderDAO
         $deadLine = date('Y-m-d H:i:s',$stamp);
 
         $unfinished = $model->where("openid='$this->openid' and pickup_id='$id' and express_status=2  and time>'$deadLine'")->find();
-        $finishedAndunpaid = $model->where("openid='$this->openid' and pickup_id='$id' and express_status=3 or express_status=1")->find();
-        if($finished == false && $unfinished==false)
+        $finishedAndunpaid = $model->where("openid='$this->openid' and pickup_id='$id' and (express_status=3 or express_status=1)")->find();
+        $str = $model->getLastSQL();
+        if($finishedAndunpaid == null && $unfinished==null)
         {
             return 5;
         }
