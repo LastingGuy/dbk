@@ -58,6 +58,7 @@
             // }
             $dorinfo = getDormitory_local($schools[0]['school']);   
             $express = getExpress_local($schools[0]['school']);
+            $typesOfExpress = getExpressSize_local($schools[0]['school']);
         }
 
         $return = array
@@ -65,6 +66,7 @@
             'schools'=>$schools,
             'dors'=>$dorinfo,
             'express'=>$express,
+            'typesOfExpress'=>$typesOfExpress
         );
         return $return;
     }
@@ -119,33 +121,55 @@
         return $express;
     }
 
+    //获得快递大小信息
+    function getExpressSize_local($school)
+    {
+        if($school==false)
+        {
+            $types = array();
+        }
+        else
+        {
+            $model = D('ExpresspriceView');
+            $data = $model->where("school_name='%s'",$school)->select();
+            $types = array();
+            foreach($data as $k => $size)
+            {
+                $types[$k] = array
+                (
+                    'size'=>$size['size'],
+                    'description'=>$size['description']
+                );
+            }
+        }
+        return $types;
+    }
+
     //获得价格
     // 参数：
     //      $school:学校名称
     //      $size:快递类型 
     //返回 
-    //      -1 自定义计价
     //      -100 无效订单 
-    function getPrice($school,$size)
+    function getPrice($school,$size,$all = false)
     {
-        $model = M('school');
-        $data = $model->where("school_name='%s'",$school)->find();
+        $model = D('ExpresspriceView');
+        // var_dump($model->select());
+        $data = $model->where("school_name='%s' and size='%s'",$school,$size)->find();
+        // var_dump($data);
         if($data==false)
         {
             return -100;
         }
         else
         {
-            switch($size)
+            if(!$all)
             {
-                case 'size1':
-                    return $data['small_price'];
-                case 'size2':
-                    return $data['mid_price'];
-                case 'size3':
-                    return $data['large_price'];
-                default:
-                    return -100;
+                return $data['price'];
+            }
+            else
+            {
+                return $data;
             }
         }
 

@@ -337,25 +337,35 @@ class IndexController extends Controller{
     //计算价格
     private function charge($school,&$type)
     {
-        $charge = getPrice($school,$type);
+        $charge = getPrice($school,$type,true);
+        // if($charge==-1)
+        // {
+        //     $charge=5;
+        // }
+
+        // switch($type)
+        // {
+        //     case 'size1':
+        //         $type='中小件(<2kg)';
+        //         return $charge;
+        //     case 'size2':
+        //         $type='大件(>2kg)';
+        //         return $charge;
+        //     case 'size3':
+        //         $type='超大件(>3kg)';
+        //         return $charge;
+        //     default:
+        //         return false;
+        // }
+
         if($charge==-1)
         {
-            $charge=5;
+            return false;
         }
-
-        switch($type)
+        else
         {
-            case 'size1':
-                $type='中小件(<2kg)';
-                return $charge;
-            case 'size2':
-                $type='大件(>2kg)';
-                return $charge;
-            case 'size3':
-                $type='超大件(>3kg)';
-                return $charge;
-            default:
-                return false;
+            $type = $charge['description'];
+            return $charge['price'];
         }
     }
 }
