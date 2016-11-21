@@ -73,7 +73,7 @@ create table dbk_pickup(
     remarks varchar(100) default null comment '备注',
     price int(11) not null comment '快递价格',
 	`time`  datetime not null comment '下单时间',
-	express_status tinyint not null comment ' 0：等待接单  1：已接单  2：正在配送 3:已完成',
+	express_status tinyint not null comment ' 0：等待接单  1：未支付  2：正在配送 3:已完成',
 	constraint pk_dbk_pickup primary key(pickup_id),
     constraint fk_dbk_dormitory_pickup foreign key(dormitory_id) references dbk_dormitory(dormitory_id),
     constraint fk_dbk_openid_pickup foreign key(openid) references dbk_weixin_user(openid)
@@ -92,7 +92,7 @@ create table dbk_send(
     destination varchar(1000) NOT NULL COMMENT '目的地',
     remarks varchar(300) comment '备注',
     time datetime  not null comment '下单时间',
-    sender_status tinyint not null comment '寄件状态  0:未接单 1:已接单 2：正在寄件 3：完成寄件' ,
+    sender_status tinyint not null comment '寄件状态  0:未接单 1:未支付 2：正在寄件 3：完成寄件' ,
     constraint pk_dbk_send primary key(send_id),
     constraint  fk_dbk_dormitory_send foreign key(dormitory_id) references dbk_dormitory(dormitory_id),
     constraint fk_dbk_openid_send foreign key(openid) references dbk_weixin_user(openid)

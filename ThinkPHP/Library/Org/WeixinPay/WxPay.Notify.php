@@ -83,6 +83,23 @@ class WxPayNotify extends WxPayNotifyReply
 				$row['transaction_id'] = $data['transaction_id'];
 				$row['time_end'] = $data['time_end'];
 				$model->save($row);
+
+
+				if($row['pay_type']==1){
+					//代拿订单更新， 变成已支付
+					$pickup['pickup_id'] = $row['order_id'];
+					$pickup['express_status'] = 2;
+					$model = M("pickup");
+					$model->save($pickup);
+				}
+				else if($row['pay_type']==2){
+					//代寄订单更新， 变成已支付
+					$send['send_id'] = $row['order_id'];
+					$send['sender_status'] = 2;
+					$model = M("send");
+					$model->save($send);
+				}
+
 			}
 			return true;
 		}
