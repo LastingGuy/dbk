@@ -92,7 +92,7 @@ class OrderDAOlmpl implements IOrderDAO
         $deadLine = date('Y-m-d H:i:s',$stamp);
 
         $unfinished = $model->where("openid='$this->openid' and pickup_id='$id' and express_status=2  and time>'$deadLine'")->find();
-        $finished = $model->where("openid='$this->openid' and pickup_id='$id' and express_status=3")->find();
+        $finishedAndunpaid = $model->where("openid='$this->openid' and pickup_id='$id' and express_status=3 or express_status=1")->find();
         if($finished == false && $unfinished==false)
         {
             return 5;
