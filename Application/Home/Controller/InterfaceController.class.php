@@ -94,8 +94,8 @@ class InterfaceController extends Controller
     //微信支付接口
     public function weixinPay()
     {
-        $openid = 'oF6atwNyAc4wlpgNVWTdQi4kj7Po';
-        session('weixin_user',$openid);
+        // $openid = 'oF6atwNyAc4wlpgNVWTdQi4kj7Po';
+        // session('weixin_user',$openid);
 
         //插入订单记录到pickup
         $order = new Common\OrderDAOlmpl();
