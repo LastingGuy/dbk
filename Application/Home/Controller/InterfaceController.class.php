@@ -9,8 +9,8 @@ namespace Home\Controller;
 use Think\Controller;
 use Home\Common;
 import("Org.WeixinPay.WxPay#Api",null,".php");
-import("Org.WeixinPay.WxPay#Notify",null,".php");
-import("Org.weixinPay.WxPay#JsApiPay",null,".php");
+// import("Org.WeixinPay.WxPay#Notify",null,".php");
+// import("Org.weixinPay.WxPay#JsApiPay",null,".php");
 class InterfaceController extends Controller
 {
     //默认跳转至个人中心
@@ -121,7 +121,7 @@ class InterfaceController extends Controller
             $input->SetOpenid(session("weixin_user"));
 
 
-            $order = \WxPayApi::unifiedOrder($input);
+            $order = \WxPayApiunifiedOrder($input);
 
 
             $wxpayData = array
@@ -136,7 +136,7 @@ class InterfaceController extends Controller
                 'pay_status'=>0,
                 'total_fee'=>$input->getTotal_fee(),
                 'time_start'=>$input->getTime_start(),
-                'time_end'=>$input->getTime_expire()
+                'time_expire'=>$input->getTime_expire()
             );
 
             $wxpayModel = M('weixinPay');
