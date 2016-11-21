@@ -9,7 +9,7 @@ namespace Home\Controller;
 use Think\Controller;
 use Home\Common;
 import("Org.WeixinPay.WxPay#Api",null,".php");
-
+import("Org.WeixinPay.WxPay#Notify",null,".php");
 class InterfaceController extends Controller
 {
     //默认跳转至个人中心
@@ -115,7 +115,7 @@ class InterfaceController extends Controller
             $input->SetTime_start(date("YmdHis"));
             $input->SetTime_expire(date("YmdHis", time() + 600));
             $input->SetGoods_tag("test");
-            $input->SetNotify_url("http://paysdk.weixin.qq.com/example/notify.php");
+            $input->SetNotify_url("http://daibuke.cn/dbktest/index.php/home/interface/weixinNotify");
             $input->SetTrade_type("JSAPI");
             $input->SetOpenid(session("weixin_user"));
 
