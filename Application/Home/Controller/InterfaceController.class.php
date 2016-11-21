@@ -10,6 +10,7 @@ use Think\Controller;
 use Home\Common;
 import("Org.WeixinPay.WxPay#Api",null,".php");
 import("Org.WeixinPay.WxPay#Notify",null,".php");
+import("Org.weixinPay.WxPay#JsApiPay",null,".php");
 class InterfaceController extends Controller
 {
     //默认跳转至个人中心
@@ -140,17 +141,19 @@ class InterfaceController extends Controller
 
             $wxpayModel = M('weixinPay');
             $wxpayModel->add($wxpayData);
-            $time = time();
-            $data = array
-            (
-                'appid'=>$order['appid'],
-                'timestamp'=>"$time",
-                'nonce_str'=>$order['nonce_str'],
-                'perpay_id'=>$order['prepay_id'],
-                'sign'=>$order['sign']
-            );
+            // $time = time();
+            // $data = array
+            // (
+            //     'appid'=>$order['appid'],
+            //     'timestamp'=>"$time",
+            //     'nonce_str'=>$order['nonce_str'],
+            //     'perpay_id'=>$order['prepay_id'],
+            //     'sign'=>$order['sign']
+            // );
 
-            $this->ajaxReturn($data);
+            $tools = new JsApiPay();
+            $str = $tools->GetJsApiParameters($order);
+            echo $str;
             //返回数据
         }
 
