@@ -682,7 +682,7 @@
             'getBrandWCPayRequest', 
             {
                 "appId" :weixinpaydata['appid'],     //公众号名称，由商户传入     
-                "timeStamp":weixinpaydata['timeStamp'],         //时间戳，自1970年以来的秒数     
+                "timeStamp":weixinpaydata['timestamp'],         //时间戳，自1970年以来的秒数     
                 "nonceStr" :weixinpaydata['nonce_str'], //随机串     
                 "package" : "prepay_id="+weixinpaydata['prepay_id'],     
                 "signType" : "MD5",         //微信签名方式：     
