@@ -151,7 +151,7 @@ class InterfaceController extends Controller
             //     'sign'=>$order['sign']
             // );
 
-            $tools = new JsApiPay();
+            $tools = new \JsApiPay();
             $str = $tools->GetJsApiParameters($order);
             echo $str;
             //返回数据
