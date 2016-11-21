@@ -183,6 +183,7 @@
             <script>
     function sendpickuporder()
     {
+
         $("#Pickupbtn").attr('disabled','disabled');
 
         var city = $("#city").val();
@@ -268,44 +269,47 @@
             return;
         }
 
-        
-        $.post("{:U('interface/weixinPay')}",
+        if(confirm("确认提交订单!"))
         {
-        'city':city,'school':school,'rename':rename,
-        'tel':telephone,'address':dbuild,
-        'express':express,'express_type':express_type,
-        'price':price,'express_sms':express_sms,
-        'fetch_code':fetch_code,'remarks':remarks,
-        'default':isDefault
-        },
-        function(t)
-        {
-                // alert(t);
-                // if(t=='提交成功')
-                //     self.location='../usercenter/usercenter';
-                // else
-                //     $("#Pickupbtn").removeAttr('disabled');
+            $.post("{:U('interface/weixinPay')}",
+            {
+            'city':city,'school':school,'rename':rename,
+            'tel':telephone,'address':dbuild,
+            'express':express,'express_type':express_type,
+            'price':price,'express_sms':express_sms,
+            'fetch_code':fetch_code,'remarks':remarks,
+            'default':isDefault
+            },
+            function(t)
+            {
+                    // alert(t);
+                    // if(t=='提交成功')
+                    //     self.location='../usercenter/usercenter';
+                    // else
+                    //     $("#Pickupbtn").removeAttr('disabled');
 
 
-                if(t['success']==true)
+                    if(t['success']==true)
+                    {
+                        weixinpaydata = t;
+                        weixinPay();
+                    }
+                    else
+                    {
+                        alert(t['msg']);
+                        $("#Pickupbtn").removeAttr('disabled');
+                    }
+                    
+            }).error
+            (
+                function()
                 {
-                    weixinpaydata = t;
-                    weixinPay();
-                }
-                else
-                {
-                    alert(t['msg']);
+                    alert('提交失败！');
                     $("#Pickupbtn").removeAttr('disabled');
                 }
-                
-        }).error
-        (
-            function()
-            {
-                alert('提交失败！');
-                $("#Pickupbtn").removeAttr('disabled');
-            }
-        )
+            )
+        }
+        
 
     }
 
