@@ -123,7 +123,7 @@ class InterfaceController extends Controller
             $input->SetOpenid(session("weixin_user"));
 
 
-            $order = \WxPayApiunifiedOrder($input);
+            $order = \WxPayApi::unifiedOrder($input);
 
 
             $wxpayData = array
