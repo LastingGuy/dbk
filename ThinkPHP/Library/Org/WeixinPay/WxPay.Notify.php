@@ -74,7 +74,7 @@ class WxPayNotify extends WxPayNotifyReply
 		//查看微信支付订单是否在表中，不在直接返回false
 		$model = M("weixin_pay");
 		$find['trade_no'] = $data['out_trade_no'];
-		if($row = $model->find($find)){
+		if($row = $model->where("trade_no='%s",$find['trade_no'])->find()){
 			\Think\Log::write('测试日志信息，找到支付订单','WARN');
 			//找到之后查看是否已经验证过
 			if($row['pay_status'] == 0){
