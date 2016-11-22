@@ -17,8 +17,8 @@ class UsercenterController extends Controller
         parent::__construct();
 
         // test
-        // $openid = 'oF6atwNyAc4wlpgNVWTdQi4kj7Po';
-        // session('weixin_user',$openid);
+        $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmmk';
+        session('weixin_user',$openid);
 
 
         $this->orderDAO = new Common\OrderDAOlmpl();
@@ -45,25 +45,25 @@ class UsercenterController extends Controller
     {
 
         //test
-        // $this->display();
+        $this->display();
 
-        $user = new Common\UserDAOImpl();
-        if( $user->getUserInfo())
-        {
-            $nikename = session('user_name');
-            $headimgurl = session('headimgurl');
-            if($headimgurl=='')
-            {
-                $headimgurl='__PUBLIC__\img\123.png';
-            }
-            $this->assign('nikename',$nikename);
-            $this->assign('headimgurl',$headimgurl);
-            $this->display();
-        }
-        else
-        {
-            $this->error('请登录！');
-        }
+        // $user = new Common\UserDAOImpl();
+        // if( $user->getUserInfo())
+        // {
+        //     $nikename = session('user_name');
+        //     $headimgurl = session('headimgurl');
+        //     if($headimgurl=='')
+        //     {
+        //         $headimgurl='__PUBLIC__\img\123.png';
+        //     }
+        //     $this->assign('nikename',$nikename);
+        //     $this->assign('headimgurl',$headimgurl);
+        //     $this->display();
+        // }
+        // else
+        // {
+        //     $this->error('请登录！');
+        // }
 
     }
 
@@ -73,7 +73,7 @@ class UsercenterController extends Controller
         if(session('?weixin_user'))
         {
             // test
-            // $openid = 'oF6atwMLdDGJg_5NHyy0PBfeg0RU';
+            // $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmmk';
             // session('weixin_user',$openid);
             $openid = session('weixin_user');
 
@@ -94,7 +94,7 @@ class UsercenterController extends Controller
         if(session('?weixin_user'))
         {
             // test
-            // $openid = 'oF6atwMLdDGJg_5NHyy0PBfeg0RU';
+            // $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmmk';
             
             $openid = session('weixin_user');
 
@@ -116,7 +116,7 @@ class UsercenterController extends Controller
         if(session('?weixin_user'))
         {
             // test
-            // $openid = 'oF6atwMLdDGJg_5NHyy0PBfeg0RU';
+            // $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmmk';
             
             $openid = session('weixin_user');
 
@@ -190,6 +190,8 @@ class UsercenterController extends Controller
             $type = I('post.type');
             $id = I('post.id');
             $result = array();
+            $type = 0;
+            $id = "1278";
             // $result['error_code'] = '123';
             if($id=='')
             {
@@ -200,10 +202,10 @@ class UsercenterController extends Controller
             switch($type)
             {
                 case 0:
-                    $this->ajaxReturn($this->orderDAO->deletePickupOrder($id));
+                    $this->ajaxReturn($this->orderDAO->deletePickupOrder($id)->generate());
                     // $this->ajaxReturn($result);
                 case 1:
-                    $this->ajaxReturn($this->orderDAO->deleteSendOrder($id));
+                    $this->ajaxReturn($this->orderDAO->deleteSendOrder($id)->generate);
                 default:
                     $this->ajaxReturn('6');
 

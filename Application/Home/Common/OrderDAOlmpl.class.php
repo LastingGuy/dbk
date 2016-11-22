@@ -41,40 +41,7 @@ class OrderDAOlmpl implements IOrderDAO
     //删除代取订单
     public function deletePickupOrder($id)
     {
-
-        //微信支付申请退款
-        //查看是否有该订单的微信支付
-        $mod = M("weixin_pay");
-        if($pay = $mod->where("order_id=$id and pay_type=1")->find()) {
-
-            //商户退款单号 请汪京陆自己写
-            $out_refund_no = "";
-            //向微信申请退款
-            $input = new \WxPayRefund();
-            $input->SetOut_trade_no($out_refund_no);
-            $input->SetTotal_fee($pay['total_fee']);
-            $input->SetRefund_fee($pay['total_fee']);
-            $input->SetOut_refund_no(\WxPayConfig::MCHID . date("YmdHis"));
-            $input->SetOp_user_id(\WxPayConfig::MCHID);
-            $result = \WxPayApi::refund($input);
-
-            //退款成功
-            if($result['return_code']=="SUCCESS"){
-                //查找是否有退款记录，如果没有退款记录则插入
-                $mod = M("weixin_refund");
-                if (!($refund = $mod->where("trade_no=" + $pay['trade_no'])->find())) {
-                    $refund['refund_no'] = $out_refund_no;
-                    $refund['openid'] = $pay['openid'];
-                    $refund['trade_no'] = $pay['trade_no'];
-                    $refund['total_fee'] = $pay['total_fee'];
-                    $refund['refund_time'] = $result['refund_time'];
-                    $refund['refund_id'] = $result['refund_id'];
-                    $mod->add($refund);
-                }
-            }
-
-        }
-
+       $response = new ResponseGenerator("deletePickUpOrder");
 
 
         $model = $this->pickupModel;
@@ -92,21 +59,79 @@ class OrderDAOlmpl implements IOrderDAO
         $deadLine = date('Y-m-d H:i:s',$stamp);
 
         $unfinished = $model->where("openid='$this->openid' and pickup_id='$id' and express_status=2  and time>'$deadLine'")->find();
-        $finishedAndunpaid = $model->where("openid='$this->openid' and pickup_id='$id' and (express_status=3 or express_status=1)")->find();
+        $finishedAndunpaid = $model->where("openid='$this->openid' and pickup_id='$id' and (express_status=3 or express_status=1 or express_status=5)")->find();
         $str = $model->getLastSQL();
         if($finishedAndunpaid == null && $unfinished==null)
         {
-            return 5;
+            return $response->setCode(5)->setMsg("该时段订单无法删除");
         }
 
-        if($model->where("pickup_id='$id'")->setInc('express_status',100)==true)
+        if($unfinished!=null)
         {
-            return 1;
-        }     
-        else
-        {
-           return 6;
+            
+            //微信支付申请退款
+            //查看是否有该订单的微信支付
+            $mod = M("weixin_pay");
+            if($pay = $mod->where("order_id=$id and pay_type=1")->find()) 
+            {
+
+                //商户退款单号 日期+类型（10代表代取订单、退款）+订单号
+                $out_refund_no = \WxPayConfig::MCHID.date("Ymd").'10'.$id;
+                //向微信申请退款
+                $input = new \WxPayRefund();
+                $input->SetOut_trade_no($out_refund_no);
+                $input->SetTotal_fee($pay['total_fee']);
+                $input->SetRefund_fee($pay['total_fee']);
+                $input->SetOut_refund_no(\WxPayConfig::MCHID . date("YmdHis"));
+                $input->SetOp_user_id(\WxPayConfig::MCHID);
+                $result = \WxPayApi::refund($input);
+
+                //退款成功
+                if($result['return_code']=="SUCCESS")
+                {
+                    //查找是否有退款记录，如果没有退款记录则插入
+                    $mod = M("weixin_refund");
+                    if (!($refund = $mod->where("trade_no=" + $pay['trade_no'])->find())) 
+                    {
+                        $refund['refund_no'] = $out_refund_no;
+                        $refund['openid'] = $pay['openid'];
+                        $refund['trade_no'] = $pay['trade_no'];
+                        $refund['total_fee'] = $pay['total_fee'];
+                        $refund['refund_time'] = $result['refund_time'];
+                        $refund['refund_id'] = $result['refund_id'];
+                        $mod->add($refund);                  
+                    }
+
+                    $model->where("pickup_id='$id'")->setField('express_status',4);
+                    return $response->setSuccess(true)->setCode(1)->setMsg("申请退款成功");
+                }
+                else
+                {
+                    return $response->setCode(6)->setMsg("申请退款失败");
+                }
+
+            }
+            else
+            {
+                return $response->setCode(6)->setMsg("申请退款失败");
+            }
+
         }
+
+        if($finishedAndunpaid!=null)
+        {
+            if($model->where("pickup_id='$id'")->setInc('express_status',100)==true)
+            {
+                return $response->setSuccess(true)->setCode(1)->setMsg("删除成功");
+            }     
+            else
+            {
+            return $response->setCode(6)->setMsg("删除失败");
+            }
+        }
+
+        return $response->setCode(6)->setMsg("删除失败");
+       
     }
 
     //删除待寄订单
