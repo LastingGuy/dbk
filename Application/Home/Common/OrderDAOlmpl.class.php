@@ -79,10 +79,10 @@ class OrderDAOlmpl implements IOrderDAO
                 $out_refund_no = \WxPayConfig::MCHID.date("Ymd").'10'.$id;
                 //向微信申请退款
                 $input = new \WxPayRefund();
-                $input->SetOut_trade_no($out_refund_no);
+                $input->SetOut_trade_no($pay['trade_no']);
                 $input->SetTotal_fee($pay['total_fee']);
                 $input->SetRefund_fee($pay['total_fee']);
-                $input->SetOut_refund_no(\WxPayConfig::MCHID . date("YmdHis"));
+                $input->SetOut_refund_no($out_refund_no);
                 $input->SetOp_user_id(\WxPayConfig::MCHID);
                 $result = \WxPayApi::refund($input);
 
