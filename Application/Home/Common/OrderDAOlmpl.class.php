@@ -91,7 +91,7 @@ class OrderDAOlmpl implements IOrderDAO
                 {
                     //查找是否有退款记录，如果没有退款记录则插入
                     $mod = M("weixin_refund");
-                    if (!($refund = $mod->where("trade_no=" + $pay['trade_no'])->find())) 
+                    if (!($refund = $mod->where("trade_no='%s'" , $pay['trade_no'])->find())) 
                     {
                         $refund['refund_no'] = $out_refund_no;
                         $refund['openid'] = $pay['openid'];
