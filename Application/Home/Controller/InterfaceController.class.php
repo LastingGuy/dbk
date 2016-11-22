@@ -181,5 +181,22 @@ class InterfaceController extends Controller
         $object = new \WxPayNotify();
         $object->Handle();
     }
+
+    //微信支付退款查询
+    public function weixinRefundQuery($order_id){
+        $model = M("pickup");
+        $openid = session("openid");
+        //先查看该订单是否有并且属于这个用户，然后执行查询退款
+        if($model->where("pickup_id = $order_id and openid= $openid")->find()){
+            $model = M("weixin_pay");
+            $pickup = $model->where("order_id=$order_id and pay_type=1")->find();
+            $transaction_id = $pickup['transaction_id'];
+            $input = new \WxPayOrderQuery();
+            $input->SetTransaction_id($transaction_id);
+            $result = \WxPayApi::orderQuery($input);
+            //$result中的return_code是SUCCESS时并且result_code为SUCCESS时，退款成功。
+        }
+
+    }
 }
 ?>
