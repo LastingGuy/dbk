@@ -7,7 +7,7 @@ class IndexController extends Controller{
     public function index()
     {
         // test
-        // $openid = 'oF6atwNyAc4wlpgNVWTdQi4kj7Po';
+        // $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmmk';
         // session('weixin_user',$openid);
         // $this->redirect('home/index/order');
 

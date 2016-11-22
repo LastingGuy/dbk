@@ -89,7 +89,7 @@ class ResponseGenerator
 
     public function getBody()
     {
-        return body;
+        return $body;
     }
 
     public function generate()

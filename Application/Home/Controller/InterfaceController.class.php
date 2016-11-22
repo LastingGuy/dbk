@@ -97,19 +97,23 @@ class InterfaceController extends Controller
     //微信支付接口
     public function weixinPay()
     {
-        // $openid = 'oF6atwNyAc4wlpgNVWTdQi4kj7Po';
+        // $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmmk';
         // session('weixin_user',$openid);
 
         //插入订单记录到pickup
         $order = new Common\OrderDAOlmpl();
         $result = $order->newRecvOrder();
 
+        $this->ajaxReturn($result->generate());
+
         if($result->getSuccess())
         {
             $orderInfo = $result->getBody();
-            
 
-            $trade_no = \WxPayConfig::MCHID.date("YmdHis");
+            
+            
+            //商户订单号  日期+类型（11代表带取订单、付款）+订单号
+            $trade_no = \WxPayConfig::MCHID.date("Ymd").'11'.$orderInfo['pickup_id'];
             //②、统一下单
             $input = new \WxPayUnifiedOrder();
             $input->SetBody("dbk");
@@ -161,8 +165,7 @@ class InterfaceController extends Controller
             //     'sign'=>$order['sign']
             // );
 
-            // var_dump($data);
-
+            
             $tools = new \JsApiPay();
             $str = $tools->GetJsApiParameters($order);
             $this->ajaxReturn($result->setCode(0)->setBody($str)->generate());
