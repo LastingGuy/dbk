@@ -190,8 +190,8 @@ class UsercenterController extends Controller
             $type = I('post.type');
             $id = I('post.id');
             $result = array();
-            $type = 0;
-            $id = "1278";
+            // $type = 0;
+            // $id = "1320";
             // $result['error_code'] = '123';
             if($id=='')
             {
