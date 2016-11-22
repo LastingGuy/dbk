@@ -74,7 +74,7 @@ class OrderDAOlmpl implements IOrderDAO
             $mod = M("weixin_pay");
             if($pay = $mod->where("order_id=$id and pay_type=1")->find()) 
             {
-
+                $sql1 = $mod->getLastSQL();
                 //商户退款单号 日期+类型（10代表代取订单、退款）+订单号
                 $out_refund_no = \WxPayConfig::MCHID.date("Ymd").'10'.$id;
                 //向微信申请退款
@@ -101,9 +101,17 @@ class OrderDAOlmpl implements IOrderDAO
                         $refund['refund_id'] = $result['refund_id'];
                         $mod->add($refund);                  
                     }
-
+                    $sql2 = $mod->getLastSQL();
                     $model->where("pickup_id='$id'")->setField('express_status',4);
-                    return $response->setSuccess(true)->setCode(1)->setMsg("申请退款成功")->setBody($refund);
+                    return $response->setSuccess(true)->setCode(1)->setMsg("申请退款成功")->setBody(
+                        array(
+                            'sql1'=>$sql1,
+                            'sql2'=>$sql2,
+                            'pay'=>$pay,
+                            'result'=>$result,
+                            'refund'=>$refund
+                        )
+                        );
                 }
                 else
                 {

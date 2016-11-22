@@ -205,7 +205,7 @@ class UsercenterController extends Controller
                     $this->ajaxReturn($this->orderDAO->deletePickupOrder($id)->generate());
                     // $this->ajaxReturn($result);
                 case 1:
-                    $this->ajaxReturn($this->orderDAO->deleteSendOrder($id)->generate);
+                    $this->ajaxReturn($this->orderDAO->deleteSendOrder($id)->generate());
                 default:
                     $this->ajaxReturn('6');
 
