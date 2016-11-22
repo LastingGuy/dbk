@@ -186,6 +186,7 @@ class InterfaceController extends Controller
     public function weixinRefundQuery($order_id){
         $model = M("pickup");
         $openid = session("openid");
+
         //先查看该订单是否有并且属于这个用户，然后执行查询退款
         if($model->where("pickup_id = $order_id and openid= $openid")->find()){
             $model = M("weixin_pay");
