@@ -135,20 +135,13 @@
           },
           function(t)
           {
-            switch(t)
+            switch(t['code'])
             {
-              case 0:
-                alert('请登陆!');
-                break;
-              case 1:
-                alert('删除成功!');
-                self.location="{$page}";
-                break;
               case 5:
                 alert('16:00之前不可删除前日16:00之前订单，16:00之后不可删除当日16：00之前订单!');
                 break;
               default:
-                alert('删除失败!');
+                alert(t['msg']);
             }
           }).error(
             function()

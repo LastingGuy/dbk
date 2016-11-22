@@ -103,7 +103,7 @@ class OrderDAOlmpl implements IOrderDAO
                     }
 
                     $model->where("pickup_id='$id'")->setField('express_status',4);
-                    return $response->setSuccess(true)->setCode(1)->setMsg("申请退款成功");
+                    return $response->setSuccess(true)->setCode(1)->setMsg("申请退款成功")->setBody($refund);
                 }
                 else
                 {
