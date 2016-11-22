@@ -17,8 +17,8 @@ class UsercenterController extends Controller
         parent::__construct();
 
         // test
-        $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmmk';
-        session('weixin_user',$openid);
+        // $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmmk';
+        // session('weixin_user',$openid);
 
 
         $this->orderDAO = new Common\OrderDAOlmpl();
@@ -45,25 +45,25 @@ class UsercenterController extends Controller
     {
 
         //test
-        $this->display();
+        // $this->display();
 
-        // $user = new Common\UserDAOImpl();
-        // if( $user->getUserInfo())
-        // {
-        //     $nikename = session('user_name');
-        //     $headimgurl = session('headimgurl');
-        //     if($headimgurl=='')
-        //     {
-        //         $headimgurl='__PUBLIC__\img\123.png';
-        //     }
-        //     $this->assign('nikename',$nikename);
-        //     $this->assign('headimgurl',$headimgurl);
-        //     $this->display();
-        // }
-        // else
-        // {
-        //     $this->error('请登录！');
-        // }
+        $user = new Common\UserDAOImpl();
+        if( $user->getUserInfo())
+        {
+            $nikename = session('user_name');
+            $headimgurl = session('headimgurl');
+            if($headimgurl=='')
+            {
+                $headimgurl='__PUBLIC__\img\123.png';
+            }
+            $this->assign('nikename',$nikename);
+            $this->assign('headimgurl',$headimgurl);
+            $this->display();
+        }
+        else
+        {
+            $this->error('请登录！');
+        }
 
     }
 

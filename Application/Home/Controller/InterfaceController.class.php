@@ -104,14 +104,10 @@ class InterfaceController extends Controller
         $order = new Common\OrderDAOlmpl();
         $result = $order->newRecvOrder();
 
-        $this->ajaxReturn($result->generate());
-
         if($result->getSuccess())
         {
             $orderInfo = $result->getBody();
-
-            
-            
+        
             //商户订单号  日期+类型（11代表带取订单、付款）+订单号
             $trade_no = \WxPayConfig::MCHID.date("Ymd").'11'.$orderInfo['pickup_id'];
             //②、统一下单
