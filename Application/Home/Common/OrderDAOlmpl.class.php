@@ -87,7 +87,7 @@ class OrderDAOlmpl implements IOrderDAO
                 $result = \WxPayApi::refund($input);
 
                 //退款成功
-                if($result['return_code']=="SUCCESS")
+                if($result['return_code']=="SUCCESS"&&$result['result_code']=='SUCCESS')
                 {
                     //查找是否有退款记录，如果没有退款记录则插入
                     $mod = M("weixin_refund");
