@@ -84,7 +84,6 @@ class WxPayNotify extends WxPayNotifyReply
 				$row['time_end'] = $data['time_end'];
 				$model->save($row);
 
-
 				if($row['pay_type']==1){
 					//代拿订单更新， 变成已支付
 					$pickup['pickup_id'] = $row['order_id'];
