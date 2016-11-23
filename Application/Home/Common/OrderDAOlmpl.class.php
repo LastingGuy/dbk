@@ -73,7 +73,7 @@ class OrderDAOlmpl implements IOrderDAO
         if($order['express_status']!=2 && $order['express_status']!=4 && $order['express_status']<100)
         {
             //未支付、已完成可以删除
-             if($model->where("pickup_id='$id'")->setInc('express_status',100)==true)
+            if($model->where("pickup_id='$id'")->setInc('express_status',100)==true)
             {
                 return $response->setSuccess(true)->setCode(1)->setMsg("删除成功");
             }     
@@ -107,6 +107,7 @@ class OrderDAOlmpl implements IOrderDAO
                 }
                 else
                 {
+                    $model->where("pickup_id='$id'")->setInc('express_status',100);
                     $result->setSuccess(true)->setCode(1)->setMsg("删除成功");
                 }        
                 
