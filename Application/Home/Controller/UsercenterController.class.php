@@ -195,7 +195,8 @@ class UsercenterController extends Controller
             // $result['error_code'] = '123';
             if($id=='')
             {
-                $this->ajaxReturn('2');
+                $response = new Common\ResponseGenerator('deleteOrder',false,2,"ID不正确");
+                $this->ajaxReturn($response->generate());
             }
 
 
@@ -212,8 +213,9 @@ class UsercenterController extends Controller
             }
         }
         else
-        {
-            $this->ajaxReturn('1');
+        {   
+            $response = new Common\ResponseGenerator('deleteOrder',false,0,"请登录");
+            $this->ajaxReturn($response->generate());
         }
     }
     
