@@ -21,7 +21,7 @@ class WeixinPayUtil{
         $input->SetBody("代步客");
         $input->SetAttach("代步客");
         $input->SetOut_trade_no($trade_no);
-        $input->SetTotal_fee($orderInfo['price']);
+        $input->SetTotal_fee($orderInfo['price']*100);
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag("test");
@@ -143,8 +143,8 @@ class WeixinPayUtil{
             //向微信申请退款
             $input = new \WxPayRefund();
             $input->SetOut_trade_no($pay['trade_no']);
-            $input->SetTotal_fee($pay['total_fee']);
-            $input->SetRefund_fee($pay['total_fee']);
+            $input->SetTotal_fee($pay['total_fee']*100);
+            $input->SetRefund_fee($pay['total_fee']*100);
             $input->SetOut_refund_no($out_refund_no);
             $input->SetOp_user_id(\WxPayConfig::MCHID);
             $result = \WxPayApi::refund($input);
