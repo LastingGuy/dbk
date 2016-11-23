@@ -174,6 +174,8 @@ create table dbk_weixin_refund
   trade_no varchar(32) comment '商户订单号',
   nonce_str varchar(32) comment '随机字符串',
   sign varchar(32) comment '签名',
+  pay_type tinyint comment '订单类型： 1代拿下单  2代寄下单 ',
+  pay_status  tinyint DEFAULT 0 comment '订单状态 ：0未完成  1已完成',
   total_fee int comment '订单金额',
   refund_fee int comment '退款金额',
   refund_time datetime comment '退款起始时间',
