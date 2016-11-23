@@ -201,9 +201,9 @@ class WeixinPayUtil{
                 if($pickup!=null&&$pickup!=false)
                 {   
                     $transaction_id = $pickup['transaction_id'];
-                    $input = new \WxPayOrderQuery();
+                    $input = new \WxPayRefundQuery();
                     $input->SetTransaction_id($transaction_id);
-                    $result = \WxPayApi::orderQuery($input);
+                    $result = \WxPayApi::refundQuery($input);
                     \Think\Log::write($result['return_code'],'WARN');
                     \Think\Log::write($result['return_msg'],'WARN');
                     \Think\Log::write($result['result_code'],'WARN');
