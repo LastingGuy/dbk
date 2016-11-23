@@ -49,7 +49,7 @@ class WeixinPayUtil{
             'prepay_id'=>$order['prepay_id'],
             'pay_type'=>1,
             'pay_status'=>0,
-            'total_fee'=>$input->getTotal_fee(),
+            'total_fee'=>$input->getTotal_fee()/100,
             'time_start'=>$input->getTime_start(),
             'time_expire'=>$input->getTime_expire()
         );

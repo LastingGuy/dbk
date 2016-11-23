@@ -109,11 +109,7 @@ class OrderDAOlmpl implements IOrderDAO
             else
             {
                 //无法删除
-                return $response->setSuccess(false)->setCode(5)->setMsg('该时段无法删除')->setBody
-                (array(
-                    'stamp'=>$stamp,
-                    'order'=>$order)
-                );
+                return $response->setSuccess(false)->setCode(5)->setMsg('该时段无法删除');
             }
         }
         else
