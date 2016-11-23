@@ -14,6 +14,7 @@ class OrderDAOlmpl implements IOrderDAO
     private $pickupModel;
     private $orderDetail;
     private $sendOrder;
+
     const judgeTime = 16;
 
     public function __construct()
