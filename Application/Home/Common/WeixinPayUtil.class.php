@@ -186,17 +186,20 @@ class WeixinPayUtil{
     {
         $model = M("pickup");
         $openid = session("weixin_user");
+         \Think\Log::write('查询订单','WARN');
 
         //先查看该订单是否有并且属于这个用户，然后执行查询退款
         $order = $model->where("pickup_id = $order_id and openid= '$openid'")->find();
         if($order!=false&&$order!=null)
         {
+             \Think\Log::write('找到订单','WARN');
             if($order==4) //对退款中订单进行退款查询操作
-            {
+            {   
+                \Think\Log::write('开始修改','WARN');
                 $model = M("weixin_pay");
                 $pickup = $model->where("order_id=$order_id and pay_type=1")->find();
                 if($pickup!=null&&$pickup!=false)
-                {
+                {   
                     $transaction_id = $pickup['transaction_id'];
                     $input = new \WxPayOrderQuery();
                     $input->SetTransaction_id($transaction_id);
