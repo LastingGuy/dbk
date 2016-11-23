@@ -141,6 +141,9 @@
           {
             switch(t['code'])
             {
+              case 1:
+                alert(t['msg']);
+                self.location="{$page}";
               case 5:
                 alert('16:00之前不可删除前日16:00之前订单，16:00之后不可删除当日16：00之前订单!');
                 break;
