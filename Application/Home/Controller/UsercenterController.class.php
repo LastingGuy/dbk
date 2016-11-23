@@ -146,9 +146,9 @@ class UsercenterController extends Controller
             {
                 ///type 为1查询代取快递订单 2查询待寄快递订单
                 case 0:
-                    $model = D('orderdetail');
-                    $data = $model->where("pickup_id='$id' and openid='$openid'")->select();
                     Common\WeixinPayUtil::weixinRefundQuery($id);
+                    $model = D('orderdetail');
+                    $data = $model->where("pickup_id='$id' and openid='$openid'")->select();   
                     break;
                 case 1:
                     $model = D('sendView');
