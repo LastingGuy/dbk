@@ -87,7 +87,7 @@ class OrderDAOlmpl implements IOrderDAO
         else if($order['express_status']==2)
         {   //未完成订单
             
-            if($order['time']>$stamp)
+            if($ordertime>$stamp)
             {
                 //在可删除时间之后的订单，可以删除
 
@@ -109,7 +109,11 @@ class OrderDAOlmpl implements IOrderDAO
             else
             {
                 //无法删除
-                return $response->setSuccess(false)->setCode(5)->setMsg('该时段无法删除');
+                return $response->setSuccess(false)->setCode(5)->setMsg('该时段无法删除')->setBody
+                (array(
+                    'stamp'=>$stamp,
+                    'order'=>$order)
+                );
             }
         }
         else
