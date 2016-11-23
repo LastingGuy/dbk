@@ -104,7 +104,7 @@ class InterfaceController extends Controller
         $orderDAO = new Common\OrderDAOlmpl();
         $response = $orderDAO->newRecvOrder();
 
-        if($result->getSuccess())               //订单新建成功，进行微信支付
+        if($response->getSuccess())               //订单新建成功，进行微信支付
         {
             $order = $response->getBody();    //获得订单信息
 
