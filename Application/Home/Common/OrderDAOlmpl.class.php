@@ -91,7 +91,7 @@ class OrderDAOlmpl implements IOrderDAO
             {
                 //在可删除时间之后的订单，可以删除
 
-                $result = new Common\ResponseGenerator("deletePickUpOrder",true);
+                $result = new ResponseGenerator("deletePickUpOrder",true);
                 if($order['price']!=0)
                 {
                     //退款操作
