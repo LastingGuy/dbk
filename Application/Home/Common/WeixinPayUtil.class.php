@@ -193,7 +193,7 @@ class WeixinPayUtil{
         if($order!=false&&$order!=null)
         {
              \Think\Log::write('找到订单','WARN');
-            if($order==4) //对退款中订单进行退款查询操作
+            if($order['express_status']==4) //对退款中订单进行退款查询操作
             {   
                 \Think\Log::write('开始修改','WARN');
                 $model = M("weixin_pay");
