@@ -136,8 +136,10 @@ class WeixinPayUtil{
     {
         $response = new ResponseGenerator("refund");
         $mod = M("weixin_pay");
-        if($pay = $mod->where("order_id=$id and pay_type=1")->find()) 
+        $pay = $mod->where("order_id=$id and pay_type=1")->find();
+        if($pay!=false&&$pay!=null) 
         {
+            \Think\Log::write('开始申请退款','INFO');
             //商户退款单号 日期+类型（10代表代取订单、退款）+订单号
             $out_refund_no = \WxPayConfig::MCHID.date("Ymd").'10'.$id;
             //向微信申请退款
@@ -148,10 +150,12 @@ class WeixinPayUtil{
             $input->SetOut_refund_no($out_refund_no);
             $input->SetOp_user_id(\WxPayConfig::MCHID);
             $result = \WxPayApi::refund($input);
-
+            \Think\Log::write("return_msg:".$result['return_msg'],'INFO');
             //退款成功
             if($result['return_code']=="SUCCESS"&&$result['result_code']=='SUCCESS')
             {
+                \Think\Log::write('申请退款成功','INFO');
+
                 //查找是否有退款记录，如果没有退款记录则插入
                 $mod = M("weixin_refund");
                 if (!($refund = $mod->where("trade_no='%s'" , $pay['trade_no'])->find())) 
