@@ -41,13 +41,17 @@
     <div class="goBack">
       <div class="fixWidth">
         <a href="{$page}"></a>
-        <div class="deleteOrder" onclick="deleteOrder()">
-          <eq name='data.status' value='2'>
-                申请退款
-              <else/>
-                删除订单
-              </eq>
-          </div>
+        <eq name='data.status' value='4'>
+          <else/>
+            <div class="deleteOrder" onclick="deleteOrder()">
+            <eq name='data.status' value='2'>
+                  申请退款
+                <else/>
+                  删除订单
+            </eq>
+            </div>
+        </eq>
+        
       </div>
     </div>
 

@@ -115,7 +115,7 @@ class InterfaceController extends Controller
             }
             else
             {
-                $this->ajaxReturn($response->generate());
+                $this->ajaxReturn($response->setMsg('下单成功')->generate());
             }
 
 

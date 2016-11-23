@@ -96,15 +96,20 @@ class OrderDAOlmpl implements IOrderDAO
                 {
                     //退款操作
                     $result = WeixinPayUtil::refundRecvOrder($id);
-                }        
-                //修改状态
-                if($result->getSuccess())
-                {
-                    $model->where("pickup_id='$id'")->setField('express_status',4);
-                    $result->setSuccess(true)->setCode(1)->setMsg("申请退款成功")->setAction('deletePickUpOrder');
-                }
+                    //修改状态
+                    if($result->getSuccess())
+                    {
+                        $model->where("pickup_id='$id'")->setField('express_status',4);
+                        $result->setSuccess(true)->setCode(1)->setMsg("申请退款成功")->setAction('deletePickUpOrder');
+                    }
 
-                return $result;
+                    return $result;
+                }
+                else
+                {
+                    $result->setSuccess(true)->setCode(1)->setMsg("删除成功");
+                }        
+                
             }
             else
             {

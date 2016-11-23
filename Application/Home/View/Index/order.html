@@ -291,8 +291,17 @@
 
                     if(t['success']==true)
                     {
-                        weixinpaydata = t['body'];
-                        weixinPay();
+                        if(t['code']==1)
+                        {
+                            weixinpaydata = t['body'];
+                            weixinPay();
+                        }
+                        else
+                        {
+                            alert('下单成功');
+                            self.location='../usercenter/usercenter';
+                        }
+                        
                     }
                     else
                     {
