@@ -115,7 +115,7 @@ class InterfaceController extends Controller
             $input->SetBody("dbk");
             $input->SetAttach("test");
             $input->SetOut_trade_no($trade_no);
-            $input->SetTotal_fee("1");
+            $input->SetTotal_fee("0");
             $input->SetTime_start(date("YmdHis"));
             $input->SetTime_expire(date("YmdHis", time() + 600));
             $input->SetGoods_tag("test");
