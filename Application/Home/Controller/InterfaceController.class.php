@@ -111,7 +111,7 @@ class InterfaceController extends Controller
             if($response->getCode()==1) //订单价格不为0，进行微信支付
             {
                 //申请微信支付
-                $this->ajaxReturn(WeixinPayUtil::recvOrder_weixinPay($response->getBody())->generate());
+                $this->ajaxReturn(Common\WeixinPayUtil::recvOrder_weixinPay($response->getBody())->generate());
             }
             else
             {
