@@ -32,11 +32,11 @@ class WeixinPayUtil{
 
         if($order['return_code']!='SUCCESS')
         {
-            return $result->setCode(0)->setSuccess(false)->setMsg($order['return_msg']);
+            return $response->setCode(0)->setSuccess(false)->setMsg($order['return_msg']);
         }
         else if($order['result_code']!='SUCCESS')
         {
-            return $result->setCode(0)->setSuccess(false)->setMsg($order['err_code_des']);
+            return $response->setCode(0)->setSuccess(false)->setMsg($order['err_code_des']);
         }
 
         $wxpayData = array
@@ -59,7 +59,7 @@ class WeixinPayUtil{
 
         $tools = new \JsApiPay();
         $str = $tools->GetJsApiParameters($order);
-        return $result->setCode(1)->setSuccess(true)->setBody($str);
+        return $response->setCode(1)->setSuccess(true)->setBody($str);
 
 
         // //插入订单记录到pickup
