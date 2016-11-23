@@ -107,7 +107,7 @@ class OrderDAOlmpl implements IOrderDAO
                 }
                 else
                 {
-                    $model->where("pickup_id='$id'")->setInc('express_status',100);
+                    $model->where("pickup_id='$id'")->setField('express_status',5);
                     $result->setSuccess(true)->setCode(1)->setMsg("删除成功");
                 }        
                 
