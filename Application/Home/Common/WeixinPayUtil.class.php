@@ -184,12 +184,12 @@ class WeixinPayUtil{
     //微信支付退款查询
     static function weixinRefundQuery($order_id)
     {
-        $model = M("pickup");
+        $pickupmodel = M("pickup");
         $openid = session("weixin_user");
          \Think\Log::write('查询订单','WARN');
 
         //先查看该订单是否有并且属于这个用户，然后执行查询退款
-        $order = $model->where("pickup_id = $order_id and openid= '$openid'")->find();
+        $order = $pickupmodel->where("pickup_id = $order_id and openid= '$openid'")->find();
         if($order!=false&&$order!=null)
         {
              \Think\Log::write('找到订单','WARN');
@@ -212,7 +212,7 @@ class WeixinPayUtil{
                     //$result中的return_code是SUCCESS时并且result_code为SUCCESS时，退款成功。
                     if($result['return_code']=='SUCCESS'&&$result['result_code']=='SUCCESS'&&$result['refund_status_0']=='SUCCESS')
                     {
-                        $model->where("pickup_id='%s'",$order_id)->setField('express_status',5);
+                        $pickupmodel->where("pickup_id='%s'",$order_id)->setField('express_status',5);
 
                     }
                 }
