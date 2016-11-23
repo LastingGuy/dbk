@@ -66,7 +66,7 @@ class OrderDAOlmpl implements IOrderDAO
         // //已完成、未支付订单'
         // $finishedAndunpaid = $model->where("openid='$this->openid' and pickup_id='$id' and (express_status=3 or express_status=1 or express_status=5)")->find();
 
-        $order = $model->where("openid='%s' and pick_up='%s",$this->openid,$id)->find();
+        $order = $model->where("openid='%s' and pick_up='%s'",$this->openid,$id)->find();
 
         $ordertime = strtotime($order['time']);
 
