@@ -204,10 +204,13 @@ class WeixinPayUtil{
                     $input = new \WxPayOrderQuery();
                     $input->SetTransaction_id($transaction_id);
                     $result = \WxPayApi::orderQuery($input);
+                    \Think\Log::write($result['return_code'],'WARN');
                     \Think\Log::write($result['return_msg'],'WARN');
-                    \Think\Log::write($result['err_code_des'],'WARN');
+                    \Think\Log::write($result['result_code'],'WARN');
+                    \Think\Log::write($result['err_code'],'WARN');
+                    \Think\Log::write($result['refund_status_0'],'WARN');
                     //$result中的return_code是SUCCESS时并且result_code为SUCCESS时，退款成功。
-                    if($result['return_code']=='SUCCESS'&&$result['result_code']=='SUCCESS')
+                    if($result['return_code']=='SUCCESS'&&$result['result_code']=='SUCCESS'&&$result['refund_status_0'])
                     {
                         $model->where("pickup_id='%s'",$order_id)->setField('express_status',5);
 
