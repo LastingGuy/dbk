@@ -148,6 +148,7 @@ class UsercenterController extends Controller
                 case 0:
                     $model = D('orderdetail');
                     $data = $model->where("pickup_id='$id' and openid='$openid'")->select();
+                    Common\WeixinPayUtil::weixinRefundQuery($id);
                     break;
                 case 1:
                     $model = D('sendView');

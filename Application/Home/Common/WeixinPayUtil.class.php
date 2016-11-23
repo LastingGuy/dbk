@@ -182,19 +182,33 @@ class WeixinPayUtil{
     }
     
     //微信支付退款查询
-    static function weixinRefundQuery($order_id){
+    static function weixinRefundQuery($order_id)
+    {
         $model = M("pickup");
         $openid = session("weixin_user");
 
         //先查看该订单是否有并且属于这个用户，然后执行查询退款
-        if($model->where("pickup_id = $order_id and openid= $openid")->find()){
-            $model = M("weixin_pay");
-            $pickup = $model->where("order_id=$order_id and pay_type=1")->find();
-            $transaction_id = $pickup['transaction_id'];
-            $input = new \WxPayOrderQuery();
-            $input->SetTransaction_id($transaction_id);
-            $result = \WxPayApi::orderQuery($input);
-            //$result中的return_code是SUCCESS时并且result_code为SUCCESS时，退款成功。
+        $order = $model->where("pickup_id = $order_id and openid= '$openid'")->find();
+        if($order!=false&&$order!=null)
+        {
+            if($order==4) //对退款中订单进行退款查询操作
+            {
+                $model = M("weixin_pay");
+                $pickup = $model->where("order_id=$order_id and pay_type=1")->find();
+                if($pickup!=null&&$pickup!=false)
+                {
+                    $transaction_id = $pickup['transaction_id'];
+                    $input = new \WxPayOrderQuery();
+                    $input->SetTransaction_id($transaction_id);
+                    $result = \WxPayApi::orderQuery($input);
+
+                    //$result中的return_code是SUCCESS时并且result_code为SUCCESS时，退款成功。
+                    if($result['return_code']=='SUCCESS'&&$result['result_code']=='SUCCESS')
+                    {
+                        $model->where("pickup_id='%s'",$order_id)->setField('express_status',5);
+                    }
+                }
+            }
         }
 
     }
