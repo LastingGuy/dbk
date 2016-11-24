@@ -16,11 +16,11 @@ class PickupDAOImpl implements IPickupDAO{
         $model = M('pickup_view');
 
         $return_data['draw'] = $param["draw"];
-        $return_data['recordsTotal'] = $model->where("school_id='$school' and express_status<100")->count();
+        $return_data['recordsTotal'] = $model->where("school_id='$school' and express_status>=2 and express_status<=3")->count();
         $return_data['recordsFiltered'] = $return_data['recordsTotal'];
 
         //获取订单
-        $return_data['data'] = $model->where("school_id='$school' and express_status<100")->order("pickup_id desc")->limit($param['start'],$param['length'])->select();
+        $return_data['data'] = $model->where("school_id='$school' and express_status>=2 and express_status<=3")->order("pickup_id desc")->limit($param['start'],$param['length'])->select();
         foreach($return_data['data'] as $key=>$value){
             if($return_data['data'][$key]['express_status'] == 2)
             {
@@ -38,9 +38,6 @@ class PickupDAOImpl implements IPickupDAO{
                 $return_data['data'][$key]['express_status'] = "<div style='color:lightseagreen'>已完成</div>";
             }
             $return_data['data'][$key]['look'] = "<img src='".__ROOT__."/Public/assets/advanced-datatable/examples/examples_support/details_open.png'>";
-
-
-
         }
         return $return_data;
     }
@@ -67,8 +64,8 @@ class PickupDAOImpl implements IPickupDAO{
 
         $date = date('Y-m-d');
         $today_end = $date." 16:00:00";
-        
-        $data = $model->where("school_id='$school' and time<='$today_end' and time>'$today_begin' and express_status<100")->getField("pickup_id,receiver_name,receiver_phone,express_company,express_type,
+
+        $data = $model->where("school_id='$school' and pay_time<='$today_end' and pay_time>'$today_begin' and express_status>=2 and express_status<=3 ")->getField("pickup_id,receiver_name,receiver_phone,express_company,express_type,
             price,dormitory_address,express_sms,express_code,remarks,time,express_status",true);
 
         //填充表格信息
@@ -107,7 +104,7 @@ class PickupDAOImpl implements IPickupDAO{
         //表格数组
         $model = D('pickup_view');
 
-        $data = $model->where("school_id='$school' and time<='$end' and time>'$begin' and express_status<100")->getField("pickup_id,receiver_name,receiver_phone,express_company,express_type,
+        $data = $model->where("school_id='$school' and pay_time<='$end' and pay_time>'$begin' and express_status>=2 and express_status<=3 ")->getField("pickup_id,receiver_name,receiver_phone,express_company,express_type,
             price,dormitory_address,express_sms,express_code,remarks,time,express_status",true);
 
         //填充表格信息
