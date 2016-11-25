@@ -171,7 +171,8 @@ class WeixinPayUtil{
                     $refund['pay_type'] = $pay['pay_type'];
                     $refund['trade_no'] = $pay['trade_no'];
                     $refund['total_fee'] = $pay['total_fee'];
-                    $refund['refund_time'] = $result['refund_time'];
+                    $refund['refund_fee'] = $pay['settlement_refund_fee'];
+                    $refund['refund_time'] = date('Y-m-d H:i:s');
                     $refund['refund_id'] = $result['refund_id'];
                     $mod->add($refund);                  
                 }
