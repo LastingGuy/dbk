@@ -10,6 +10,7 @@ Deccription:用户中心
 */
 class UsercenterController extends Controller
 {
+
     private $orderDAO;
     private $userDAO;
     public function __construct()

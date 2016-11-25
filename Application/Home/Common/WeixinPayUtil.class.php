@@ -14,6 +14,8 @@ class WeixinPayUtil{
     {
 
         $response = new ResponseGenerator("weixinpay");
+
+        G('begin');
         //商户订单号  日期+类型（11代表带取订单、付款）+订单号
         $trade_no = \WxPayConfig::MCHID.date("Ymd").'11'.$orderInfo['pickup_id'];
         //②、统一下单
@@ -29,7 +31,10 @@ class WeixinPayUtil{
         $input->SetTrade_type("JSAPI");
         $input->SetOpenid(session("weixin_user"));
         $order = \WxPayApi::unifiedOrder($input);
+        G('end');
+        \Think\Log::write(G('begin','end').'s','WARN');
 
+        //echo G('begin','end').'s';
         if($order['return_code']!='SUCCESS')
         {
             return $response->setCode(0)->setSuccess(false)->setMsg($order['return_msg']);

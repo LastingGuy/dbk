@@ -72,9 +72,11 @@ create table dbk_pickup(
     express_code varchar(50) not null comment '取件码/货架号/手机号',
     remarks varchar(100) default null comment '备注',
     price int(11) not null comment '快递价格',
-	`time`  datetime not null comment '下单时间',
-	express_status tinyint not null comment ' 0：等待接单  1：未支付  2：正在配送 3:已完成',
-	constraint pk_dbk_pickup primary key(pickup_id),
+	 `time`  datetime not null comment '下单时间',
+	  pay_time datetime not null comment '支付时间',
+	  temp1 varchar(45)  comment '暂时字段',
+	  express_status tinyint not null comment ' 0：等待接单  1：未支付  2：正在配送 3:已完成',
+	  constraint pk_dbk_pickup primary key(pickup_id),
     constraint fk_dbk_dormitory_pickup foreign key(dormitory_id) references dbk_dormitory(dormitory_id),
     constraint fk_dbk_openid_pickup foreign key(openid) references dbk_weixin_user(openid)
 )  default character set utf8 ;
@@ -130,7 +132,7 @@ as
         dbk_pickup.dormitory_id, dbk_pickup.express_code, dbk_pickup.express_company,
         dbk_pickup.express_sms, dbk_pickup.express_status, dbk_pickup.express_type,
         dbk_pickup.pickup_id, dbk_pickup.price, dbk_pickup.receiver_name, dbk_pickup.receiver_phone,
-        dbk_pickup.remarks, dbk_pickup.time, dbk_pickup.openid
+        dbk_pickup.remarks, dbk_pickup.time, dbk_pickup.openid, dbk_pickup.pay_time
  from dbk_school, dbk_dormitory, dbk_pickup
  where dbk_school.school_id = dbk_dormitory.school_id and dbk_dormitory.dormitory_id = dbk_pickup.dormitory_id;
 

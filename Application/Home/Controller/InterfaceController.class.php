@@ -163,7 +163,7 @@ class InterfaceController extends Controller
 
             // $wxpayModel = M('weixinPay');
             // $wxpayModel->add($wxpayData);
-            
+
             // $tools = new \JsApiPay();
             // $str = $tools->GetJsApiParameters($order);
             // $this->ajaxReturn($result->setCode(0)->setBody($str)->generate());
