@@ -132,7 +132,7 @@ as
         dbk_pickup.dormitory_id, dbk_pickup.express_code, dbk_pickup.express_company,
         dbk_pickup.express_sms, dbk_pickup.express_status, dbk_pickup.express_type,
         dbk_pickup.pickup_id, dbk_pickup.price, dbk_pickup.receiver_name, dbk_pickup.receiver_phone,
-        dbk_pickup.remarks, dbk_pickup.time, dbk_pickup.openid
+        dbk_pickup.remarks, dbk_pickup.time, dbk_pickup.openid, dbk_pickup.pay_time
  from dbk_school, dbk_dormitory, dbk_pickup
  where dbk_school.school_id = dbk_dormitory.school_id and dbk_dormitory.dormitory_id = dbk_pickup.dormitory_id;
 
