@@ -88,6 +88,7 @@ class WxPayNotify extends WxPayNotifyReply
 					//代拿订单更新， 变成已支付
 					$pickup['pickup_id'] = $row['order_id'];
 					$pickup['express_status'] = 2;
+					$pickup['pay_time'] = date('Y-m-d H:i:s');
 					$model = M("pickup");
 					$model->save($pickup);
 				}
