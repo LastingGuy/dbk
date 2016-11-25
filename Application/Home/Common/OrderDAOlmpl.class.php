@@ -362,6 +362,7 @@ class OrderDAOlmpl implements IOrderDAO
         if($price==0)   //价格为0。不需要支付
         {
             $data['express_status'] = 2;
+            $data['pay_time']=$data['time'];
             $response->setCode(2)->setMsg('价格为0，不需要进行支付');
         }
         else    //需要支付
