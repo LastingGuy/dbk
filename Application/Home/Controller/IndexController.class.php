@@ -7,9 +7,9 @@ class IndexController extends Controller{
     public function index()
     {
         // test
-        // $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmmk';
-        // session('weixin_user',$openid);
-        // $this->redirect('home/index/order');
+        //  $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmmk';
+        //  session('weixin_user',$openid);
+        //  $this->redirect('home/index/order');
 
         if(I("get.code")!='')
         {
@@ -33,15 +33,24 @@ class IndexController extends Controller{
     //订单界面
     public function order()
     {
-        if(!session('?weixin_user'))
-        {
-            $this->error('请登录！');
-        }
-        else
-        {
-            $this->getDefaultInfo();
-            $this->display();
-        }
+        $this->redirect('pause');
+
+        // if(!session('?weixin_user'))
+        // {
+        //     $this->error('请登录！');
+        // }
+        // else
+        // {
+        //     $this->getDefaultInfo();
+        //     $this->display();
+        // }
+    }
+
+
+    //系统维护
+    public function puase()
+    {
+        $this->display();
     }
 
     public function ordertest()
