@@ -33,17 +33,17 @@ class IndexController extends Controller{
     //订单界面
     public function order()
     {
-        $this->redirect('pause');
+        // $this->redirect('pause');
 
-        // if(!session('?weixin_user'))
-        // {
-        //     $this->error('请登录！');
-        // }
-        // else
-        // {
-        //     $this->getDefaultInfo();
-        //     $this->display();
-        // }
+        if(!session('?weixin_user'))
+        {
+            $this->error('请登录！');
+        }
+        else
+        {
+            $this->getDefaultInfo();
+            $this->display();
+        }
     }
 
 
