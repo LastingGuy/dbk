@@ -47,25 +47,25 @@ class UsercenterController extends Controller
 
         //test
         // $this->display();
-        // $this->redirect('index/order');
+        $this->redirect('index/order');
 
-        $user = new Common\UserDAOImpl();
-        if( $user->getUserInfo())
-        {
-            $nikename = session('user_name');
-            $headimgurl = session('headimgurl');
-            if($headimgurl=='')
-            {
-                $headimgurl='__PUBLIC__\img\123.png';
-            }
-            $this->assign('nikename',$nikename);
-            $this->assign('headimgurl',$headimgurl);
-            $this->display();
-        }
-        else
-        {
-            $this->error('请登录！');
-        }
+        // $user = new Common\UserDAOImpl();
+        // if( $user->getUserInfo())
+        // {
+        //     $nikename = session('user_name');
+        //     $headimgurl = session('headimgurl');
+        //     if($headimgurl=='')
+        //     {
+        //         $headimgurl='__PUBLIC__\img\123.png';
+        //     }
+        //     $this->assign('nikename',$nikename);
+        //     $this->assign('headimgurl',$headimgurl);
+        //     $this->display();
+        // }
+        // else
+        // {
+        //     $this->error('请登录！');
+        // }
 
     }
 
