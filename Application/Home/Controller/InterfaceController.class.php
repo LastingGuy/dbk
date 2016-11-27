@@ -132,8 +132,9 @@ class InterfaceController extends Controller
         $model = M("weixin_pay");
         $mod = M("pickup");
         $data = $model->where("time_start>'2016-11-27 12:30:00'")->select();
+        var_dump($data);
         foreach ($data as $key=>$value){
-            $out_trade_no = $data['trade_no'];
+            $out_trade_no = $value['trade_no'];
             $input = new \WxPayOrderQuery();
             $input->SetOut_trade_no($out_trade_no);
             $result = \WxPayApi::orderQuery($input);
@@ -147,7 +148,7 @@ class InterfaceController extends Controller
                 $new['pay_status'] = 1;
                 $model->save($new);
 
-                $pickup['pickup_id'] = $data['order_id'];
+                $pickup['pickup_id'] = $value['order_id'];
                 $pickup['express_status'] = 2;
                 $pickup['pay_time'] = $result['time_end'];
                 $mod->save($pickup);
@@ -155,7 +156,7 @@ class InterfaceController extends Controller
 
         }
 
-        var_dump($result);
+
     }
 }
 ?>
