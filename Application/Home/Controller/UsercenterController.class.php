@@ -88,7 +88,7 @@ class UsercenterController extends Controller
             }
             $this->assign('nikename',$nikename);
             $this->assign('headimgurl',$headimgurl);
-            $this->display();
+            $this->display('usercenter');
         }
         else
         {
