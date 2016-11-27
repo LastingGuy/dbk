@@ -27,7 +27,7 @@ class WeixinPayUtil{
         $input->SetTime_start(date("YmdHis"));
         $input->SetTime_expire(date("YmdHis", time() + 600));
         $input->SetGoods_tag("test");
-        $input->SetNotify_url("http://daibuke.cn/dbktest/index.php/home/interface/weixinNotify");
+        $input->SetNotify_url("http://daibuke.cn/dbk/index.php/home/interface/weixinNotify");
         $input->SetTrade_type("JSAPI");
         $input->SetOpenid(session("weixin_user"));
         $order = \WxPayApi::unifiedOrder($input);
