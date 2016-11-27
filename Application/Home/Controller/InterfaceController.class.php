@@ -129,10 +129,25 @@ class InterfaceController extends Controller
 
    //微信支付查询接口
     public function weixinQuery(){
-        $out_trade_no = "1401363102201611271110035";
-        $input = new \WxPayOrderQuery();
-        $input->SetOut_trade_no($out_trade_no);
-        $result = \WxPayApi::orderQuery($input);
+        $model = M("weinxin_pay");
+        $data = $model->where("time_start>'2016-11-27 12:30:00'")->select();
+        foreach ($data as $key=>$value){
+            $out_trade_no = $data['trade_no'];
+            $input = new \WxPayOrderQuery();
+            $input->SetOut_trade_no($out_trade_no);
+            $result = \WxPayApi::orderQuery($input);
+
+            if($result["return_code"] == "SUCCESS"
+                && $result["result_code"] == "SUCCESS"){
+                $new['trade_no'] = $out_trade_no;
+                $new['time_end'] = $result['time_end'];
+                $new['transaction_id'] = $result['transaction_id'];
+                $new['pay_status'] = 1;
+                $data->save($new);
+            }
+
+        }
+
         var_dump($result);
     }
 }
