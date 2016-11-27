@@ -293,6 +293,7 @@ class OrderDAOlmpl implements IOrderDAO
         {
             if($pickup->add($data))
             {
+                \Think\Log::write($pickup->getLastSql(),'INFO');
                 if($data['default']=='true')
                 {
                     $info = array(
