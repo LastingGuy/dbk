@@ -127,6 +127,13 @@ class InterfaceController extends Controller
         $object->Handle();
     }
 
-   
+   //微信支付查询接口
+    public function weixinQuery(){
+        $out_trade_no = "1401363102201611271110035";
+        $input = new \WxPayOrderQuery();
+        $input->SetOut_trade_no($out_trade_no);
+        $result = \WxPayApi::orderQuery($input);
+        var_dump($result);
+    }
 }
 ?>
