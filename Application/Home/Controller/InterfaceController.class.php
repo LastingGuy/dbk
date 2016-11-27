@@ -128,7 +128,7 @@ class InterfaceController extends Controller
     }
 
    //微信支付批量查询接口
-    public function weixinQuery(){
+    /*public function weixinQuery(){
         $model = M("weixin_pay");
         $mod = M("pickup");
         $data = $model->where("time_start>'2016-11-27 12:30:00'")->select();
@@ -156,6 +156,6 @@ class InterfaceController extends Controller
         }
 
 
-    }
+    }*/
 }
 ?>
