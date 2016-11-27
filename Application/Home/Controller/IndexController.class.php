@@ -47,6 +47,7 @@ class IndexController extends Controller{
     }
 
 
+
     //系统维护
     public function puase()
     {
@@ -62,7 +63,7 @@ class IndexController extends Controller{
         else
         {
             $this->getDefaultInfo();
-            $this->display();
+            $this->display('order');
         }
     }
 

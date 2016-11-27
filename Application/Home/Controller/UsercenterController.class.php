@@ -69,6 +69,35 @@ class UsercenterController extends Controller
 
     }
 
+    //用户中心主页
+    public function usercentertest()
+    {
+
+        //test
+        // $this->display();
+//        $this->redirect('index/order');
+
+        $user = new Common\UserDAOImpl();
+        if( $user->getUserInfo())
+        {
+            $nikename = session('user_name');
+            $headimgurl = session('headimgurl');
+            if($headimgurl=='')
+            {
+                $headimgurl='__PUBLIC__\img\123.png';
+            }
+            $this->assign('nikename',$nikename);
+            $this->assign('headimgurl',$headimgurl);
+            $this->display();
+        }
+        else
+        {
+            $this->error('请登录！');
+        }
+
+    }
+
+
     //所有订单
     public function allorder()
     {
