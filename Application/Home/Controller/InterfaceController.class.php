@@ -127,9 +127,10 @@ class InterfaceController extends Controller
         $object->Handle();
     }
 
-   //微信支付查询接口
+   //微信支付批量查询接口
     public function weixinQuery(){
-        $model = M("weinxin_pay");
+        $model = M("weixin_pay");
+        $mod = M("pickup");
         $data = $model->where("time_start>'2016-11-27 12:30:00'")->select();
         foreach ($data as $key=>$value){
             $out_trade_no = $data['trade_no'];
@@ -139,11 +140,17 @@ class InterfaceController extends Controller
 
             if($result["return_code"] == "SUCCESS"
                 && $result["result_code"] == "SUCCESS"){
+
                 $new['trade_no'] = $out_trade_no;
                 $new['time_end'] = $result['time_end'];
                 $new['transaction_id'] = $result['transaction_id'];
                 $new['pay_status'] = 1;
-                $data->save($new);
+                $model->save($new);
+
+                $pickup['pickup_id'] = $data['order_id'];
+                $pickup['express_status'] = 2;
+                $pickup['pay_time'] = $result['time_end'];
+                $mod->save($pickup);
             }
 
         }
