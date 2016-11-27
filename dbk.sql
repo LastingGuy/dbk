@@ -156,7 +156,7 @@ create  table dbk_weixin_pay
   order_id int comment '代拿代寄订单号',
   nonce_str varchar(32) comment '随机字符串',
   sign varchar(32) comment '签名',
-  perpay_id varchar(64) comment '预支付交易会话标识',
+  prepay_id varchar(64) comment '预支付交易会话标识',
   pay_type tinyint comment '订单类型： 1代拿下单  2代寄下单 ',
   pay_status  tinyint DEFAULT 0 comment '订单状态 ：0未完成  1已完成',
   total_fee int comment '支付金额，单位分',
@@ -165,8 +165,7 @@ create  table dbk_weixin_pay
   time_expire datetime comment '交易过期时间',
   transaction_id varchar(32) comment '微信支付订单号',
   CONSTRAINT pk_dbk_weixin_pay PRIMARY  KEY(trade_no)
-
-)
+)ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
 
 #微信支付退款
 create table dbk_weixin_refund
@@ -176,6 +175,7 @@ create table dbk_weixin_refund
   trade_no varchar(32) comment '商户订单号',
   nonce_str varchar(32) comment '随机字符串',
   sign varchar(32) comment '签名',
+  order_id int comment '订单号',
   pay_type tinyint comment '订单类型： 1代拿下单  2代寄下单 ',
   pay_status  tinyint DEFAULT 0 comment '订单状态 ：0未完成  1已完成',
   total_fee int comment '订单金额',
@@ -183,7 +183,7 @@ create table dbk_weixin_refund
   refund_time datetime comment '退款起始时间',
   refund_id varchar(28) comment '微信退款单号',
   CONSTRAINT pk_dbk_weixin_refund PRIMARY  KEY(refund_no)
-)
+)ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
 
 #导入学校
 insert into dbk_school(school_name,school_city) values('浙江大学城市学院','杭州市');
