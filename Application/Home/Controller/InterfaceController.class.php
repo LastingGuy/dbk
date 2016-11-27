@@ -132,7 +132,6 @@ class InterfaceController extends Controller
         $model = M("weixin_pay");
         $mod = M("pickup");
         $data = $model->where("time_start>'2016-11-27 12:30:00'")->select();
-        var_dump($data);
         foreach ($data as $key=>$value){
             $out_trade_no = $value['trade_no'];
             $input = new \WxPayOrderQuery();
