@@ -65,7 +65,7 @@ class PickupDAOImpl implements IPickupDAO{
         $date = date('Y-m-d');
         $today_end = $date." 16:00:00";
 
-        $data = $model->where("school_id='$school' and pay_time<='$today_end' and pay_time>'$today_begin' and express_status>=2 and express_status<=3 ")->getField("pickup_id,receiver_name,receiver_phone,express_company,express_type,
+        $data = $model->where("school_id='$school' and pay_time<='$today_end' and pay_time>'$today_begin' and express_status=2 ")->getField("pickup_id,receiver_name,receiver_phone,express_company,express_type,
             price,dormitory_address,express_sms,express_code,remarks,pay_time,express_status",true);
 
         //填充表格信息
@@ -104,7 +104,7 @@ class PickupDAOImpl implements IPickupDAO{
         //表格数组
         $model = D('pickup_view');
 
-        $data = $model->where("school_id='$school' and pay_time<='$end' and pay_time>'$begin' and express_status>=2 and express_status<=3 ")->getField("pickup_id,receiver_name,receiver_phone,express_company,express_type,
+        $data = $model->where("school_id='$school' and pay_time<='$end' and pay_time>'$begin' and express_status=2")->getField("pickup_id,receiver_name,receiver_phone,express_company,express_type,
             price,dormitory_address,express_sms,express_code,remarks,pay_time,express_status",true);
 
         //填充表格信息
