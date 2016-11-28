@@ -10,6 +10,7 @@ Deccription:用户中心
 */
 class UsercenterController extends Controller
 {
+
     private $orderDAO;
     private $userDAO;
     public function __construct()
@@ -17,7 +18,7 @@ class UsercenterController extends Controller
         parent::__construct();
 
         // test
-        // $openid = 'oF6atwNyAc4wlpgNVWTdQi4kj7Po';
+        // $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmmk';
         // session('weixin_user',$openid);
 
 
@@ -46,6 +47,7 @@ class UsercenterController extends Controller
 
         //test
         // $this->display();
+//         $this->redirect('index/order');
 
         $user = new Common\UserDAOImpl();
         if( $user->getUserInfo())
@@ -67,13 +69,42 @@ class UsercenterController extends Controller
 
     }
 
+    //用户中心主页
+    public function usercentertest()
+    {
+
+        //test
+        // $this->display();
+//        $this->redirect('index/order');
+
+        $user = new Common\UserDAOImpl();
+        if( $user->getUserInfo())
+        {
+            $nikename = session('user_name');
+            $headimgurl = session('headimgurl');
+            if($headimgurl=='')
+            {
+                $headimgurl='__PUBLIC__\img\123.png';
+            }
+            $this->assign('nikename',$nikename);
+            $this->assign('headimgurl',$headimgurl);
+            $this->display('usercenter');
+        }
+        else
+        {
+            $this->error('请登录！');
+        }
+
+    }
+
+
     //所有订单
     public function allorder()
     {
         if(session('?weixin_user'))
         {
             // test
-            // $openid = 'oF6atwMLdDGJg_5NHyy0PBfeg0RU';
+            // $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmmk';
             // session('weixin_user',$openid);
             $openid = session('weixin_user');
 
@@ -94,7 +125,7 @@ class UsercenterController extends Controller
         if(session('?weixin_user'))
         {
             // test
-            // $openid = 'oF6atwMLdDGJg_5NHyy0PBfeg0RU';
+            // $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmmk';
             
             $openid = session('weixin_user');
 
@@ -116,7 +147,7 @@ class UsercenterController extends Controller
         if(session('?weixin_user'))
         {
             // test
-            // $openid = 'oF6atwMLdDGJg_5NHyy0PBfeg0RU';
+            // $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmmk';
             
             $openid = session('weixin_user');
 
@@ -146,8 +177,9 @@ class UsercenterController extends Controller
             {
                 ///type 为1查询代取快递订单 2查询待寄快递订单
                 case 0:
+                    Common\WeixinPayUtil::weixinRefundQuery($id);
                     $model = D('orderdetail');
-                    $data = $model->where("pickup_id='$id' and openid='$openid'")->select();
+                    $data = $model->where("pickup_id='$id' and openid='$openid'")->select();   
                     break;
                 case 1:
                     $model = D('sendView');
@@ -190,28 +222,32 @@ class UsercenterController extends Controller
             $type = I('post.type');
             $id = I('post.id');
             $result = array();
+            // $type = 0;
+            // $id = "1320";
             // $result['error_code'] = '123';
             if($id=='')
             {
-                $this->ajaxReturn('2');
+                $response = new Common\ResponseGenerator('deleteOrder',false,2,"ID不正确");
+                $this->ajaxReturn($response->generate());
             }
 
 
             switch($type)
             {
                 case 0:
-                    $this->ajaxReturn($this->orderDAO->deletePickupOrder($id));
+                    $this->ajaxReturn($this->orderDAO->deletePickupOrder($id)->generate());
                     // $this->ajaxReturn($result);
                 case 1:
-                    $this->ajaxReturn($this->orderDAO->deleteSendOrder($id));
+                    $this->ajaxReturn($this->orderDAO->deleteSendOrder($id)->generate());
                 default:
                     $this->ajaxReturn('6');
 
             }
         }
         else
-        {
-            $this->ajaxReturn('1');
+        {   
+            $response = new Common\ResponseGenerator('deleteOrder',false,0,"请登录");
+            $this->ajaxReturn($response->generate());
         }
     }
     

@@ -13,10 +13,10 @@ class DataDAOImpl{
         $model = M('pickup_view');
         $number = null;
         if($school!=null) {
-            $number = $model->where("express_status<100 and school_id='$school'")->count();
+            $number = $model->where("express_status>=2 and express_status<=3 and school_id='$school'")->count();
         }
         else{
-            $number = $model->where("express_status<100")->count();
+            $number = $model->where("express_status>=2 and express_status<=3")->count();
         }
         return $number;
     }
@@ -33,10 +33,10 @@ class DataDAOImpl{
         $today_end = $date." 16:00:00";
 
         if($school!=null){
-            $number = $model->where("school_id='$school' and express_status<100 and time<='$today_end' and time>'$today_begin'")->count();
+            $number = $model->where("school_id='$school' and express_status>=2 and express_status<=3 and time<='$today_end' and time>'$today_begin'")->count();
         }
         else{
-            $number = $model->where("express_status<100 and time<='$today_end' and time>'$today_begin'")->count();
+            $number = $model->where("express_status>=2 and express_status<=3 and time<='$today_end' and time>'$today_begin'")->count();
         }
 
 

@@ -4,7 +4,7 @@
     function getCitys_local()
     {
         $school = M('school');;
-        $schools = $school->field('school_city as city')->group('school_city')->select();
+        $schools = $school->field('school_city as city')->where("school_id!=0")->group('school_city')->select();
         // $options='';
         
         // if(count($schools)==0)

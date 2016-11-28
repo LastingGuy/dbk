@@ -13,6 +13,7 @@ class AdminDAOImpl implements IAdminDAO{
         $model = M("admin");
         $condition['admin_id'] = $user_id;
         $condition['admin_passwd'] = $user_passwd;
+
         if($model->where($condition)->find()){
             return $this->addSession($user_id);
         }else{

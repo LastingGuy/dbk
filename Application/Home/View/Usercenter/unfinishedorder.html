@@ -57,11 +57,22 @@
                       <p>下单时间：<i class="red">{$vo.time}</i></p>
                       <p>完成状态：
                         <i class="red">
-                          <eq name='vo.express_status' value='2'>
+                          <!--<eq name='vo.express_status' value='2'>
                             待收货
                           <else/>
                             完成
-                          </eq>
+                          </eq>-->
+                          <switch name="vo.express_status">
+                              <case value="1">未支付</case>
+                              <case value="2">待收货</case>
+                              <case value="3">完成</case>
+                              <case value="4" break="0"></case>
+                              <case value="5">已取消</case>
+                              <case value="101" break="0"></case>
+                              <case value="102" break="0"></case>
+                              <case value="103">已删除</case>
+                              <default>无效订单</default>
+                          </switch>
                         </i></p>
                     </div>
                   </div><!-- orderState -->

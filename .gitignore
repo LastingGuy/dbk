@@ -2,3 +2,5 @@
 /Application/Runtime/
 /Application/Common/Conf/config.php
 /ThinkPHP/Conf/debug.php
+.idea/
+.vscode/

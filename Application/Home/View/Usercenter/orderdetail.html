@@ -41,7 +41,17 @@
     <div class="goBack">
       <div class="fixWidth">
         <a href="{$page}"></a>
-        <div class="deleteOrder" onclick="deleteOrder()">删除订单</div>
+        <eq name='data.status' value='4'>
+          <else/>
+            <div class="deleteOrder" onclick="deleteOrder()">
+            <eq name='data.status' value='2'>
+                  申请退款
+                <else/>
+                  删除订单
+            </eq>
+            </div>
+        </eq>
+        
       </div>
     </div>
 
@@ -70,11 +80,22 @@
            <div class="status">
              <p>下单时间：<i class="red">{$data.time}</i></p>
              <p>完成状态：<i class="red">
-              <eq name='data.status' value='2'>
+              <!--<eq name='data.status' value='2'>
                 待收货
               <else/>
                 已完成
-              </eq>
+              </eq>-->
+              <switch name="data.status">
+                  <case value="1">未支付</case>
+                  <case value="2">待收货</case>
+                  <case value="3">完成</case>
+                  <case value="4">退款中</case>
+                  <case value="5">已取消</case>
+                  <case value="101" break="0"></case>
+                  <case value="102" break="0"></case>
+                  <case value="103">已删除</case>
+                  <default>无效订单</default>
+              </switch>
               </i></p>
            </div>
         </div><!-- orderState -->
@@ -118,20 +139,17 @@
           },
           function(t)
           {
-            switch(t)
+            switch(t['code'])
             {
-              case 0:
-                alert('请登陆!');
-                break;
               case 1:
-                alert('删除成功!');
+                alert(t['msg']);
                 self.location="{$page}";
                 break;
               case 5:
                 alert('16:00之前不可删除前日16:00之前订单，16:00之后不可删除当日16：00之前订单!');
                 break;
               default:
-                alert('删除失败!');
+                alert(t['msg']);
             }
           }).error(
             function()
