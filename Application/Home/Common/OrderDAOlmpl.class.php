@@ -361,7 +361,8 @@ class OrderDAOlmpl implements IOrderDAO
 
                     $jsData = new \WxPayJsApiPay();
                     $jsData->SetAppid(\WxPayConfig::APPID);
-                    $jsData->SetTimeStamp(time());
+                    $timestamp = time();
+                    $jsData->SetTimeStamp("$timestamp");
                     $jsData->SetNonceStr(\WxPayApi::getNonceStr());
                     $jsData->SetPackage("prepay_id=" . $order['prepay_id']);
                     $jsData->SetSignType("MD5");
