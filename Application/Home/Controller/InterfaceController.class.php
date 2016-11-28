@@ -127,6 +127,46 @@ class InterfaceController extends Controller
         $object->Handle();
     }
 
+
+    //获得未支付订单详情
+    public function getOrderWeixinPayInfo()
+    {
+        $response = new Common\ResponseGenerator("getRefundOrderInfo");
+        if(!session("?weixin_user"))        //未登录
+        {
+            $response->setCode(0)->setMsg("未登录");
+            $this->ajaxReturn($response->generate());
+        }
+        else if(false)                   //未提交参数
+        {
+            $response->setCode(0)->setMsg("参数错误");
+            return $response->generate();
+        }
+        else
+        {
+            $orderID = I("post.orderID");
+            $userID = session("weixin_user");
+
+
+            $orderDAO = new Common\OrderDAOlmpl();
+            $result = $orderDAO->getUnPaidOrderInfo($orderID,1,$userID);
+
+
+            if($result->getSuccess())
+            {
+                $response->setSuccess(true)->setMsg("ok")->setCode(1)->setBody($result->getBody());
+                $this->ajaxReturn($response->generate());
+            }
+            else
+            {
+                $result->setAction($response->getAction());
+                $this->ajaxReturn($result->generate());
+            }
+        }
+    }
+
+
+
    //微信支付批量查询接口
     /*public function weixinQuery(){
         $model = M("weixin_pay");

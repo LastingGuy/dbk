@@ -45,10 +45,18 @@ class UsercenterController extends Controller
     public function usercenter()
     {
 
-        //test
+/////////////////////////test/////////////////
         // $this->display();
-//         $this->redirect('index/order');
 
+
+
+///////////////////////////////如需内部调试////////////////////////////////
+///////////////////启用以下代码//////////////
+        //$this->redirect('index/order');
+
+
+//////////////////////////////////////////////
+//////////////////////停用以下代码/////////////
         $user = new Common\UserDAOImpl();
         if( $user->getUserInfo())
         {
@@ -66,6 +74,7 @@ class UsercenterController extends Controller
         {
             $this->error('请登录！');
         }
+////////////////////////////////////////////////////////////////////////////
 
     }
 
@@ -75,7 +84,6 @@ class UsercenterController extends Controller
 
         //test
         // $this->display();
-//        $this->redirect('index/order');
 
         $user = new Common\UserDAOImpl();
         if( $user->getUserInfo())
@@ -206,6 +214,8 @@ class UsercenterController extends Controller
         }
         
     }
+
+
 
     //删除订单
     //return code:

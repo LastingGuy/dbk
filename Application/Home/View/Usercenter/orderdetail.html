@@ -34,7 +34,7 @@
 
 
 </head>
-	<body>
+	<body onload="init()">
 		<div class="contain orderDetail">
 
 
@@ -98,6 +98,11 @@
               </switch>
               </i></p>
            </div>
+           <eq name="data.status" value="1">
+            <div class="rePay">
+                <input type="submit" id="payButton" value="正在查询中..." disabled="disabled" onclick="pay();return false;">
+            </div>
+           </eq>
         </div><!-- orderState -->
       </div>
     </div><!-- infoSection -->
@@ -159,6 +164,104 @@
           )
         }
       }
+      function init()
+      {
+        if(<eq name="data.status" value="1">true<else/>false</eq>)
+        {
+          $.post('../interface/getorderweixinpayinfo',
+          {
+            orderID:{$data.id}
+          },
+          function(r)
+          {
+            if(r['success'])
+            {
+              $("#payButton").val('付款');
+              $("#payButton").removeAttr('disabled');
+            }
+            else
+            {
+              $("#payButton").val('订单已失效');
+            }
+          }
+          ).error(
+            function()
+            {
+              $('payButton').val('查询失败，请尝试重新打开订单详情');
+            }
+          );
+        }
+      }
+
+      function pay()
+      {
+         $.post('../interface/getorderweixinpayinfo',
+          {
+            orderID:{$data.id}
+          },
+          function(r)
+          {
+            if(r['success'])
+            {
+              wxpaydata = r['body'];
+              weixinPay();
+            }
+            else
+            {
+              alert("订单已失效");
+              $("#payButton").val('订单已失效');
+            }
+          }
+          ).error(
+            function()
+            {
+              alert("支付失败");
+            }
+          );
+      }
+
+       function onBridgeReady()
+    {
+        WeixinJSBridge.invoke(
+            'getBrandWCPayRequest', 
+            JSON.parse(wxpaydata),
+            function(res)
+            {     
+                if(res.err_msg == "get_brand_wcpay_request:ok" ) 
+                {
+                    alert('支付成功');
+                    location.reload();
+                }
+                else
+                {
+                    alert('支付失败!');
+                } 
+            }
+        ); 
+    }
+
+    function weixinPay()
+    {
+        if (typeof WeixinJSBridge == "undefined")
+        {
+            if( document.addEventListener )
+            {
+                document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+            }
+            else if (document.attachEvent)
+            {
+                document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+                document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+            }
+        }
+        else
+        {
+            onBridgeReady();
+        }
+    }
+
+      var wxpaydata;
+
     </script>
 	</body>
 </html>

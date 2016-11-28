@@ -9,11 +9,12 @@ import("Org.WeixinPay.WxPay#Api",null,".php");
 
 class OrderDAOlmpl implements IOrderDAO
 {
-    private $openid;
-    private $sendModel;
-    private $pickupModel;
-    private $orderDetail;
-    private $sendOrder;
+    private $openid;    //当前用户openid
+    private $sendModel; //M('send')
+    private $pickupModel;   //M('pickup')
+    private $orderDetail;   //D('orderdetail')
+    private $sendOrder; //D('sendView')
+    private $M_weixinPay; //M('weixinPay')
 
     const judgeTime = 16;
 
@@ -24,6 +25,7 @@ class OrderDAOlmpl implements IOrderDAO
         $this->pickupModel = M('pickup');
         $this->orderDetail = D('orderdetail');
         $this->sendOrder = D('sendView');
+        $this->M_weixinPay = M('weixinPay');
 
     }
     
@@ -326,6 +328,51 @@ class OrderDAOlmpl implements IOrderDAO
             return $response->setCode(0)->setMsg($pickup->getError());
         }
 
+
+    }
+
+    /*
+     * 获得未支付订单信息
+     * @param $orderid 订单号
+     * @param $orderType 订单类型 1 为代取订单 2 为代寄订单
+     * @param $userid 用户 openID
+     *
+     *
+     * */
+    public function getUnPaidOrderInfo($orderid,$orderType,$userid)
+    {
+        $weixinPayModel = $this->M_weixinPay;
+        $response = new ResponseGenerator("getUnPaidOrderInfo");
+        switch ($orderType)
+        {
+            case 1:
+            case 2:
+                $order = $weixinPayModel->where("order_id=%s and openid='%s' and pay_type=%s",$orderid,$userid,$orderType)->find();
+                if($order)
+                {
+                    if($order['pay_status']!=0)
+                    {
+                        return $response->setCode(0)->setMsg("订单以支付");
+                    }
+                    else if(time()>strtotime($order['time_expire']))
+                    {
+                        return $response->setCode(0)->setMsg("订单过期");
+                    }
+
+                    $jsData = new \WxPayJsApiPay();
+                    $jsData->SetAppid(\WxPayConfig::APPID);
+                    $jsData->SetTimeStamp(time());
+                    $jsData->SetPackage("prepay_id=" . $order['prepay_id']);
+                    $jsData->SetSignType("MD5");
+                    $jsData->SetPaySign($jsData->MakeSign());
+                    $parameters = json_encode($jsData->GetValues());
+                    return $response->setSuccess(true)->setCode(1)->setMsg("ok")->setBody($parameters);
+
+                }
+                break;
+            default:
+                return $response->setCode(0)->setMsg("参数错误");
+        }
 
     }
 
