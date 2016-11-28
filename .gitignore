@@ -4,3 +4,4 @@
 /ThinkPHP/Conf/debug.php
 .idea/
 .vscode/
+ThinkPHP/Library/Org/WeixinPay/WxPay.Config.php
