@@ -26,6 +26,7 @@ class WxPayConfig
 	const MCHID = '1401363102';
 	const KEY = 'daibuke2016hzzaa2824211994111318';
 	const APPSECRET = '20af5faa385f8bce23e8920dfbbb545b';
+    const NOTIFYPATH = "http://daibuke.cn/dbk/index.php/home/interface/weixinNotify";
 	
 	//=======【证书路径设置】=====================================
 	/**
