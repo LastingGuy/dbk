@@ -145,7 +145,7 @@ class PickupDAOImpl implements IPickupDAO{
 
     //完成指定时间内的订单
     public function completeDuringTheTime($begin_time, $end_time){
-        $object = M('pickup_view');
+        $object = M();
         $school_id = session("admin_school");
         $object->execute("update dbk_pickup_view set express_status=3 where pay_time>='$begin_time' and pay_time<='$end_time' and school_id=$school_id");
         return 1;
@@ -153,7 +153,7 @@ class PickupDAOImpl implements IPickupDAO{
 
     //未完成指定时间内的订单
     public function uncompleteDuringTheTime($begin_time, $end_time){
-        $object = M('pickup_view');
+        $object = M();
         $school_id = session("admin_school");
         $object->execute("update dbk_pickup_view set express_status=2 where pay_time>='$begin_time' and pay_time<='$end_time' and school_id=$school_id");
         return 1;

@@ -147,9 +147,9 @@ class SendDAOImpl implements ISendDAO{
 
     //完成指定时间内的订单
     public function completeDuringTheTime($begin_time, $end_time){
-        $object = M('pickup_view');
-        $data['express_status'] = 3;
-        $object->execute("update dbk_send_view set sender_status=3 where time>='$begin_time' and time<='$end_time'");
+        $object = M();
+        $school_id = session("admin_school");
+        $object->execute("update dbk_send_view set sender_status=3 where time>='$begin_time' and time<='$end_time' and school_id=$school_id");
         return 1;
     }
 }
