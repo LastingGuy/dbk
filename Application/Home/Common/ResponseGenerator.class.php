@@ -101,9 +101,9 @@ class ResponseGenerator
             'code'=>$this->code,
             'msg'=>$this->msg,
             'body'=>$this->body
-        );   
+        );
 
         return $data;
     }
 }
-?> 
+?>
