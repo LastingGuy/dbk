@@ -300,11 +300,11 @@ class OrderDAOlmpl implements IOrderDAO
     {
         switch ($status)
         {
-            case SELF::ALL: //获得所有代寄订单
+            case self::ALL: //获得所有代寄订单
                 return $this->getAllSendOrders();
-            case SELF::UnFinished:  //获得所有未完成订单
+            case self::UnFinished:  //获得所有未完成订单
                 return $this->getUnFinishedSendOrders();
-            case SELF::Finished:
+            case self::Finished:
                 return $this->getFinishedSendOrders();
             default:
                 return array();
@@ -323,11 +323,11 @@ class OrderDAOlmpl implements IOrderDAO
     {
         switch ($type)
         {
-            case SELF::PICKUPORDER: //代取订单
+            case self::PICKUPORDER: //代取订单
                 $orderModel = $this->D_orderdetail;
                 $data = $orderModel->where("pickup_id='%s' and openid='%s' and express_status<100",$orderid,$this->openid)->select();
                 return $data;
-            case SELF::SENDORDER:   //代寄订单
+            case self::SENDORDER:   //代寄订单
                 $orderModel = $this->M_sendView;
                 $data = $orderModel->where("send_id='%s' and openid='%s' and sender_status<100",$orderid,$this->openid)->select();
                 return $data;
