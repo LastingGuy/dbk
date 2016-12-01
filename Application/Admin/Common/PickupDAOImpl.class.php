@@ -16,11 +16,23 @@ class PickupDAOImpl implements IPickupDAO{
         $model = M('pickup_view');
 
         $return_data['draw'] = $param["draw"];
-        $return_data['recordsTotal'] = $model->where("school_id='$school' and express_status>=2 and express_status<=3")->count();
-        $return_data['recordsFiltered'] = $return_data['recordsTotal'];
+        $search = $param['search']['value'];
+        if($search!=null){
+            $return_data['recordsTotal'] = $model->where("school_id='$school' and express_status>=2 and express_status<=3 and (receiver_name like '$search%' or receiver_phone like '$search%')")->count();
+            $return_data['recordsFiltered'] = $return_data['recordsTotal'];
+            //获取订单
+            $return_data['data'] = $model->where("school_id='$school' and express_status>=2 and express_status<=3 and (receiver_name like '$search%' or receiver_phone like '$search%')")->order("pickup_id desc")->limit($param['start'],$param['length'])->select();
 
-        //获取订单
-        $return_data['data'] = $model->where("school_id='$school' and express_status>=2 and express_status<=3")->order("pickup_id desc")->limit($param['start'],$param['length'])->select();
+        }else{
+            $return_data['recordsTotal'] = $model->where("school_id='$school' and express_status>=2 and express_status<=3")->count();
+            $return_data['recordsFiltered'] = $return_data['recordsTotal'];
+            //获取订单
+            $return_data['data'] = $model->where("school_id='$school' and express_status>=2 and express_status<=3")->order("pickup_id desc")->limit($param['start'],$param['length'])->select();
+
+        }
+
+
+
         foreach($return_data['data'] as $key=>$value){
             if($return_data['data'][$key]['express_status'] == 2)
             {
