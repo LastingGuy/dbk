@@ -104,13 +104,16 @@ create table dbk_send(
 #到件电话通知
 create table dbk_dormitory_dialog
 (
-  dialog_id int auto_increment comment '拨打记录号',
+  dialog_id int auto_increment comment '拨打记录号',  
+
+#到件电话通知
+create table dbk_dormitory_dialog
+(
 	pickup_id int comment '订单id',
 	dialog_time datetime comment '拨打时间',
-	constraint pk_dbk_dormitory_dialog primary key(dialog_id),
+	constraint pk_dbk_dormitory_dialog primary key(pickup_id),
 	constraint fk_pickup_id FOREIGN key(pickup_id) REFERENCES dbk_pickup(pickup_id)
 ) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
-
 #收件费用
 create table dbk_school_fee
 (
