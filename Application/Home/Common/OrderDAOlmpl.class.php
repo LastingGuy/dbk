@@ -404,7 +404,7 @@ class OrderDAOlmpl implements IOrderDAO
         $price = $this->charge($school,$data['express_type']);
         if($price==-100)
         {
-            return $response->setCode(0)->setMsg('订单错误');
+            return $response->setCode(0)->setMsg('价格错误,请尝试重新下单');
         }
         else
         {
@@ -441,7 +441,7 @@ class OrderDAOlmpl implements IOrderDAO
         $pickup = D('pickup');
         if($pickup->create($data))
         {
-            if($pickup->add($data))
+            if($id = $pickup->add($data))
             {
                 \Think\Log::write($pickup->getLastSql(),'INFO');
                 if($data['default']=='true')
@@ -455,10 +455,10 @@ class OrderDAOlmpl implements IOrderDAO
                     );
                     $this->saveDefaultInfo( $data['openid'],$info);
                 }
-                $info = $pickup->where($data)->find();
+                $info = $pickup->where('pickup_id=%s',$id)->find();
                 if($info==null)
                 {
-                    return $response->setSuccess(false)->setMsg('订单错误');
+                    return $response->setSuccess(false)->setMsg('系统错误,请在订单详情中支付');
                 }
                 else
                 {
