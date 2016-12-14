@@ -666,3 +666,19 @@ a:hover{
 .menuSelect select{
   margin-bottom: 7px;
 } 
+
+.rePay{
+  height: 50px;
+  width:100%;
+}
+
+.rePay input[type="submit"]{
+  display: block;
+  width: 100%;
+  background: #0279fb;
+  color: white;
+  height: 35px;
+  margin: 20px auto 0;
+  border: none;
+  border-radius: 5px;
+}

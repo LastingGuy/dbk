@@ -45,10 +45,18 @@ class UsercenterController extends Controller
     public function usercenter()
     {
 
-        //test
+/////////////////////////test/////////////////
         // $this->display();
-//         $this->redirect('index/order');
 
+
+
+///////////////////////////////如需内部调试////////////////////////////////
+///////////////////启用以下代码//////////////
+        //$this->redirect('index/order');
+
+
+//////////////////////////////////////////////
+//////////////////////停用以下代码/////////////
         $user = new Common\UserDAOImpl();
         if( $user->getUserInfo())
         {
@@ -66,6 +74,7 @@ class UsercenterController extends Controller
         {
             $this->error('请登录！');
         }
+////////////////////////////////////////////////////////////////////////////
 
     }
 
@@ -75,7 +84,6 @@ class UsercenterController extends Controller
 
         //test
         // $this->display();
-//        $this->redirect('index/order');
 
         $user = new Common\UserDAOImpl();
         if( $user->getUserInfo())
@@ -103,12 +111,8 @@ class UsercenterController extends Controller
     {
         if(session('?weixin_user'))
         {
-            // test
-            // $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmmk';
-            // session('weixin_user',$openid);
-            $openid = session('weixin_user');
-
-            $orders = $this->getOrders($openid,0,0);
+            $orders = $this->orderDAO->getOrders(Common\OrderDAOlmpl::ALLKindsOFOrder,
+                                                    Common\OrderDAOlmpl::ALL);
             $this->assign('count',count($orders));
             $this->assign('recoder',$orders);
             $this->display();
@@ -124,12 +128,8 @@ class UsercenterController extends Controller
     {
         if(session('?weixin_user'))
         {
-            // test
-            // $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmmk';
-            
-            $openid = session('weixin_user');
-
-            $orders = $this->getOrders($openid,0,2);
+            $orders = $this->orderDAO->getOrders(Common\OrderDAOlmpl::PICKUPORDER,
+                Common\OrderDAOlmpl::UnFinished);
             $this->assign('count',count($orders));
             $this->assign('recoder',$orders);
             $this->display();
@@ -146,12 +146,8 @@ class UsercenterController extends Controller
     {
         if(session('?weixin_user'))
         {
-            // test
-            // $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmmk';
-            
-            $openid = session('weixin_user');
-
-            $orders = $this->getOrders($openid,0,3);
+            $orders = $this->orderDAO->getOrders(Common\OrderDAOlmpl::PICKUPORDER,
+                Common\OrderDAOlmpl::Finished);
             $this->assign('count',count($orders));
             $this->assign('recoder',$orders);
             $this->display();
@@ -161,6 +157,25 @@ class UsercenterController extends Controller
             $this->error('请登录！');
         }
     }
+
+    //代寄订单
+    public function sendorder()
+    {
+
+        if(!session('?weixin_user'))
+        {
+            $this->error('请登陆');
+        }
+        else
+        {
+            $datas = $this->orderDAO->getOrders(Common\OrderDAOlmpl::SENDORDER,
+                Common\OrderDAOlmpl::ALL);
+            $this->assign('count',count($datas));
+            $this->assign('recoder',$datas);
+            $this->display();
+        }
+    }
+
 
     //获得订单详情
     public function orderdetail()
@@ -206,6 +221,42 @@ class UsercenterController extends Controller
         }
         
     }
+
+    //获得代寄订单
+    public function sendorderdetail()
+    {
+        if(!session('?weixin_user'))
+        {
+            $this->error('请登录！');
+
+        }
+        else
+        {
+            $id = I('get.id');
+            $page = I('get.page');
+
+
+            C("READ_DATA_MAP",true); //启用模板映射
+
+            $orderDAO = new Common\OrderDAOlmpl();
+            $data = $orderDAO->getOrderDetail(Common\OrderDAOlmpl::SENDORDER,$id);
+
+            if(count($data)==0)
+            {
+                $this->error('无效订单');
+            }
+            else
+            {
+                $this->assign('page',$page);
+                $this->assign('data',$data[0]);
+//                var_dump($data[0]);
+                $this->display();
+            }
+        }
+
+    }
+
+
 
     //删除订单
     //return code:
