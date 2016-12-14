@@ -10,13 +10,25 @@ Deccription:用户中心
 */
 class UsercenterController extends Controller
 {
-    public function index()
+
+    private $orderDAO;
+    private $userDAO;
+    public function __construct()
     {
+        parent::__construct();
+
         // test
-        // $openid = 'oF6atwNyAc4wlpgNVWTdQi4kj7Po';
+        // $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmmk';
         // session('weixin_user',$openid);
 
 
+        $this->orderDAO = new Common\OrderDAOlmpl();
+
+    }
+
+    public function index()
+    {
+        
         //查看用户是否已经写入数据库，没有则写入
         $object = new Common\UserDAOImpl();
         if($object->login())
@@ -32,6 +44,11 @@ class UsercenterController extends Controller
     //用户中心主页
     public function usercenter()
     {
+
+        //test
+        // $this->display();
+//         $this->redirect('index/order');
+
         $user = new Common\UserDAOImpl();
         if( $user->getUserInfo())
         {
@@ -52,13 +69,42 @@ class UsercenterController extends Controller
 
     }
 
+    //用户中心主页
+    public function usercentertest()
+    {
+
+        //test
+        // $this->display();
+//        $this->redirect('index/order');
+
+        $user = new Common\UserDAOImpl();
+        if( $user->getUserInfo())
+        {
+            $nikename = session('user_name');
+            $headimgurl = session('headimgurl');
+            if($headimgurl=='')
+            {
+                $headimgurl='__PUBLIC__\img\123.png';
+            }
+            $this->assign('nikename',$nikename);
+            $this->assign('headimgurl',$headimgurl);
+            $this->display('usercenter');
+        }
+        else
+        {
+            $this->error('请登录！');
+        }
+
+    }
+
+
     //所有订单
     public function allorder()
     {
         if(session('?weixin_user'))
         {
             // test
-            // $openid = 'oF6atwMLdDGJg_5NHyy0PBfeg0RU';
+            // $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmmk';
             // session('weixin_user',$openid);
             $openid = session('weixin_user');
 
@@ -79,7 +125,7 @@ class UsercenterController extends Controller
         if(session('?weixin_user'))
         {
             // test
-            // $openid = 'oF6atwMLdDGJg_5NHyy0PBfeg0RU';
+            // $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmmk';
             
             $openid = session('weixin_user');
 
@@ -101,7 +147,7 @@ class UsercenterController extends Controller
         if(session('?weixin_user'))
         {
             // test
-            // $openid = 'oF6atwMLdDGJg_5NHyy0PBfeg0RU';
+            // $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmmk';
             
             $openid = session('weixin_user');
 
@@ -131,8 +177,9 @@ class UsercenterController extends Controller
             {
                 ///type 为1查询代取快递订单 2查询待寄快递订单
                 case 0:
+                    Common\WeixinPayUtil::weixinRefundQuery($id);
                     $model = D('orderdetail');
-                    $data = $model->where("pickup_id='$id' and openid='$openid'")->select();
+                    $data = $model->where("pickup_id='$id' and openid='$openid'")->select();   
                     break;
                 case 1:
                     $model = D('sendView');
@@ -161,46 +208,46 @@ class UsercenterController extends Controller
     }
 
     //删除订单
+    //return code:
+    //0:没有登陆
+    //1：删除成功
+    //2：id不正确
+    //4:无此订单
+    //5:该时段订单无法删除
+    //6:删除失败
     public function deleteorder()
     {
         if(session('?weixin_user'))
         {
-            $type = I('get.type');
-            $id = I('get.id');
-            $page = I('get.page');
-            $openid = session('weixin_user');
+            $type = I('post.type');
+            $id = I('post.id');
+            $result = array();
+            // $type = 0;
+            // $id = "1320";
+            // $result['error_code'] = '123';
             if($id=='')
             {
-                $this->error('删除失败');
+                $response = new Common\ResponseGenerator('deleteOrder',false,2,"ID不正确");
+                $this->ajaxReturn($response->generate());
             }
+
 
             switch($type)
             {
                 case 0:
-                    $model = M('pickup');
-                    if($model->where("openid='$openid' and pickup_id='$id'")->delete())
-                    {
-                        $this->redirect($page);
-                    }
-                    else
-                    {
-                        $this->error('删除失败');
-                    }
-
+                    $this->ajaxReturn($this->orderDAO->deletePickupOrder($id)->generate());
+                    // $this->ajaxReturn($result);
                 case 1:
-                    $model = M('send');
-                    if($model->where("openid='$openid' and send_id='$id'")->delete())
-                    {
-                        $this->redirect($page);
-                    }
-                    else
-                    {
-                        $this->error('删除失败');
-                    }
+                    $this->ajaxReturn($this->orderDAO->deleteSendOrder($id)->generate());
                 default:
-                    $this->error('删除失败');
+                    $this->ajaxReturn('6');
 
             }
+        }
+        else
+        {   
+            $response = new Common\ResponseGenerator('deleteOrder',false,0,"请登录");
+            $this->ajaxReturn($response->generate());
         }
     }
     
@@ -218,22 +265,7 @@ class UsercenterController extends Controller
             return false;
         }
 
-        if($type==0)
-        {
-            $pickupModel = M('pickup');
-            if($status==0)
-            {
-                $datas = $pickupModel->where("openid='$openid'")->order('time desc')->select();
-                return $datas;
-            }
-            else
-            {
-                $datas = $pickupModel->where("openid='$openid' and express_status='$status'")->order('pickup_id desc')->select();
-                return $datas;
-            }
-        }
-
-
+        return $this->orderDAO->getOrders($type,$status);
     }
 }
 ?>

@@ -1,0 +1,455 @@
+<?php
+
+/*
+*   Author:Wang Jinglu
+*   Date:2016/10/31
+*/
+namespace Home\Common;
+import("Org.WeixinPay.WxPay#Api",null,".php");
+
+class OrderDAOlmpl implements IOrderDAO
+{
+    private $openid;
+    private $sendModel;
+    private $pickupModel;
+    private $orderDetail;
+    private $sendOrder;
+
+    const judgeTime = 16;
+
+    public function __construct()
+    {
+        $this->openid = session('weixin_user');
+        $this->sendModel = M('send');
+        $this->pickupModel = M('pickup');
+        $this->orderDetail = D('orderdetail');
+        $this->sendOrder = D('sendView');
+
+    }
+    
+    public function setOpenID($id='')
+    {
+        if($id!='')
+        {
+            $this->openid = $id;
+        }
+        else
+        {
+            $this->openid = session('weixin_user');
+        }
+    }
+
+    //删除代取订单
+    public function deletePickupOrder($id)
+    {
+       $response = new ResponseGenerator("deletePickUpOrder");
+
+
+        $model = $this->pickupModel;
+        $today = getdate();
+        $stamp = mktime(self::judgeTime,0,0,$today['mon'],$today['mday'],$today['year']);
+
+        if($today['hours']<self::judgeTime || $today['wday']==6)
+        {
+            //当前时间点在16：00之前，将时间戳减去一天，如果当天是星期天，则将时间戳减去两天
+            //如果当天为星期六，时间戳为星期五的16：00
+            $stamp -= 24 * 60 * 60;
+            if($today['wday']==0)
+            {
+                $stamp -= 24 * 60 * 60;
+            }
+        }
+       
+        $order = $model->where("openid='%s' and pickup_id='%s'",$this->openid,$id)->find();
+
+        $ordertime = strtotime($order['time']);
+
+        if($order['express_status']!=2 && $order['express_status']!=4 && $order['express_status']<100)
+        {
+            //未支付、已完成可以删除
+            if($model->where("pickup_id='$id'")->setInc('express_status',100)==true)
+            {
+                return $response->setSuccess(true)->setCode(1)->setMsg("删除成功");
+            }     
+            else
+            {
+                return $response->setCode(6)->setMsg("删除失败");
+            }
+
+            
+        }
+        else if($order['express_status']==2)
+        {   //未完成订单
+            
+            if($ordertime>$stamp)
+            {
+                //在可删除时间之后的订单，可以删除
+
+                $result = new ResponseGenerator("deletePickUpOrder",true);
+                if($order['price']!=0)
+                {
+                    //退款操作
+                    $result = WeixinPayUtil::refundRecvOrder($id);
+                    //修改状态
+                    if($result->getSuccess())
+                    {
+                        $model->where("pickup_id='$id'")->setField('express_status',4);
+                        $result->setSuccess(true)->setCode(1)->setMsg("申请退款成功")->setAction('deletePickUpOrder');
+                    }
+
+                    return $result;
+                }
+                else
+                {
+                    $model->where("pickup_id='$id'")->setField('express_status',5);
+                    return $result->setSuccess(true)->setCode(1)->setMsg("删除成功");
+                }        
+                
+            }
+            else
+            {
+                //无法删除
+                return $response->setSuccess(false)->setCode(5)->setMsg('该时段无法删除');
+            }
+        }
+        else
+        {
+            return $response->setSuccess(false)->setCode(6)->setMsg('无法删除订单');
+        }
+
+       
+    }
+
+    //删除待寄订单
+    public function deleteSendOrder($id)
+    {
+        $model = $this->sendModel;
+        $today = getdate();
+        $stamp = mktime(self::judgeTime,0,0,$today['mon'],$today['mday'],$today['year']);
+
+        if($today['hours']<self::judgeTime || $today['wday']==6)
+        {
+            $stamp -= 24 * 60 * 60;
+            if($today['wday']==0)
+            {
+                $stamp -= 24 * 60 * 60;
+            }
+        }
+        $deadLine = date('Y-m-d H:i:s',$stamp);
+
+        $unfinished = $model->where("send_id='$this->openid' and pickup_id='$id' and sender_status=2  and time>'$deadLine'")->find();
+        $finished = $model->where("send_id='$this->openid' and pickup_id='$id' and sender_status=3")->find();
+        if($finished == false && $unfinished==false)
+        {
+            return 5;
+        }
+
+        if($model->where("pickup_id='$id'")->setInc('sender_status',100)==true)
+        {
+            return 1;
+        }     
+        else
+        {
+           return 6;
+        }
+    }
+
+    //获得所有未删除代取订单
+    public function getAllPickupOrders()
+    {
+        $datas = $this->pickupModel->where("openid='$this->openid' and express_status<100")->order('time desc')->select();
+        return $datas;
+    }
+
+    //获得未完成订单
+    public function getUnfinishedPickupOrders()
+    {
+        $datas = $this->pickupModel->where("openid='$this->openid' and express_status=2")->order('pickup_id desc')->select();
+        return $datas;
+    }
+
+    //获得已完成订单
+    public function getFinishedPickupOrders()
+    {
+        $datas = $this->pickupModel->where("openid='$this->openid' and express_status=3")->order('pickup_id desc')->select();
+        return $datas;
+    }
+    public function getPickupOrdersByStatus($status)
+    {
+        switch($status)
+        {
+            case 0:
+                return $this->getAllPickupOrders();
+                break;
+            case 2:
+                return $this->getUnfinishedPickupOrders();
+                break;
+            case 3:
+                return $this->getFinishedPickupOrders();
+                break;
+            default:
+                return array();
+        }
+    }
+
+    public function getAllSendOrders()
+    {
+        $datas = $this->sendOrder->where("openid='$this->openid' and express_status<100")->order('time desc')->select();
+        return $datas;
+    }
+    public function getAllOrders()
+    {
+        return;
+    }
+    public function getDeleteOrders()
+    {
+        return;
+    }
+
+    public function getOrders($type,$status)
+    {
+        switch($type)
+        {
+            case 0: 
+                return $this->getPickupOrdersByStatus($status);
+                break;
+            case 1:
+                return $this->getPickupOrdersByStatus($status);
+                break;
+            default:
+                return array();
+        }
+    }
+
+    //新建待寄订单
+    //return ResponseGenerator
+    //code :
+    //  0: 失败
+    //  1：成功需要支付
+    //  2：成功，价格为0不需要进行支付
+    public function newRecvOrder()
+    {
+        $data = I('post.');
+        $school = $data['school'];
+        $city = $data['city'];
+        $address = $data['address'];
+
+        
+        $response = new ResponseGenerator("NewRecvOrder");
+
+        //获得寝室id
+        $DOR = D('DormitoryView'); //实例化寝室模型
+        $dor = $DOR->field('dormitory_id')->where("school_name='$school' and school_city='$city' and dormitory_address = '$address'")->select();
+        if(count($dor)>0)   //找到符合的寝室
+        {
+            $dor = $dor[0]['dormitory_id'];
+            $data['dor'] = $dor;
+        }
+        else    //未找到符合寝室
+        {   
+            return $response->setCode(0)->setMsg('请填写正确的收货人地址');
+        }
+
+        //计算价格
+        $price = $this->charge($school,$data['express_type']);
+        if($price==-100)
+        {
+            return $response->setCode(0)->setMsg('订单错误');
+        }
+        else
+        {
+            $data['price'] = $price;;
+        }
+
+        
+        //构建数据库信息
+        $data['receiver_name'] = $data['rename'];
+        if(!$this->isMobile($data['tel']))
+        {
+            return $response->setCode(0)->setMsg('请正确填写手机号!');
+        }
+        $data['receiver_phone'] = $data['tel'];
+        $data['dormitory_id'] = $data['dor'];
+        $data['express_company'] = $data['express'];
+        $data['express_code'] = $data['fetch_code']; 
+        $data['openid'] = session('weixin_user');
+        $data['time'] = date('Y-m-d H:i:s');
+        if($price==0)   //价格为0。不需要支付
+        {
+            $data['express_status'] = 2;
+            $data['pay_time']=$data['time'];
+            $response->setCode(2)->setMsg('价格为0，不需要进行支付');
+        }
+        else    //需要支付
+        {
+            $data['express_status'] = 1;
+            $response->setCode(1)->setMsg('下单成功，进行支付');
+        }
+
+
+
+        $pickup = D('pickup');
+        if($pickup->create($data))
+        {
+            if($pickup->add($data))
+            {
+                \Think\Log::write($pickup->getLastSql(),'INFO');
+                if($data['default']=='true')
+                {
+                    $info = array(
+                        'default_name'=>$data['receiver_name'],
+                        'default_phone'=>$data['receiver_phone'],
+                        'default_city'=>$city,
+                        'default_school'=>$school,
+                        'default_dormitory'=>$address
+                    );
+                    $this->saveDefaultInfo( $data['openid'],$info);
+                }
+                $info = $pickup->where($data)->find();
+                if($info==null)
+                {
+                    return $response->setSuccess(false)->setMsg('订单错误');
+                }
+                else
+                {
+                    return $response->setSuccess(true)->setBody($info);
+                }
+            }
+            else
+            {
+                return $response->setCode(0)->setMsg('提交失败');
+            }
+        
+        }
+        else
+        {
+            return $response->setCode(0)->setMsg($pickup->getError());
+        }
+
+
+    }
+
+
+    //判断是否为手机号码
+    private function isMobile($mobile) 
+    {
+        $is_tel = preg_match("/^([0-9]{3,4}-)?[0-9]{7,8}$/",$mobile)?true:false;
+        if($is_tel)
+        {
+            return true;
+        }
+
+        if (!is_numeric($mobile)) 
+        {
+            return false;
+        }     
+        $is_mobile =preg_match('#^13[\d]{9}$|^14[5,7]{1}\d{8}$|^15[^4]{1}\d{8}$|^17[0,6,7,8]{1}\d{8}$|^18[\d]{9}$#', $mobile) ? true : false;
+        return $is_mobile;
+    }
+
+    //验证是否存在相同订单
+    //$data is an array of the order data, it contains
+    //every feild except time and express_status in table pickup or send;
+    //$type is defined to check which kind of order(0 for pickup order, 1 for send order)
+    //it retruns whether there is a same order in db
+    private function isUniqueOrder($data,$type)
+    {
+        $r = array();
+        switch($type)
+        {
+            case 0:
+                $orderModel = D('pickup');
+                $r = $orderModel->where($data)->select();
+                break;
+            case 1:
+                $orderModel = D('send');
+                $r = $orderModel->where($data)->select();
+                break;
+            default:
+                return false;
+        }
+        if(count($r)>0)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+
+    }
+
+    //设置默认地址
+    //$data is an array of the default address info of user,
+    //it contains:
+    //  $data['openid'],
+    //  $data['default_name'],
+    //  $data['default_phone'],
+    //  $data['default_city'],
+    //  $data['default_school'],
+    //  $data['default_dormitory']
+    //and every element is required
+    private function saveDefaultInfo($openid,$data)
+    {
+        $defaultInfoModel = M('defaultinfo');
+        $count = $defaultInfoModel->where("openid='$openid'")->count();
+        
+        if($count==0)
+        {
+            ///there is not the default info of this user, add it to db.
+            $data['openid'] = $openid;
+            $defaultInfoModel->data($data)->add();
+        }
+        else
+        {
+            ///there has already the default info of this user ,so replace it by the new info
+            $defaultInfoModel->where("openid='$openid'")->save($data);
+        }
+    }
+
+    //获得默认地址
+    private function getDefaultInfo()
+    {
+        $openid = session('weixin_user');
+        $model = M('defaultinfo');
+        $data = $model->where("openid='$openid'")->select();
+        if(count($data)>0)
+        {
+            $this->assign('isSetDefault','true');
+            $this->assign('city',$data[0]['default_city']);
+            $this->assign('school',$data[0]['default_school']);
+            $this->assign('dor',$data[0]['default_dormitory']);
+            $this->assign('phone',$data[0]['default_phone']);
+            $this->assign('name',$data[0]['default_name']);
+        }
+        else
+        {
+            $this->assign('isSetDefault','false');
+        }
+    }
+
+    //计算价格
+    private function charge($school,&$type)
+    {
+        $charge = getPrice($school,$type);
+        if($charge==-1)
+        {
+            $charge=5;
+        }
+
+        switch($type)
+        {
+            case 'size1':
+                $type='中小件(<2kg)';
+                return $charge;
+            case 'size2':
+                $type='大件(>2kg)';
+                return $charge;
+            case 'size3':
+                $type='超大件(>3kg)';
+                return $charge;
+            default:
+                return false;
+        }
+    }
+}

@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- BEGIN META -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Custom Theme">
+    <!-- END META -->
+
+    <!-- BEGIN SHORTCUT ICON -->
+    <link rel="shortcut icon" href="__ROOT__/Public/img/favicon.ico">
+    <!-- END SHORTCUT ICON -->
+    <title>数据统计 - 代步客管理系统</title>
+
+
+    <!-- BEGIN STYLESHEET -->
+    <link href="__ROOT__/Public/css/bootstrap.min.css" rel="stylesheet"><!-- BOOTSTRAP CSS -->
+    <link href="__ROOT__/Public/css/bootstrap-reset.css" rel="stylesheet"><!-- BOOTSTRAP CSS -->
+    <link href="__ROOT__/Public/assets/font-awesome/css/font-awesome.css" rel="stylesheet"><!-- FONT AWESOME ICON CSS -->
+    <link href="__ROOT__/Public/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet"><!-- BOOTSTRAP ADVANCE DATATABLE CSS -->
+    <link rel="stylesheet" type="text/css" href="__ROOT__/Public/assets/bootstrap-datetimepicker/css/datetimepicker.css"><!-- DATETIMEPICKER PLUGIN CSS -->
+    <link href="__ROOT__/Public/css/style.css" rel="stylesheet"><!-- THEME BASIC CSS -->
+    <link href="__ROOT__/Public/css/style-responsive.css" rel="stylesheet"><!-- THEME RESPONSIVE CSS -->
+    <!--[if lt IE 9]>
+    <script src="__ROOT__/Public/js/html5shiv.js"></script>
+    <script src="__ROOT__/Public/js/respond.min.js"></script>
+    <![endif]-->
+    <!-- END STYLESHEET -->
+
+</head>
+<body>
+<!-- BEGIN SECTION -->
+<section id="container" class="">
+
+    <!-- BEGIN HEADER -->
+    <include file="./Application/Common/Common/header.html" />
+    <!-- END HEADER -->
+
+    <!-- BEGIN SIDEBAR -->
+    <include file="./Application/Common/Common/sidebar.html" />
+    <!-- END SIDEBAR -->
+
+    <!-- BEGIN MAIN CONTENT -->
+    <section id="main-content">
+
+        <section class="wrapper site-min-height">
+            <!-- BEGIN PANEL SECTION -->
+            <section class="panel">
+                <header class="panel-heading">
+                    <span class="label label-primary">数据总览</span>
+                     <span class="tools pull-right">
+                     <a href="javascript:;" class="fa fa-chevron-down"></a>
+                     <a href="javascript:;" class="fa fa-times"></a>
+                     </span>
+                </header>
+                <div class="panel-body">
+                    <form action="#" class="form-horizontal tasi-form">
+                        <div class="form-group">
+                            <div class='col-lg-offset-2 col-lg-3' style="margin-bottom: 30px; margin-top: 40px;font-size: 25px;">
+                                <span class="label label-danger"> 代 收 订 单 总 量</span> {$all_pickup_orders} &nbsp;&nbsp;&nbsp;
+                            </div>
+                            <div class='col-lg-offset-2 col-lg-3' style="margin-bottom: 30px; margin-top: 40px; font-size: 25px;">
+                                <span class="label label-primary">今 日 代 收 订 单</span> {$today_pickup_orders}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class='col-lg-offset-2 col-lg-3' style="margin-bottom: 30px; margin-top: 30px;font-size: 25px;">
+                                <span class="label label-warning">代 寄 订 单 总 量</span> {$all_send_orders} &nbsp;&nbsp;&nbsp;
+                            </div>
+                            <div class='col-lg-offset-2 col-lg-3' style="margin-bottom: 30px; margin-top: 30px; font-size: 25px;">
+                                <span class="label label-info">今 日 代 寄 订 单</span> {$today_send_orders}
+                            </div>
+                        </div>
+
+                    </form>
+
+
+
+
+
+
+                </div>
+            </section>
+            <!-- END PANEL SECTION -->
+
+            <!-- BEGIN PANEL SECTION -->
+            <section class="panel">
+                <header class="panel-heading">
+                    <span class="label label-primary">查看某校数据</span>
+                     <span class="tools pull-right">
+                     <a href="javascript:;" class="fa fa-chevron-down"></a>
+                     <a href="javascript:;" class="fa fa-times"></a>
+                     </span>
+                </header>
+                <div class="panel-body" >
+                    <form action="#" class="form-horizontal tasi-form">
+                        <div class="form-group">
+                            <label for="school_city" style="font-size: 16px" class="col-lg-offset-2 col-lg-1 control-label">城 市</label>
+                            <div class='col-lg-2'>
+                                <select  id="school_city" class="form-control" onchange="getSchool()">
+                                </select>
+                            </div>
+
+                            <label for="school_name" style="font-size: 16px" class="col-lg-offset-1 col-lg-1 control-label">学 校</label>
+                            <div class='col-lg-2'>
+                                <select id="school_name" class="form-control">
+                                </select>
+                            </div>
+
+                            <div class="col-lg-offset-1 col-lg-1">
+                                <button type="button" class="btn btn-primary" onclick="getDataBySchool()">&nbsp;查 询&nbsp;</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class='col-lg-offset-2 col-lg-3' style="margin-bottom: 30px; margin-top: 40px;font-size: 20px;">
+                                <span class="label label-primary"> 代 收 订 单 总 量</span><span id="data1"></span>
+                            </div>
+                            <div class='col-lg-offset-2 col-lg-3' style="margin-bottom: 30px; margin-top: 40px; font-size: 20px;">
+                                <span class="label label-danger">今 日 代 收 订 单</span><span id="data2"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class='col-lg-offset-2 col-lg-3' style="margin-bottom: 30px; margin-top: 30px;font-size: 20px;">
+                                <span class="label label-info">代 寄 订 单 总 量</span><span id="data3"></span>
+                            </div>
+                            <div class='col-lg-offset-2 col-lg-3' style="margin-bottom: 30px; margin-top: 30px; font-size: 20px;">
+                                <span class="label label-success">今 日 代 寄 订 单</span><span id="data4"></span>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </section>
+            <!-- END PANEL SECTION -->
+        </section>
+    </section>
+    <!-- END MAIN CONTENT -->
+
+    <!-- BEGIN FOOTER -->
+    <include file="./Application/Common/Common/footer.html" />
+    <!-- END FOOTER -->
+</section>
+<!-- END SECTION -->
+
+
+<!-- BEGIN JS -->
+<script language="javascript" src="__ROOT__/Public/assets/advanced-datatable/media/js/jquery.js"></script><!-- ADVANCE DATATABLE JS -->
+<script src="__ROOT__/Public/js/bootstrap.min.js" ></script><!-- BOOTSTRAP JS -->
+<script class="include"  src="__ROOT__/Public/js/jquery.dcjqaccordion.2.7.js"></script><!-- ACCORDING JS -->
+<script src="__ROOT__/Public/js/jquery.scrollTo.min.js" ></script><!-- SCROLLTO JS -->
+<script src="__ROOT__/Public/js/jquery.nicescroll.js" ></script><!-- NICESCROLL JS -->
+<script src="__ROOT__/Public/js/respond.min.js" ></script><!-- RESPOND JS -->
+<script src="__ROOT__/Public/js/common-scripts.js" ></script><!-- BASIC COMMON JS  -->
+
+
+<script >
+    $("#data_module").addClass("active");
+    $("#data_statistics").addClass("active");
+
+
+    //获取城市
+    function getCity(){
+        $.post("{:U('admin/data/getCity')}",{},function(data){
+            for(var index in data){
+
+                $('#school_city').append("<option value='"+data[index]['school_city']+"'>"+data[index]['school_city'] +"</option>");
+            }
+            getSchool();
+        });
+    }
+
+    //获取学校
+    function getSchool(){
+        $.post("{:U('admin/data/getSchool')}",{city:$("#school_city").val()},function(data){
+            $('#school_name').empty();
+            for(var index in data){
+                $('#school_name').append("<option value='"+data[index]['school_id']+"'>"+data[index]['school_name'] +"</option>");
+            }
+        });
+    }
+
+    //查找
+    function getDataBySchool(){
+        $.post("{:U('admin/data/getDataBySchool')}",{school:$("#school_name").val()},function(data){
+            $('#data1').empty();
+            $('#data2').empty();
+            $('#data3').empty();
+            $('#data4').empty();
+
+            $('#data1').append(" "+data['all_pickup_orders']);
+            $('#data2').append(" "+data['today_pickup_orders']);
+            $('#data3').append(" "+data['all_send_orders']);
+            $('#data4').append(" "+data['today_send_orders']);
+        });
+    }
+
+    getCity();
+
+
+</script>
+<!-- END JS -->
+</body>
+</html>
+
+

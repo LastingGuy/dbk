@@ -12,6 +12,10 @@ class SendController extends Controller
 {
     public function index()
     {
+        //准备权限
+        $this->assign("admin_school",session("admin_school"));
+        $this->assign("admin_type",session("admin_type"));
+
         if(!session("?admin_id")) {
         header('Location:'.U("Admin/Index/index"));
         }
@@ -69,6 +73,19 @@ class SendController extends Controller
 
         $object = new Common\SendDAOImpl();
         $data['result'] = $object->updateStatus($send_id);
+
+        $this->ajaxReturn($data);
+    }
+
+    //完成订单
+    public function complete(){
+        if(!session("?admin_id")) {
+            header('Location:'.U("Admin/Index/index"));
+        }
+        $start_time = I('post.start_time');
+        $end_time = I('post.end_time');
+        $object = new Common\SendDAOImpl();
+        $data['result'] = $object->completeDuringTheTime($start_time, $end_time);
 
         $this->ajaxReturn($data);
     }

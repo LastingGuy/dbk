@@ -17,15 +17,15 @@
 
 
      //大中小件-对应的价格
-      $('.expressSize').change(function(){
-        switch($('.expressSize').val())
-        {
-          case 'size1': $('.normal .price').text('0'); break;
-          case 'size2': $('.normal .price').text('0'); break;
-          case 'size3': $('.normal .price').text('0'); break;
-          default: ;
-        }
-      });
+      // $('.expressSize').change(function(){
+      //   switch($('.expressSize').val())
+      //   {
+      //     case 'size1': $('.normal .price').text('1元'); break;
+      //     case 'size2': $('.normal .price').text('2元'); break;
+      //     case 'size3': $('.normal .price').text('底价2元， 每增加1千克增加1元'); break;
+      //     default: ;
+      //   }
+      // });
 
 
      //轮播图

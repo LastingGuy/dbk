@@ -75,7 +75,7 @@
                         alert("账号或密码错误，登录失败！");
                     }
                     else if (data['login'] == 2){
-                        alert("你的账号已锁定，请联系管理员重置！");
+                        window.location = "{:U('admin/data/index')}";
                     }
                     else{
                         alert("登录出错");

@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>代步客-取快递</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="keywords" content="代步客,校园代取快递,取快递,快递助手">
+    <meta name="description" content="代步客,校园代取快递">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />  
+ 
+    <style type="text/css">       
+        body { font: normal 100% Helvetica, Arial, sans-serif; }  
+        img { max-width: 100%;} 
+    </style>   
+</head>
+
+<body>
+    <div style="text-align:center">
+        <div >
+            <img src="__PUBLIC__/img/banner.jpg">
+            <h1>系统正在维护中...</h1>
+            <h2>将给您带来全新的体验</h2>
+            <h3>敬请期待!</h3>
+        </div>
+        <div class="Countdown" id="time">
+            <span id="h"></span><span class="bd">:</span>
+            <span id="m"></span><span class="bd">:</span>
+            <span id="s"></span>
+        </div>
+    </div>
+<script>
+    var date = new Date();
+    var h = 16 - date.getHours();
+    var m = 59 - date.getMinutes();//传个分钟数到这里
+    var s = 59 - date.getSeconds();
+    function showtime(){
+        document.getElementById('h').innerHTML = h;
+        document.getElementById('m').innerHTML = m;
+        document.getElementById('s').innerHTML = s;
+        s = s - 1;
+        if(m== -1){
+            h = h-1;
+            m = 59;
+        }
+        if(s== -1){
+            m = m -1;
+            s = 59;
+        }
+    }
+    clearInterval(settime); 
+    var settime = setInterval(function(){
+    showtime();
+},1000);
+</script>
+</body>
+</html>

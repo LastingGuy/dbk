@@ -10,8 +10,10 @@
            {'floor':'弘毅楼'},
            {'floor':'惟学楼'},
            {'floor':'精诚楼'},
-           {'floor':'明德楼'},
-           {'floor':'慕贤楼'}
+           {'floor':'明德楼1、2'},
+           {'floor':'明德楼3'},
+           {'floor':'慕贤楼1'},
+           {'floor':'慕贤楼2、3'}
         ]},
         {'school':'树人大学','allFloor':[
            {'floor':'清乐园1号楼'},
@@ -183,14 +185,14 @@
     $secFloor.change(function(){//绑定第二个select
       var n = $secArea.find(':selected').index();
       var q = $secSchool.find(':selected').index();
-      var q = $secFloor.find(':selected').index();
+      var k = $secFloor.find(':selected').index();
       SelectFloor(n,q,k);
     });
 
     $secFloor2.change(function(){//绑定第二个select
       var n = $secArea.find(':selected').index();
       var q = $secSchool.find(':selected').index();
-      var q = $secFloor2.find(':selected').index();
+      var k = $secFloor2.find(':selected').index();
       SelectFloor(n,q,k);
     });
 

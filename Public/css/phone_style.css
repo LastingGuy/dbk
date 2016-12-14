@@ -168,7 +168,7 @@ a:hover{
 }
 .goBack .fixWidth .deleteOrder
 {
-    width: 50px;
+    width: 80px;
     height: 100%;
     float: right
 }
@@ -206,6 +206,14 @@ a:hover{
 
 .orderState h1{
     background: url(../img/icon3.png) no-repeat;
+    height: 35px;
+    line-height: 35px;
+    padding-left: 45px;
+    font-size: 15px;
+    color: gray;
+}
+
+.orderState h2{
     height: 35px;
     line-height: 35px;
     padding-left: 45px;
