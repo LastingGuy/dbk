@@ -1,14 +1,16 @@
 <?php
 /**
-* Author: Wang Jinglu
-* Date:2016/11/01
-* Description:
-*   后台接口
-*/
+ * Author: Wang Jinglu
+ * Date:2016/11/01
+ * Description:
+ *   后台接口
+ */
 namespace Home\Controller;
+
 use Think\Controller;
 use Home\Common;
-import("Org.WeixinPay.WxPay#Api",null,".php");
+
+import("Org.WeixinPay.WxPay#Api", null, ".php");
 
 
 class InterfaceController extends Controller
@@ -22,7 +24,7 @@ class InterfaceController extends Controller
     //获得全部城市
     public function getCitys()
     {
-       $this->ajaxReturn(getCitys_local());
+        $this->ajaxReturn(getCitys_local());
     }
 
     //获得学校
@@ -43,27 +45,27 @@ class InterfaceController extends Controller
     //获得快递点信息
     public function getExpress()
     {
-         $school = I('get.school');
+        $school = I('get.school');
         //  $school = '浙江大学城市学院';
-         $this->ajaxReturn(getExpress_local($school));
+        $this->ajaxReturn(getExpress_local($school));
     }
 
     //获得寝室和快递点信息
     public function getDorsAndExpress()
     {
-         $school = I('get.school');
+        $school = I('get.school');
         //  $school = '浙江大学城市学院';
-         $dors = getDormitory_local($school);
-         $express = getExpress_local($school);
-         $typesOfExpress = getExpressSize_local($school);
+        $dors = getDormitory_local($school);
+        $express = getExpress_local($school);
+        $typesOfExpress = getExpressSize_local($school);
 
-         $return = array
-         (
-             'dors'=>$dors,
-             'express'=>$express,
-             'typesOfExpress'=>$typesOfExpress
-         );
-         $this->ajaxReturn($return);
+        $return = array
+        (
+            'dors' => $dors,
+            'express' => $express,
+            'typesOfExpress' => $typesOfExpress
+        );
+        $this->ajaxReturn($return);
 
     }
 
@@ -75,18 +77,14 @@ class InterfaceController extends Controller
         // $school = '浙江大学城市学院';
         // $type = 'size2';
 
-        $charge = getPrice($school,$type,true);
-        if($charge==-100)
-        {
+        $charge = getPrice($school, $type, true);
+        if ($charge == -100) {
             $this->ajaxReturn('无价格信息');
-        }
-        else
-        {
-            $str = $charge['price'].'元';
-            if($charge['addition']!="")
-            {
+        } else {
+            $str = $charge['price'] . '元';
+            if ($charge['addition'] != "") {
                 $addition = $charge['addition'];
-                $str.="($addition)";
+                $str .= "($addition)";
             }
             $this->ajaxReturn($str);
         }
@@ -95,39 +93,121 @@ class InterfaceController extends Controller
     //微信支付接口
     public function weixinPay()
     {
+        if (!session("?weixin_user")) {
+            $response = new Common\ResponseGenerator("weixinPay", false, 0, "未登录");
+            return $response->generate();
+        }
+
+
         //新建代寄订单
         $orderDAO = new Common\OrderDAOlmpl();
         $response = $orderDAO->newRecvOrder();
 
-        if($response->getSuccess())               //订单新建成功，进行微信支付
+
+        if ($response->getSuccess())               //订单新建成功，进行微信支付
         {
             $order = $response->getBody();    //获得订单信息
 
-            if($response->getCode()==1) //订单价格不为0，进行微信支付
+            if ($response->getCode() == 1) //订单价格不为0，进行微信支付
             {
                 //申请微信支付
                 $this->ajaxReturn(Common\WeixinPayUtil::recvOrder_weixinPay($response->getBody())->generate());
-            }
-            else
-            {
+            } else {
                 $this->ajaxReturn($response->setMsg('下单成功')->generate());
             }
-        }
-        else
-        {
+        } else {
             $this->ajaxReturn($response->generate());
         }
 
     }
 
     //微信支付通知接口
-    public function weixinNotify(){
-        \Think\Log::write('测试日志信息，支付通知接口开始','WARN');
+    public function weixinNotify()
+    {
+        \Think\Log::write('测试日志信息，支付通知接口开始', 'WARN');
         $object = new \WxPayNotify();
         $object->Handle();
     }
 
-   //微信支付批量查询接口
+
+    //获得未支付订单详情
+    public function getOrderWeixinPayInfo()
+    {
+        $response = new Common\ResponseGenerator("getRefundOrderInfo");
+        if (!session("?weixin_user"))        //未登录
+        {
+            $response->setCode(0)->setMsg("未登录");
+            $this->ajaxReturn($response->generate());
+        } else if (!IS_POST)                   //未提交参数
+        {
+            $response->setCode(0)->setMsg("参数错误");
+            return $response->generate();
+        } else {
+            $orderID = I("post.orderID");
+            $userID = session("weixin_user");
+
+
+            $orderDAO = new Common\OrderDAOlmpl();
+            $result = $orderDAO->getUnPaidOrderInfo($orderID, 1, $userID);
+
+
+            if ($result->getSuccess()) {
+                $response->setSuccess(true)->setMsg("ok")->setCode(1)->setBody($result->getBody());
+                $this->ajaxReturn($response->generate());
+            } else {
+                $result->setAction($response->getAction());
+                $this->ajaxReturn($result->generate());
+            }
+        }
+    }
+
+
+    //新建代寄订单
+    public function newSendOrder()
+    {
+        //验证是否登陆
+        if (!session('?weixin_user')) {
+            $this->ajaxReturn('请登陆！');
+        }
+
+
+        if (IS_POST) {
+            $orderDAO = new Common\OrderDAOlmpl();
+            $this->ajaxReturn($orderDAO->newSendOrder());
+        } else {
+            $this->ajaxReturn('提交失败');
+        }
+    }
+
+    //取消代寄订单
+    public function cancelSendOrder()
+    {
+        $response = new Common\ResponseGenerator("cancelSendOrder");
+
+        if (!session("?weixin_user"))    //验证登录
+        {
+            $response->setCode(0)->setMsg('未登录');
+            $this->ajaxReturn($response->generate());
+        } else if (!IS_POST)   //提交错误
+        {
+            $response->setCode(0)->setMsg('请求参数错误');
+            $this->ajaxReturn($response->generate());
+        } else {
+            $id = I('post.id');
+            if ($id == '') {
+                $response = new Common\ResponseGenerator('deleteOrder', false, 2, "请求参数错误");
+                $this->ajaxReturn($response->generate());
+            }
+
+
+            $orderDAO = new Common\OrderDAOlmpl();
+            $response = $orderDAO->deleteSendOrder($id);
+            $this->ajaxReturn($response->generate());
+        }
+    }
+
+
+    //微信支付批量查询接口
     /*public function weixinQuery(){
         $model = M("weixin_pay");
         $mod = M("pickup");
@@ -158,4 +238,5 @@ class InterfaceController extends Controller
 
     }*/
 }
+
 ?>

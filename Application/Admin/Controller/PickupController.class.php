@@ -93,4 +93,16 @@ class PickupController extends Controller
         $this->ajaxReturn($data);
     }
 
+    //未完成订单
+    public function uncomplete(){
+        if(!session("?admin_id")) {
+            header('Location:'.U("Admin/Index/index"));
+        }
+        $start_time = I('post.start_time');
+        $end_time = I('post.end_time');
+        $object = new Common\PickupDAOImpl();
+        $data['result'] = $object->uncompleteDuringTheTime($start_time, $end_time);
+
+        $this->ajaxReturn($data);
+    }
 }

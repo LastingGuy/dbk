@@ -172,7 +172,7 @@ class IndexController extends Controller{
             } 
             else 
             {
-                $this->ajaxReturn($pickup->getError());
+                $this->ajaxReturn($send->getError());
             }
         }
         else 

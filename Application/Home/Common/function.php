@@ -5,22 +5,6 @@
     {
         $school = M('school');;
         $schools = $school->field('school_city as city')->where("school_id!=0")->group('school_city')->select();
-        // $options='';
-        
-        // if(count($schools)==0)
-        // {
-        //     $options="<option value=''>暂无城市信息</option>";
-        //     $return = $this->getSchools_local('no');
-        // }
-        // else
-        // {
-        //     foreach($schools as $school)
-        //     {
-        //         $city = $school['school_city'];
-        //         $options.="<option value='$city'>$city</option>";
-        //     }
-        //     $return = getSchools_local($schools[0]['school_city']);
-        // }
 
         $return = getSchools_local($schools[0]['city']);
         $return['citys'] = $schools;
@@ -33,7 +17,6 @@
     {
         if($city==false)
         {
-            // $options="<option value=''>暂无学校信息</option>";
             $schools = array();
             $dorinfo = getDormitory_local(false);
         }
@@ -41,21 +24,6 @@
         {
             $schoolModel = M('school');
             $schools = $schoolModel->field('school_name as school')->where("school_city='%s'",$city)->select();
-            // $options = "";
-            // if(count($schools)==0)
-            // {
-            //     $options="<option value=''>暂无学校信息</option>";
-            //     $dorinfo = getDormitory_local(false);
-            // }
-            // else
-            // {
-            //     foreach($schools as $school)
-            //     {
-            //         $name = $school['school_name'];
-            //         $options.="<option value='$name'>$name</option>";
-            //     }
-            //     $dorinfo = getDormitory_local($schools[0]['school_name']);
-            // }
             $dorinfo = getDormitory_local($schools[0]['school']);   
             $express = getExpress_local($schools[0]['school']);
             $typesOfExpress = getExpressSize_local($schools[0]['school']);
@@ -76,28 +44,14 @@
     {
         if($school==false)
         {
-            // $options="<option value=''>暂无寝室信息</option>";
             $dors = array();
         }
         else
         {
             $dorMoel = D('dormitoryView');
             $dors = $dorMoel->field('dormitory_address as dor')->where("school_name='%s'",$school)->select();
-            // if(count($dors)==0)
-            // {
-            //     $options="<option value=''>暂无寝室信息</option>";
-            // }
-            // else
-            // {
-            //     foreach($dors as $dor)
-            //     {
-            //         $addr = $dor['dormitory_address'];
-            //         $options.="<option value='$addr'>$addr</option>";
-            //     }
-            // }
-        }
 
-        // return $options;
+        }
         return $dors;
     }
 
@@ -107,7 +61,6 @@
     {
          if($school==false)
         {
-            // $options="<option value=''>暂无寝室信息</option>";
             $express = array();
         }
         else
