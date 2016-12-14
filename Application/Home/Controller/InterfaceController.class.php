@@ -51,10 +51,9 @@ class InterfaceController extends Controller
     }
 
     //获得寝室和快递点信息
-    public function getDorsAndExpress()
+    public function getSchoolInfo()
     {
         $school = I('get.school');
-        //  $school = '浙江大学城市学院';
         $dors = getDormitory_local($school);
         $express = getExpress_local($school);
         $typesOfExpress = getExpressSize_local($school);
@@ -65,7 +64,13 @@ class InterfaceController extends Controller
             'express' => $express,
             'typesOfExpress' => $typesOfExpress
         );
-        $this->ajaxReturn($return);
+        $response = new Common\ResponseGenerator('getSchoolInfo',true,1,"获得学校信息成功",$return);
+        $r=isSchoolOnline($school);
+        if($r!==true)
+        {
+            $response->setCode(31)->setMsg($r);
+        }
+        $this->ajaxReturn($response->generate());
 
     }
 
@@ -206,7 +211,21 @@ class InterfaceController extends Controller
         }
     }
 
-
+    public function getUserDefaultInfo()
+    {
+        $response = new Common\ResponseGenerator("getUserDefaultInfo");
+        if(!session("?weixin_user"))
+        {
+            $response->setSuccess(false)->setCode(13)->setMsg("用户未登陆");
+            $this->ajaxReturn($response->generate());
+        }
+        else
+        {
+            $id = session('weixin_user');
+            $userDAO = new Common\UserDAOImpl();
+            $this->ajaxReturn($userDAO->getUserDefaultInfo($id)->generate());
+        }
+    }
     //微信支付批量查询接口
     /*public function weixinQuery(){
         $model = M("weixin_pay");
