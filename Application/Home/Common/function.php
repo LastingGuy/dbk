@@ -167,6 +167,8 @@
 
     }
 
+
+
     function isSchoolDisplay($schoolName)
     {
         $model = M('school');
