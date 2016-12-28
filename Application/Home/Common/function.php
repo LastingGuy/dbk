@@ -4,7 +4,7 @@
     function getCitys_local()
     {
         $school = M('school');;
-        $schools = $school->field('school_city as city')->where("school_id!=0 and online=1")->group('school_city')->select();
+        $schools = $school->field('school_city as city')->where("school_id!=0 and display=1")->group('school_city')->select();
 
         $return = getSchools_local($schools[0]['city']);
         $return['citys'] = $schools;
