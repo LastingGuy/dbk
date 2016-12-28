@@ -38,12 +38,11 @@
 
 </head>
 
-<body onload="setDefaultInfo()">
+<body onload="init()">
     <div class="contain takeExpress">
 
         <div class="noticeBar">
-            <p>因考试周临近，浙江大学城市学院于12月10日周六结束本学期服务~</p> <i class="closeBtn"></i></div>
-
+            <p>{$announcement}</p> <i class="closeBtn"></i></div>
         <!--banner star-->
         <div class="banner" id="bannerBox">
             <ul>
@@ -78,7 +77,7 @@
                             <select name="city" id="city" onchange="getSchools()"> 
                                 <option value="">请选择城市</option>
                             </select>
-                            <select name="school" id="school" onchange="getDors()"></select>
+                            <select name="school" id="school" onchange="getSchoolInfo()"></select>
                             <!-- 从floorData.js中读取 -->
                         </td>
                     </tr>
@@ -265,6 +264,13 @@
         if(!isMobile(telephone))
         {
             alert('请输入正确的手机号！');
+            $("#Pickupbtn").removeAttr('disabled');
+            return;
+        }
+
+        if(!isSchoolOnLine)
+        {
+            alert(schoolMSG);
             $("#Pickupbtn").removeAttr('disabled');
             return;
         }
@@ -468,6 +474,12 @@
             return;
         }
 
+        if(!isSchoolOnLine)
+        {
+            alert(schoolMSG);
+            $("#newSendOrderbtn").removeAttr('disabled');
+            return;
+        }
 
         $.post(
             "{:U('index/newSendOrder')}"
@@ -523,23 +535,50 @@
         }
     }
 
+    //初始化
+    function init()
+    {
+        getCitys();
+        setDefaultInfo();
+    }
     //初始化默认信息
     function setDefaultInfo()
     {
-        getCitys();
-        if({$isSetDefault})
-        {
-            $("#rename").val("{$name}");
-            $("#sender_name").val("{$name}");
+        $.ajax(
+            {
+                url:"../interface/getUserDefaultInfo",
+                success:
+                function(data,status)
+                {
+                    if("success"==status)
+                    {
+                        if(!data['success'])
+                        {
+                            return;
+                        }
 
-            $("#telephone").val("{$phone}");
-            $("#sender_phone").val("{$phone}");
-            setSelectChecked("city","{$city}")
-            setSelectChecked('school',"{$school}")
-            setSelectChecked('dor1',"{$dor}")
-            setSelectChecked('dor2',"{$dor}")
-        }
+                        if(data['code']!=21)
+                        {
+                            $("#rename").val(data['body']['name']);
+                            $("#sender_name").val(data['body']['name']);
 
+                            $("#telephone").val(data['body']['phone']);
+                            $("#sender_phone").val(data['body']['phone']);
+                            setSelectChecked("city",data['body']['city']);
+                            setSelectChecked('school',data['body']['school']);
+                            setSelectChecked('dor1',data['body']['dor']);
+                            setSelectChecked('dor2',data['body']['dor']);
+                        }
+
+                        if(data['code']==22 || data['code']==23)
+                        {
+                            alert(data['msg']);
+                        }
+                        
+                    }
+                }
+            }
+        )
 
     }
 
@@ -570,12 +609,12 @@
                     if(status=='success')
                     {
                             document.getElementById('city').innerHTML= makeOptions(data['citys'],'city');
-                            document.getElementById('school').innerHTML= makeOptions(data['schools'],'school');
-                            document.getElementById('dor1').innerHTML= "<option value=''>请选择</option>" +makeOptions(data['dors'],'dor');
-                            document.getElementById('dor2').innerHTML= "<option value=''>请选择</option>" +makeOptions(data['dors'],'dor');
+                            document.getElementById('school').innerHTML="<option value=''>请选择</option>"//+ makeOptions(data['schools'],'school');
+                            document.getElementById('dor1').innerHTML= "<option value=''>请选择</option>"// +makeOptions(data['dors'],'dor');
+                            document.getElementById('dor2').innerHTML= "<option value=''>请选择</option>" //+makeOptions(data['dors'],'dor');
                             document.getElementById('express').innerHTML=
-                            "<option value=''>请选择</option>" +makeOptions(data['express'],'express_company_name');
-                            document.getElementById('express_type').innerHTML =  "<option value=''>请选择</option>"+
+                            "<option value=''>请选择</option>" //+makeOptions(data['express'],'express_company_name');
+                            document.getElementById('express_type').innerHTML =  "<option value=''>请选择</option>"//+
                             makeOptionsdiff(data['typesOfExpress'],'size','description');
                             
                     }
@@ -602,12 +641,12 @@
             {
                 if(status=='success')
                 {
-                    document.getElementById('school').innerHTML= makeOptions(data['schools'],'school');
-                    document.getElementById('dor1').innerHTML="<option value=''>请选择</option>" + makeOptions(data['dors'],'dor');
-                    document.getElementById('dor2').innerHTML="<option value=''>请选择</option>" + makeOptions(data['dors'],'dor');  
+                    document.getElementById('school').innerHTML="<option value=''>请选择</option>"+ makeOptions(data['schools'],'school');
+                    document.getElementById('dor1').innerHTML="<option value=''>请选择</option>" //+ makeOptions(data['dors'],'dor');
+                    document.getElementById('dor2').innerHTML="<option value=''>请选择</option>" //+ makeOptions(data['dors'],'dor');  
                     document.getElementById('express').innerHTML= 
-                    "<option value=''>请选择</option>" +makeOptions(data['express'],'express_company_name');
-                    document.getElementById('express_type').innerHTML =  "<option value=''>请选择</option>"+
+                    "<option value=''>请选择</option>" //+makeOptions(data['express'],'express_company_name');
+                    document.getElementById('express_type').innerHTML =  "<option value=''>请选择</option>"//+
                     makeOptionsdiff(data['typesOfExpress'],'size','description');
                     getCharge();
                 }
@@ -615,11 +654,11 @@
         })
     }
 
-    function getDors()
+    function getSchoolInfo()
     {
         school = $("#school").val();
         $.ajax({
-            url:"../interface/getDorsAndExpress",
+            url:"../interface/getSchoolInfo",
             async:false,
             data:
             {
@@ -630,13 +669,24 @@
             {
                 if(status=='success')
                 {
-                    document.getElementById('dor1').innerHTML="<option value=''>请选择</option>" + makeOptions(data['dors'],'dor');
-                    document.getElementById('dor2').innerHTML="<option value=''>请选择</option>" + makeOptions(data['dors'],'dor');
+                    schoolInfos = data['body'];
+                    document.getElementById('dor1').innerHTML="<option value=''>请选择</option>" + makeOptions(schoolInfos['dors'],'dor');
+                    document.getElementById('dor2').innerHTML="<option value=''>请选择</option>" + makeOptions(schoolInfos['dors'],'dor');
                     document.getElementById('express').innerHTML= 
-                    "<option value=''>请选择</option>" +makeOptions(data['express'],'express_company_name');
+                    "<option value=''>请选择</option>" +makeOptions(schoolInfos['express'],'express_company_name');
                     document.getElementById('express_type').innerHTML =  "<option value=''>请选择</option>"+
-                    makeOptionsdiff(data['typesOfExpress'],'size','description');
+                    makeOptionsdiff(schoolInfos['typesOfExpress'],'size','description');
                     getCharge();
+                    if(data['code']==31)
+                    {
+                        isSchoolOnLine = false;
+                        schoolMSG = data['msg'];
+                        alert(data['msg']);
+                    }
+                    else
+                    {
+                        isSchoolOnLine=true;
+                    }
                 }
             }
         })
@@ -738,6 +788,8 @@
     }
 
     var weixinpaydata ;
+    var isSchoolOnLine = true;
+    var schoolMSG;
 </script>
 
 

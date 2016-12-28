@@ -27,6 +27,9 @@ CREATE TABLE `dbk_school` (
   `small_price` float DEFAULT '0',
   `mid_price` float DEFAULT '0',
   `large_price` float DEFAULT '0',
+  `online` int(11) DEFAULT '1' COMMENT '控制学校是否上线',
+  `offline_msg` varchar(100) DEFAULT '此学校已下线',
+  `display` int(11) DEFAULT '1' COMMENT '控制学校是否显示',
   PRIMARY KEY (`school_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8
 
@@ -36,6 +39,8 @@ create table dbk_dormitory(
 	dormitory_id int unsigned auto_increment comment '寝室id',
 	school_id int unsigned comment '寝室所在学校',
     dormitory_address varchar(20) comment '寝室地址',
+    online int(11) DEFAULT '1' COMMENT '是否上线',
+    offline_msg varchar(100) DEFAULT '此寝室楼已经消失在历史中',
     constraint pk_dbk_dormitory primary key(dormitory_id),
     constraint fk_dbk_dormitory foreign key(school_id) references dbk_school(school_id)
 )  default character set utf8;
@@ -45,6 +50,7 @@ CREATE TABLE `dbk_express_company` (
   `express_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `school_id` int(10) unsigned NOT NULL,
   `express_company_name` varchar(100) NOT NULL DEFAULT '' COMMENT '快递公司名字',
+  `online` int(11) DEFAULT '1' COMMENT '是否上线',
   PRIMARY KEY (`express_id`),
   CONSTRAINT `fk_school_id_express_company` FOREIGN KEY (`school_id`) REFERENCES `dbk_school` (`school_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8
@@ -122,6 +128,7 @@ create table dbk_school_fee
   size varchar(20) comment '',
   description varchar(100) comment'描述',
   addition varchar(100),
+  online int(11) DEFAULT '1' COMMENT '控制是否上线',
   constraint pk_dbk_school_fee PRIMARY KEY(school_id,size),
   CONSTRAINT fk_dbk_school_fee_school_id FOREIGN KEY(school_id) REFERENCES  dbk_school(school_id)
 )ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
@@ -187,6 +194,15 @@ create table dbk_weixin_refund
   refund_id varchar(28) comment '微信退款单号',
   CONSTRAINT pk_dbk_weixin_refund PRIMARY  KEY(refund_no)
 )ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
+
+
+#配置表
+CREATE TABLE `dbk_config` (
+  `k` varchar(100) CHARACTER SET latin1 NOT NULL COMMENT 'key',
+  `v` varchar(100) DEFAULT NULL COMMENT 'value',
+  `remarks` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`k`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配置表'
 
 #导入学校
 insert into dbk_school(school_name,school_city) values('浙江大学城市学院','杭州市');
