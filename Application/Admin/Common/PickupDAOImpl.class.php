@@ -104,7 +104,7 @@ class PickupDAOImpl implements IPickupDAO{
     //根据自定义时间下载
     public function exportUserDefined($begin, $end){
         //记录流水
-        FlowRecord::exportPickOrders_UserDefine("选择时间$begin -- $end");
+        FlowRecord::exportPickOrders_UserDefine($begin,$end);
 
         $school = session("admin_school");
 
@@ -171,7 +171,7 @@ class PickupDAOImpl implements IPickupDAO{
         $school_id = session("admin_school");
         $object->execute("update dbk_pickup_view set express_status=3 where pay_time>='$begin_time' and pay_time<='$end_time' and school_id=$school_id");
         //记录流水
-        FlowRecord::setUnFinished_PickUp($pickup_id,"订单号$pickup_id,更改为未完成");
+        FlowRecord::completeAll_PickUp($begin_time,$end_time);
         return 1;
     }
 
@@ -180,6 +180,7 @@ class PickupDAOImpl implements IPickupDAO{
         $object = M();
         $school_id = session("admin_school");
         $object->execute("update dbk_pickup_view set express_status=2 where pay_time>='$begin_time' and pay_time<='$end_time' and school_id=$school_id");
+        FlowRecord::unfinishedAll_PickUp($begin_time, $end_time);
         return 1;
     }
 }

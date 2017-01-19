@@ -19,7 +19,8 @@ class PickupController extends Controller
         //准备权限
         $this->assign("admin_school",session("admin_school"));
         $this->assign("admin_type",session("admin_type"));
-        
+
+        var_dump(ip2long("192.168.1.1"));
         $this->display();
     }
 

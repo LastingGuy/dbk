@@ -72,7 +72,6 @@ class FlowRecord
         $data['addition'] = $addition;
         $data['date'] = date("Y-m-d H:i:s",time());
         $data['ip'] = self::getClientIP();
-
         $model = M('admin_flowrecord');
         $model->add($data);
     }
