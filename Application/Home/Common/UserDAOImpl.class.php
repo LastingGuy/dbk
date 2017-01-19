@@ -74,4 +74,53 @@ class UserDAOImpl implements IUserDAO{
         }
     }
 
+
+    /**获得默认收获地址
+     * @param $id 用户id
+     * @return ResponseGenerator
+     */
+    public function getUserDefaultInfo($id)
+    {
+        $response = new ResponseGenerator('getUserDefaultInfo');
+        $openid = $id;
+        $model = M('defaultinfo');
+        $data = $model->where("openid='$openid'")->find();
+        if($data)
+        {
+            $body = array(
+                'city'=>$data['default_city'],
+                'school'=>$data['default_school'],
+                'dor'=>$data['default_dormitory'],
+                'phone'=>$data['default_phone'],
+                'name'=>$data['default_name']
+            );
+
+            $response->setSuccess(true)->setBody($body)->setCode(1)->setMsg('获得默认地址成功');
+
+            //检查学校是否隐藏
+            $r = isSchoolDisplay($body['school']);
+            if($r!==true)
+            {
+                $response->setCode(22)->setMsg($r);
+                return $response;
+            }
+
+            //检查寝室是否已弃用
+            $r = isDorOnline($body['dor']);
+            if($r!==true)
+            {
+                $response->setCode(23)->setMsg($r);
+                return $response;
+            }
+
+            return $response;
+        }
+        else
+        {
+            $response->setCode(21)->setMsg("用户无默认地址");
+            return $response;
+        }
+    }
+
+
 }

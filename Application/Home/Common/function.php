@@ -4,7 +4,7 @@
     function getCitys_local()
     {
         $school = M('school');;
-        $schools = $school->field('school_city as city')->where("school_id!=0")->group('school_city')->select();
+        $schools = $school->field('school_city as city')->where("school_id!=0 and display=1")->group('school_city')->select();
 
         $return = getSchools_local($schools[0]['city']);
         $return['citys'] = $schools;
@@ -19,11 +19,12 @@
         {
             $schools = array();
             $dorinfo = getDormitory_local(false);
+            $express = getExpress_local(false);
         }
         else
         {
             $schoolModel = M('school');
-            $schools = $schoolModel->field('school_name as school')->where("school_city='%s'",$city)->select();
+            $schools = $schoolModel->field('school_name as school')->where("school_city='%s' and display=1",$city)->select();
             $dorinfo = getDormitory_local($schools[0]['school']);   
             $express = getExpress_local($schools[0]['school']);
             $typesOfExpress = getExpressSize_local($schools[0]['school']);
@@ -49,7 +50,7 @@
         else
         {
             $dorMoel = D('dormitoryView');
-            $dors = $dorMoel->field('dormitory_address as dor')->where("school_name='%s'",$school)->select();
+            $dors = $dorMoel->field('dormitory_address as dor')->where("school_name='%s'and dormitory.online=1 and school.display=1",$school)->select();
 
         }
         return $dors;
@@ -66,8 +67,20 @@
         else
         {
             $model = D('express');
-            $school = $model->relation(true)->where("school_name='%s'",$school)->select();
-            $express = $school[0]['express'];
+            $school = $model->relation(true)->where("school_name='%s' and display=1",$school)->select();
+            $express = array();
+            if(count($school)>0)
+            {
+                $i = 0;
+                foreach($school[0]['express'] as $e)
+                {
+                    if($e['online']==1)
+                    {
+                        $express[$i] = $e;
+                        $i++;
+                    }
+                }
+            }
         }
 
 
@@ -84,7 +97,7 @@
         else
         {
             $model = D('ExpresspriceView');
-            $data = $model->where("school_name='%s'",$school)->select();
+            $data = $model->where("school_name='%s' and  fee.online=1",$school)->select();
             $types = array();
             foreach($data as $k => $size)
             {
@@ -108,7 +121,7 @@
     {
         $model = D('ExpresspriceView');
         // var_dump($model->select());
-        $data = $model->where("school_name='%s' and size='%s'",$school,$size)->find();
+        $data = $model->where("school_name='%s' and size='%s' and fee.online=1",$school,$size)->find();
         // var_dump($data);
         if($data==false)
         {
@@ -126,5 +139,80 @@
             }
         }
 
+    }
+
+    /**检查学校是否下线
+     * @param $schoolName
+     * @return bool|string
+     */
+    function isSchoolOnline($schoolName)
+    {
+        $model = M('school');
+        $data = $model->where("school_name='%s'",$schoolName)->find();
+        if($data)
+        {
+            if($data['online']==1)
+            {
+                return true;
+            }
+            else
+            {
+                return $data['offline_msg'];
+            }
+        }
+        else
+        {
+            return '此学校已经下线';
+        }
+
+    }
+
+
+
+    function isSchoolDisplay($schoolName)
+    {
+        $model = M('school');
+        $data = $model->where("school_name='%s'",$schoolName)->find();
+        if($data)
+        {
+            if($data['display']==1)
+            {
+                return true;
+            }
+            else
+            {
+                return $data['offline_msg'];
+            }
+        }
+        else
+        {
+            return '此学校已经下线';
+        }
+
+    }
+
+    /**检查寝室是否已弃用
+     * @param $dor
+     * @return bool|string
+     */
+    function isDorOnline($dor)
+    {
+        $model = M('dormitory');
+        $data = $model->where("dormitory_address='%s'",$dor)->find();
+        if($data)
+        {
+            if($data['online']==1)
+            {
+                return true;
+            }
+            else
+            {
+                return $data['offline_msg'];
+            }
+        }
+        else
+        {
+            return '此学校已经下线';
+        }
     }
 ?>
