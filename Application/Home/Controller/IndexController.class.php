@@ -7,9 +7,9 @@ class IndexController extends Controller{
     public function index()
     {
         // test
-        //  $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmmk';
-        //  session('weixin_user',$openid);
-        //  $this->redirect('home/index/order');
+//         $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmmk';
+//         session('weixin_user',$openid);
+//         $this->redirect('home/index/order');
 
         if(I("get.code")!='')
         {
@@ -41,7 +41,12 @@ class IndexController extends Controller{
         }
         else
         {
-            $this->getDefaultInfo();
+//            $this->getDefaultInfo();
+
+            //获得公告
+            $configModel = M('config');
+            $announcement = $configModel->where("k='announcement'")->getField('v');
+            $this->assign('announcement',$announcement);
             $this->display();
         }
     }
