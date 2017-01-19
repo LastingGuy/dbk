@@ -11,7 +11,7 @@
 namespace Admin\Common;
 
 
-class flowRecord
+class FlowRecord
 {
     //操作代码
     const tLogin = 1;    //登录
@@ -63,7 +63,18 @@ class flowRecord
      */
     private static function record($taskid,$addition="")
     {
+        $data = array();
+        if(session("admin_id")==null)
+            $data['admin_id'] = 0;
+        else
+            $data['admin_id'] = session("admin_id");
+        $data['task_id'] = $taskid;
+        $data['addition'] = $addition;
+        $data['date'] = date("Y-m-d H:i:s",time());
+        $data['ip'] = self::getClientIP();
 
+        $model = M('admin_flowrecord');
+        $model->add($data);
     }
 
     /**获得账户信息
