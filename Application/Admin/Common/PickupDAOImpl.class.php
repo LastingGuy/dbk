@@ -56,6 +56,9 @@ class PickupDAOImpl implements IPickupDAO{
 
     //下载今日4点半前的数据和昨天4点半以后的数据，导出excel
     public function export(){
+        //记录流水
+        FlowRecord::exportPickUpOrders_today();
+
         $school = session("admin_school");
 
         $excel = new \PHPExcel();
@@ -100,6 +103,8 @@ class PickupDAOImpl implements IPickupDAO{
 
     //根据自定义时间下载
     public function exportUserDefined($begin, $end){
+        //记录流水
+        FlowRecord::exportPickOrders_UserDefine("选择时间$begin -- $end");
 
         $school = session("admin_school");
 
@@ -139,17 +144,22 @@ class PickupDAOImpl implements IPickupDAO{
 
     //更新订单状态
     public function updateStatus($pickup_id){
+
         $model = M("pickup");
         $data['pickup_id'] = $pickup_id;
         $express_status = $model->where("pickup_id=$pickup_id")->getField('express_status');
         if($express_status==2){
             $data['express_status'] = 3;
             $model->save($data);
+            //记录流水
+            FlowRecord::setComplete_PickUp($pickup_id,"订单号$pickup_id,更改为完成");
             return 1;
         }
         else if($express_status==3){
             $data['express_status'] = 2;
             $model->save($data);
+            //记录流水
+            FlowRecord::setUnFinished_PickUp($pickup_id,"订单号$pickup_id,更改为未完成");
             return 2;
         }
 
@@ -160,6 +170,8 @@ class PickupDAOImpl implements IPickupDAO{
         $object = M();
         $school_id = session("admin_school");
         $object->execute("update dbk_pickup_view set express_status=3 where pay_time>='$begin_time' and pay_time<='$end_time' and school_id=$school_id");
+        //记录流水
+        FlowRecord::setUnFinished_PickUp($pickup_id,"订单号$pickup_id,更改为未完成");
         return 1;
     }
 
