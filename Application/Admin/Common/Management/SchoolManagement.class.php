@@ -16,7 +16,7 @@ class SchoolManagement
      * @param $schoolid
      * @return bool
      */
-    public static function School_online($schoolid)
+    public function School_online($schoolid)
     {
         return self::School_SET(self::_School_Online,$schoolid);
 
@@ -26,7 +26,7 @@ class SchoolManagement
      * @param $schoolid
      * @return bool
      */
-    public static function School_offline($schoolid)
+    public function School_offline($schoolid)
     {
         return self::School_SET(self::_School_Offline,$schoolid);
     }
@@ -36,7 +36,7 @@ class SchoolManagement
      * @param $msg
      * @return bool
      */
-    public static function School_setOfflineMsg($schoolid,$msg)
+    public function School_setOfflineMsg($schoolid,$msg)
     {
         return self::School_SET(self::_School_SetOfflineMSG,$schoolid,$msg);
     }
@@ -46,7 +46,7 @@ class SchoolManagement
      * @param $msg
      * @return bool
      */
-    public static function School_setSchoolMsg($schoolid,$msg)
+    public function School_setSchoolMsg($schoolid,$msg)
     {
         return self::School_SET(self::_School_SetSchoolMsg,$schoolid,$msg);
     }
@@ -56,7 +56,7 @@ class SchoolManagement
      * @param $name
      * @return bool
      */
-    public static function School_setName($schooid,$name)
+    public function School_setName($schooid,$name)
     {
         return self::School_SET(self::_School_SetName,$schooid,$name);
     }
@@ -66,7 +66,7 @@ class SchoolManagement
      * @param $city
      * @return bool
      */
-    public static function School_setCity($schoolid,$city)
+    public function School_setCity($schoolid,$city)
     {
         return self::School_SET(self::_School_SetCity,$schoolid,$city);
     }
@@ -76,7 +76,7 @@ class SchoolManagement
      * @param $city
      * @return bool
      */
-    public static function School_add($name,$city)
+    public function School_add($name,$city)
     {
         $school = new Common\DAO\SchoolDAO();
         $school->setName($name)->setCity($city)->Offline()->hide();

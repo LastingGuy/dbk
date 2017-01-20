@@ -216,6 +216,7 @@ class SchoolDAO
         return $this;
     }
 
+
     public function update()
     {
         if($this->noErr)
