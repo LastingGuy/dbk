@@ -79,9 +79,10 @@
                             <tr>
                                 <th></th>
                                 <th>订单id</th>
-                                <th>用户id</th>
                                 <th>寄件人姓名</th>
                                 <th>寄件人手机</th>
+                                <th>收件人姓名</th>
+                                <th>收件人手机</th>
                                 <th>下单时间</th>
                                 <th>状 态</th>
                                 <th>编 辑</th>
@@ -249,8 +250,6 @@
         sOut += '<tr><td>寝 室：</td><td>'+aData['dormitory_address']+'</td></tr>';
         sOut += '<tr><td>寄件地址：</td><td>'+aData['destination']+'</td></tr>';
         sOut += '<tr><td>寄件物品：</td><td>'+aData['sender_goods']+'</td></tr>';
-        sOut += '<tr><td>收件人姓名：</td><td>'+aData['recv_name']+'</td></tr>';
-        sOut += '<tr><td>收件人电话：</td><td>'+aData['recv_phone']+'</td></tr>';
         sOut += '<tr><td>备 注：</td><td>'+aData['remarks']+'</td></tr>';
         sOut += '</table>';
 
@@ -275,10 +274,11 @@
             "searching": true,
             columns: [
                 { "data": "look", "orderable":false},
-                { "data": "send_id", "orderable":true},
-                { "data": "openid", "orderable":false },
+                { "data": "send_no", "orderable":true},
                 { "data": "sender_name", "orderable":true },
                 { "data": "sender_phone", "orderable":true },
+                { "data": "recv_name", "orderable":true },
+                { "data": "recv_phone", "orderable":true },
                 { "data": "time", "orderable":true },
                 { "data": "sender_status", "orderable":false },
                 { "data": "edit", "orderable": false}

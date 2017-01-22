@@ -85,7 +85,7 @@ CREATE TABLE `dbk_defaultinfo` (
 create table dbk_pickup
 (
   pickup_id int not null auto_increment comment '订单主键',
-  pickup_no int not null comment '订单号',
+  pickup_no varchar(20) not null comment '订单号',
   userid varchar(50) not null comment '用户id',
   receiver_name varchar(10) comment '收件人姓名',
   receiver_phone varchar(15) comment '收件人手机号码',
@@ -95,24 +95,41 @@ create table dbk_pickup
   express_sms varchar(300) not null comment '快递短信',
   express_code varchar(50) not null comment '取件码/货架号/手机号',
   remarks varchar(100) default null comment '备注',
-  price int(11) not null comment '快递价格',
 	`time`  datetime not null comment '下单时间',
-	pay_time datetime not null comment '支付时间',
 	temp1 varchar(45)  comment '暂时字段',
-	express_status tinyint not null comment ' 0：等待接单  1：未支付  2：正在配送 3:已完成',
+	express_status tinyint not null comment ' 0：等待接单  1：未支付  2：正在配送  3:已完成',
 	constraint pk_dbk_pickup primary key(pickup_id),
   constraint fk_dbk_dormitory_pickup foreign key(dormitory_id) references dbk_dormitory(dormitory_id),
   constraint fk_dbk_openid_pickup foreign key(userid) references dbk_user(userid)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+create table dbk_send
+(
+  send_id int not null auto_increment comment '订单主键',
+  send_no varchar(20) not null UNIQUE comment '订单号',
+  userid varchar(50) not null comment '用户id',
+  sender_name varchar(10) comment '寄件人姓名',
+  sender_phone varchar(15) comment '寄件人手机号码',
+  dormitory_id int unsigned comment '寝室id',
+  recv_name varchar(45) NOT NULL COMMENT '收件人姓名',
+  recv_phone varchar(15) NOT NULL COMMENT '收件人手机',
+  sender_goods varchar(300) not null comment '寄件物品',
+  destination varchar(1000) NOT NULL COMMENT '目的地',
+  remarks varchar(300) comment '备注',
+  time datetime  not null comment '下单时间',
+  sender_status tinyint not null comment '寄件状态  0:未接单 1:未支付 2：正在寄件 3：完成寄件' ,
+  constraint pk_dbk_send primary key(send_id),
+  constraint  fk_dbk_dormitory_send foreign key(dormitory_id) references dbk_dormitory(dormitory_id),
+  constraint fk_dbk_openid_send foreign key(userid) references dbk_user(userid)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 create table dbk_pickup_pay
 (
   pickup_id int not null auto_increment comment '订单主键',
-  nonce_str varchar(32) comment '随机字符串',
-  sign varchar(32) comment '签名',
-  total_fee int comment '支付金额，单位分',
-  pay_status  tinyint DEFAULT 0 comment '订单状态 ：0未付款  1已付款 2已退款',
+  total_fee int comment '总金额，单位分',
+  pay_fee int comment '实际支付金额，单位分',
+  coupon_id int DEFAULT NULL comment '使用代金券id',
+  pay_status  tinyint DEFAULT 0 comment '订单状态 ：0未付款  1已付款 2退款中 3已退款',
   time_start datetime comment '交易起始时间',
   time_end datetime comment '交易结束时间',
   time_expire datetime comment '交易过期时间',
@@ -123,6 +140,7 @@ create table dbk_pickup_pay
   constraint pk_dbk_pickup_pay primary key(pickup_id),
   constraint fk_dbk_pickup_pay_pickupid foreign key(pickup_id) references dbk_pickup(pickup_id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 
 
