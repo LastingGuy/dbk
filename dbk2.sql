@@ -103,6 +103,25 @@ create table dbk_pickup
   constraint fk_dbk_openid_pickup foreign key(userid) references dbk_user(userid)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+create table dbk_send
+(
+  send_id int not null auto_increment comment '订单主键',
+  send_no varchar(20) not null UNIQUE comment '订单号',
+  userid varchar(50) not null comment '用户id',
+  sender_name varchar(10) comment '寄件人姓名',
+  sender_phone varchar(15) comment '寄件人手机号码',
+  dormitory_id int unsigned comment '寝室id',
+  recv_name varchar(45) NOT NULL COMMENT '收件人姓名',
+  recv_phone varchar(15) NOT NULL COMMENT '收件人手机',
+  sender_goods varchar(300) not null comment '寄件物品',
+  destination varchar(1000) NOT NULL COMMENT '目的地',
+  remarks varchar(300) comment '备注',
+  time datetime  not null comment '下单时间',
+  sender_status tinyint not null comment '寄件状态  0:未接单 1:未支付 2：正在寄件 3：完成寄件' ,
+  constraint pk_dbk_send primary key(send_id),
+  constraint  fk_dbk_dormitory_send foreign key(dormitory_id) references dbk_dormitory(dormitory_id),
+  constraint fk_dbk_openid_send foreign key(userid) references dbk_user(userid)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 create table dbk_pickup_pay
 (
@@ -121,6 +140,7 @@ create table dbk_pickup_pay
   constraint pk_dbk_pickup_pay primary key(pickup_id),
   constraint fk_dbk_pickup_pay_pickupid foreign key(pickup_id) references dbk_pickup(pickup_id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 
 

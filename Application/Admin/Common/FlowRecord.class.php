@@ -76,29 +76,7 @@ class FlowRecord
         $model->add($data);
     }
 
-    /**获得账户信息
-     * @return mixed
-     */
-    private static function getAdmin()
-    {
-        $adminID = session("admin_id");
 
-        $adminModel = M('admin');
-        $admin = $adminModel->where("admin_id='%s",$adminID)->find();
-        return $admin;
-    }
-
-
-    /**获得学校信息
-     * @return mixed
-     */
-    private static function getSchool()
-    {
-        $admin = self::getAdmin();
-        $schoolModel = M('school');
-        $school = $schoolModel->where("school_id=%s",$admin['admin_school'])->find();
-        return $school;
-    }
 
     /**获得ip
      * @return mixed
@@ -150,8 +128,7 @@ class FlowRecord
      */
     public static function completeAll_PickUp($startStamp,$endStamp,$addition="NULL")
     {
-        $school = self::getSchool();
-        $schoolName = $school['school_name'];
+        $schoolName = session("admin_school_name");
         $add = "School:$schoolName".
             "period: ".date("Y-m-d H:i:s",$startStamp).'-'.date("Y-m-d H:i:s",$endStamp).
             "  Addition:".$addition;
@@ -164,8 +141,7 @@ class FlowRecord
      */
     public static function completeAll_Send($startStamp,$endStamp,$addition="NULL")
     {
-        $school = self::getSchool();
-        $schoolName = $school['school_name'];
+        $schoolName = session("admin_school_name");
         $add = "School: $schoolName".
             "period: ".date("Y-m-d H:i:s",$startStamp).'-'.date("Y-m-d H:i:s",$endStamp).
             "  Addition:".$addition;
@@ -201,8 +177,7 @@ class FlowRecord
      */
     public static function unfinishedAll_PickUp($startStamp,$endStamp,$addition='NULL')
     {
-        $school = self::getSchool();
-        $schoolName = $school['school_name'];
+        $schoolName = session("admin_school_name");
         $add = "School: $schoolName".
             "period: ".date("Y-m-d H:i:s",$startStamp)."-".date("Y-m-d H:i:s",$endStamp).
             "Addition: ".$addition;
@@ -217,8 +192,7 @@ class FlowRecord
      */
     public static function unfinishedAll_Send($startStamp,$endStamp,$addition="NULL")
     {
-        $school = self::getSchool();
-        $schoolName = $school['school_name'];
+        $schoolName = session("admin_school_name");
         $add = "School: $schoolName".
             "period: ".date("Y-m-d H:i:s",$startStamp)."-".date("Y-m-d H:i:s",$endStamp)."Addition: ".$addition;
         self::record(self::tUnFinishedALL_Send,$add);
@@ -230,8 +204,7 @@ class FlowRecord
      */
     public static function exportPickUpOrders_today($addition="NULL")
     {
-        $school = self::getSchool();
-        $schoolName = $school['school_name'];
+        $schoolName = session("admin_school_name");
         $add = "School: $schoolName"."  Addition:$addition";
         self::record(self::tExportPickUpOrder_Today,$add);
     }
@@ -244,8 +217,7 @@ class FlowRecord
      */
     public static function exportPickOrders_UserDefine($startStamp,$endStamp,$addition="NULL")
     {
-        $school = self::getSchool();
-        $schoolName = $school['school_name'];
+        $schoolName = session("admin_school_name");
         $add = "School: $schoolName".
             "period: ".date("Y-m-d H:i:s",$startStamp).'-'.date("Y-m-d H:i:s",$endStamp).
             "Addition: $addition";
@@ -258,8 +230,7 @@ class FlowRecord
      */
     public static function exportSendOrders_today($addition="NULL")
     {
-        $school = self::getSchool();
-        $schoolName = $school['school_name'];
+        $schoolName = session("admin_school_name");
         $add = "School: $schoolName"."  Addition:$addition";
         self::record(self::tExportSendOrder_Today,$add);
     }
