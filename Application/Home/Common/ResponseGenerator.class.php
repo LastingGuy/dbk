@@ -105,5 +105,12 @@ class ResponseGenerator
 
         return $data;
     }
+
+
+    public static function NOTSIGN($action)
+    {
+        $r = new ResponseGenerator($action,false,2,'NOTSIGN');
+        return $r;
+    }
 }
 ?>

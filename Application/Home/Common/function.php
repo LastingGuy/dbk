@@ -1,5 +1,35 @@
 <?php
 
+/**登录检测
+ * @return bool
+ */
+function notSign()
+{
+    return !session('?userid');
+}
+
+/**判断联系号码是否合法
+ * @param $mobile
+ * @return bool
+ */
+function isMobile($mobile)
+{
+    $is_tel = preg_match("/^([0-9]{3,4}-)?[0-9]{7,8}$/",$mobile)?true:false;
+    if($is_tel)
+    {
+        return true;
+    }
+
+    if (!is_numeric($mobile))
+    {
+        return false;
+    }
+    $is_mobile =preg_match('#^13[\d]{9}$|^14[5,7]{1}\d{8}$|^15[^4]{1}\d{8}$|^17[0,6,7,8]{1}\d{8}$|^18[\d]{9}$#', $mobile) ? true : false;
+    return $is_mobile;
+}
+
+
+
    //获得城市
     function getCitys_local()
     {
