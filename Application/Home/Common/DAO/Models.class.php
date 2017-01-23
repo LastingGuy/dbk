@@ -46,4 +46,13 @@ class Models
 
         return self::$_M_fee;
     }
+
+    private static $_M_express_company = false;
+    public static function M_express_company()
+    {
+        if(self::$_M_express_company===false)
+            self::$_M_express_company = M('express_company');
+
+        return self::$_M_express_company;
+    }
 }

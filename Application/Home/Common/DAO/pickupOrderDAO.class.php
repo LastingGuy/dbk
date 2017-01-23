@@ -11,5 +11,8 @@ namespace Home\Common\DAO;
 
 class pickupOrderDAO
 {
+    public function newOrder($order)
+    {
 
+    }
 }

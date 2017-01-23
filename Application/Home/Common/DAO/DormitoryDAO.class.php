@@ -18,7 +18,7 @@ class DormitoryDAO extends Models
     public function getDormitoryInfoById($id)
     {
         $model = self::M_dormitory();
-        $data = $model->where("dormitory_id = '?'",$id)->find();
+        $data = $model->where("dormitory_id = '%s'",$id)->find();
         return $data;
     }
 
@@ -30,7 +30,7 @@ class DormitoryDAO extends Models
     public function getDormitoryInfoByAddress($schoolid,$address)
     {
         $model = self::M_dormitory();
-        $data = $model->where("school_id = '?' and 'dormitory_address = '?'",$schoolid,$address)->find();
+        $data = $model->where("school_id = '%s' and 'dormitory_address = '%s'",$schoolid,$address)->find();
         return $data;
     }
 

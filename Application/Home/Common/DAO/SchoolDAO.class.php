@@ -18,7 +18,7 @@ class SchoolDAO extends Models
     public function getSchoolInfoById($id)
     {
         $m_school = self::M_school();
-        $data = $m_school->where("school_id='?'",$id)->find();
+        $data = $m_school->where("school_id='%s'",$id)->find();
 
         return $data;
     }
@@ -30,7 +30,7 @@ class SchoolDAO extends Models
     public function getSchoolInfoByName($name)
     {
         $m_school = self::M_school();
-        $data = $m_school->where("school_name='?'",$name)->find();
+        $data = $m_school->where("school_name='%s'",$name)->find();
 
         return $data;
     }
