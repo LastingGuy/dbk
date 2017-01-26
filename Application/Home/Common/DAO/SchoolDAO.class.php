@@ -35,4 +35,20 @@ class SchoolDAO extends Models
         return $data;
     }
 
+    public function getCities()
+    {
+        $m_school = self::M_school();
+        $cities = $m_school->field('school_city as city')->where("display=1")->group('school_city')->order("count(*) desc")->select();
+        return $cities;
+    }
+
+    public function getSchoolsAt($city=false)
+    {
+        if(!$city)
+            return array();
+        $m_school = self::M_school();
+        $schools = $m_school->field('school_name as school')->where("school_city='%s' and display=1",$city)->select();
+        return $schools;
+    }
+
 }

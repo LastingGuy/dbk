@@ -21,6 +21,53 @@ class PickupOrder
     private $_pickup_no;
     private $_user_id;
 
+    /**
+     * @return mixed
+     */
+    public function getPickupId()
+    {
+        return $this->_pickup_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPickupNo()
+    {
+        return $this->_pickup_no;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserId()
+    {
+        return $this->_user_id;
+    }
+
+    /**
+     * @param mixed $pickup_id
+     */
+    public function setPickupId($pickup_id)
+    {
+        $this->_pickup_id = $pickup_id;
+    }
+
+    /**
+     * @param mixed $pickup_no
+     */
+    public function setPickupNo($pickup_no)
+    {
+        $this->_pickup_no = $pickup_no;
+    }
+
+    /**
+     * @param mixed $user_id
+     */
+    public function setUserId($user_id)
+    {
+        $this->_user_id = $user_id;
+    }
 
     ///////////School///////////
     private $_school_name;
@@ -67,6 +114,37 @@ class PickupOrder
     }
 
 
+    /**
+     * @return mixed
+     */
+    public function getSchoolId()
+    {
+        return $this->_school_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSchoolName()
+    {
+        return $this->_school_name;
+    }
+
+    /**
+     * @param mixed $school_id
+     */
+    public function setSchoolId($school_id)
+    {
+        $this->_school_id = $school_id;
+    }
+
+    /**
+     * @param mixed $school_name
+     */
+    public function setSchoolName($school_name)
+    {
+        $this->_school_name = $school_name;
+    }
 
     ////////////////dormitory///////
     private $_dormitory_id = -1;
@@ -111,6 +189,40 @@ class PickupOrder
     }
 
 
+    /**
+     * @param mixed $dormitory_address
+     */
+    public function setDormitoryAddress($dormitory_address)
+    {
+        $this->_dormitory_address = $dormitory_address;
+    }
+
+    /**
+     * @param int $dormitory_id
+     */
+    public function setDormitoryId($dormitory_id)
+    {
+        $this->_dormitory_id = $dormitory_id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDormitoryAddress()
+    {
+        return $this->_dormitory_address;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDormitoryId()
+    {
+        return $this->_dormitory_id;
+    }
+
+
+
     /////////////////////receiver///////////
     private $_receiver_name;
     private $_receiver_phone;
@@ -134,6 +246,37 @@ class PickupOrder
         return isMobile($this->_receiver_phone);
     }
 
+    /**
+     * @param mixed $receiver_name
+     */
+    public function setReceiverName($receiver_name)
+    {
+        $this->_receiver_name = $receiver_name;
+    }
+
+    /**
+     * @param mixed $receiver_phone
+     */
+    public function setReceiverPhone($receiver_phone)
+    {
+        $this->_receiver_phone = $receiver_phone;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReceiverName()
+    {
+        return $this->_receiver_name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReceiverPhone()
+    {
+        return $this->_receiver_phone;
+    }
 
     ///////////////////express/////////
     private $_express_type_size;
@@ -195,11 +338,155 @@ class PickupOrder
     }
 
 
+    /**
+     * @param mixed $express_code
+     */
+    public function setExpressCode($express_code)
+    {
+        $this->_express_code = $express_code;
+    }
+
+    /**
+     * @param mixed $express_company
+     */
+    public function setExpressCompany($express_company)
+    {
+        $this->_express_company = $express_company;
+    }
+
+    /**
+     * @param mixed $express_sms
+     */
+    public function setExpressSms($express_sms)
+    {
+        $this->_express_sms = $express_sms;
+    }
+
+    /**
+     * @param mixed $express_type
+     */
+    public function setExpressType($express_type)
+    {
+        $this->_express_type = $express_type;
+    }
+
+    /**
+     * @param mixed $express_type_size
+     */
+    public function setExpressTypeSize($express_type_size)
+    {
+        $this->_express_type_size = $express_type_size;
+    }
+
+    /**
+     * @param boolean $price
+     */
+    public function setPrice($price)
+    {
+        $this->_price = $price;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExpressCode()
+    {
+        return $this->_express_code;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExpressCompany()
+    {
+        return $this->_express_company;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExpressSms()
+    {
+        return $this->_express_sms;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExpressType()
+    {
+        return $this->_express_type;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExpressTypeSize()
+    {
+        return $this->_express_type_size;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getPrice()
+    {
+        return $this->_price;
+    }
+
     private $_remarks;
     private $_orderTime;
     private $_status;
 
 
+    /**
+     * @param mixed $orderTime
+     */
+    public function setOrderTime($orderTime)
+    {
+        $this->_orderTime = $orderTime;
+    }
+
+    /**
+     * @param mixed $remarks
+     */
+    public function setRemarks($remarks)
+    {
+        $this->_remarks = $remarks;
+    }
+
+    /**
+     * @param mixed $status
+     */
+    public function setStatus($status)
+    {
+        $this->_status = $status;
+    }
+
+
+    /**
+     * @return mixed
+     */
+    public function getOrderTime()
+    {
+        return $this->_orderTime;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRemarks()
+    {
+        return $this->_remarks;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStatus()
+    {
+        return $this->_status;
+    }
 
 
     public function __construct($order)

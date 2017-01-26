@@ -55,4 +55,12 @@ class Models
 
         return self::$_M_express_company;
     }
+
+    private static $_M_user =false;
+    public static function M_user()
+    {
+        if(self::$_M_user===false)
+            self::$_M_user= M('user');
+        return self::$_M_user;
+    }
 }
