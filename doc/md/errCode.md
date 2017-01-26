@@ -3,7 +3,8 @@
 ##默认
 * 失败：0 FAIL
 * 成功：1 OK
-* 未登录 2 NOTLOGIN
+* 未登录 2 NOTSIGN
+* 参数错误 3 WrongParams
 
 ##PHP
 ###登录操作(action:login)
@@ -30,11 +31,37 @@ msg | code | success | body|addition
 
 ###获得学校寝室和快递点信息（action:getSchoolInfo）
 接口：`interface\getSchoolInfo`
-
 msg|code|success|body|addition
 ---|---|---|---|---|---
 获得学校信息成功|1|true|{dors:{},express:{},typesOfExpress{}}|
 学校已下线|31|true|同上
+
+###新建代取订单(action:newPickupOrder)
+####接口：`home\order\newPickupOrder`
+####method: `POST`
+####参数：
+```
+	
+	{
+		school: 浙江大学城市学院
+		dormitory: 问源楼
+		receiver: 张三
+		phone: 13112341234
+		size:	size1
+		company: 圆通
+		sms:	快递短信	
+		code: 1234
+		remarks: 无
+	}
+```
+	
+####return
+||code|success|msg|body|addition
+---|---|---|---|---|---|---
+未登录|2|false|NOTSIGN||
+参数错误|3|false|WrongParams|description|
+成功|1|true|OK|orderNo
+
 
 
 ##JAVA

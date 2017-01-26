@@ -105,5 +105,29 @@ class ResponseGenerator
 
         return $data;
     }
+
+
+    public static function NOTSIGN($action)
+    {
+        $r = new ResponseGenerator($action,false,2,'NOTSIGN');
+        return $r;
+    }
+
+    public static function FAIL($action,$body = null)
+    {
+        return new ResponseGenerator($action,false,0,'FAIL',$body);
+    }
+
+    public static function OK($action,$body = null)
+    {
+        return new ResponseGenerator($action,true,1,'OK',$body);
+    }
+
+    public static function WRONGPARAMS($action,$body)
+    {
+        return new ResponseGenerator($action,false,3,'WrongParams',$body);
+    }
+
+
 }
 ?>
