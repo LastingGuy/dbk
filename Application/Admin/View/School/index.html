@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- BEGIN META -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Custom Theme">
+    <!-- END META -->
+
+    <!-- BEGIN SHORTCUT ICON -->
+    <link rel="shortcut icon" href="__ROOT__/Public/img/favicon.ico">
+    <!-- END SHORTCUT ICON -->
+    <title>管理学校 - 代步客管理系统</title>
+
+
+    <!-- BEGIN STYLESHEET -->
+    <link href="__ROOT__/Public/css/bootstrap.min.css" rel="stylesheet"><!-- BOOTSTRAP CSS -->
+    <link href="__ROOT__/Public/css/bootstrap-reset.css" rel="stylesheet"><!-- BOOTSTRAP CSS -->
+    <link href="__ROOT__/Public/assets/font-awesome/css/font-awesome.css" rel="stylesheet"><!-- FONT AWESOME ICON CSS -->
+    <link href="__ROOT__/Public/assets/advanced-datatable/media/css/demo_table.css" rel="stylesheet"><!-- BOOTSTRAP ADVANCE DATATABLE CSS -->
+    <link rel="stylesheet" type="text/css" href="__ROOT__/Public/assets/bootstrap-datetimepicker/css/datetimepicker.css"><!-- DATETIMEPICKER PLUGIN CSS -->
+    <link href="__ROOT__/Public/css/style.css" rel="stylesheet"><!-- THEME BASIC CSS -->
+    <link href="__ROOT__/Public/css/style-responsive.css" rel="stylesheet"><!-- THEME RESPONSIVE CSS -->
+    <link href="__ROOT__/Public/css/mui-switch.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+
+    <script src="__ROOT__/Public/js/html5shiv.js"></script>
+    <script src="__ROOT__/Public/js/respond.min.js"></script>
+    <![endif]-->
+    <!-- END STYLESHEET -->
+
+</head>
+<body>
+<!-- BEGIN SECTION -->
+<section id="container" class="">
+
+    <!-- BEGIN HEADER -->
+    <include file="./Application/Common/Common/header.html" />
+    <!-- END HEADER -->
+
+    <!-- BEGIN SIDEBAR -->
+    <include file="./Application/Common/Common/sidebar.html" />
+    <!-- END SIDEBAR -->
+
+    <!-- BEGIN MAIN CONTENT -->
+    <section id="main-content">
+
+        <section class="wrapper site-min-height">
+            <!-- BEGIN PANEL SECTION -->
+            <section class="panel">
+                <header class="panel-heading">
+                    <span class="label label-primary">业务开关</span>
+                     <span class="tools pull-right">
+                     <a href="javascript:;" class="fa fa-chevron-down"></a>
+                     <a href="javascript:;" class="fa fa-times"></a>
+                     </span>
+                </header>
+                <div class="panel-body">
+                    <form id="switch" class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="col-lg-2 col-sm-2 control-label">代 拿 开 关</label>
+                            <div class="col-lg-2">
+                                <label><input id="pick_switch" class="switch mui-switch form-control" type="checkbox" data-service="pickup" data-status="0"> 关</label>
+                            </div>
+                            <label class="col-lg-offset-1 col-lg-2 col-sm-2 control-label">代 寄 开 关</label>
+                            <div class="col-lg-2">
+                                <label><input id="send_switch" class="switch mui-switch form-control" type="checkbox" data-service="send" data-status="0"> 关</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+            <!-- END PANEL SECTION -->
+        </section>
+    </section>
+    <!-- END MAIN CONTENT -->
+
+    <!-- BEGIN FOOTER -->
+    <include file="./Application/Common/Common/footer.html" />
+    <!-- END FOOTER -->
+</section>
+<!-- END SECTION -->
+
+<!-- BEGIN JS -->
+<script language="javascript" src="__ROOT__/Public/assets/advanced-datatable/media/js/jquery.js"></script><!-- ADVANCE DATATABLE JS -->
+<script src="__ROOT__/Public/js/bootstrap.min.js" ></script><!-- BOOTSTRAP JS -->
+<script class="include"  src="__ROOT__/Public/js/jquery.dcjqaccordion.2.7.js"></script><!-- ACCORDING JS -->
+<script src="__ROOT__/Public/js/jquery.scrollTo.min.js" ></script><!-- SCROLLTO JS -->
+<script src="__ROOT__/Public/js/jquery.nicescroll.js" ></script><!-- NICESCROLL JS -->
+<script src="__ROOT__/Public/js/respond.min.js" ></script><!-- RESPOND JS -->
+<script language="javascript" src="__ROOT__/Public/assets/advanced-datatable/media/js/jquery.dataTables.js"></script><!-- ADVANCE DATATABLE JS -->
+<script  src="__ROOT__/Public/assets/data-tables/dataTables.bootstrap.min.js"></script><!-- DATATABLE JS -->
+<script src="__ROOT__/Public/assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script><!-- BOOTSTRAP DATETIMEPICKER JS  -->
+<script src="__ROOT__/Public/assets/bootstrap-datetimepicker/js/locale/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="__ROOT__/Public/js/common-scripts.js" ></script><!-- BASIC COMMON JS  -->
+<script >
+    $("#express_module").addClass("active");
+    $("#school_manage").addClass("active");
+
+    /* DATATABLE MODIFICATION SCRIPT */
+    /* Formating function for row details */
+
+
+    function completeAll(){
+        $.post("{:U('admin/send/complete')}", {
+                    start_time: $('#begin_time2').val(),
+                    end_time: $('#end_time2').val()
+                },
+                function(){
+                    $('#close2').click();
+                    oTable.fnDraw(false);
+                });
+
+    }
+
+    $("#switch input.switch").live("click",function (){
+        var status = 0;
+        var service = $(this).attr("data-service");
+        if($(this).attr("data-status") == 0){
+            status = 1
+        }
+
+        $.get("{:U('admin/school/serviceSwitch')}",{
+            'status': status,
+            'service': service
+        },
+        function(){
+            var thing = "";
+            var object = "";
+            if(service=="send"){
+                thing = "代寄业务 ";
+                object = $("#send_switch");
+            }
+            else{
+                thing = "代拿业务 ";
+                object = $("#pickup_switch");
+            }
+            var what = "";
+            if(status==1){
+                what = "开启！";
+                object.attr({checked:'','data-status':'1'});
+            }
+            else{
+                what = "关闭！";
+                object.attr({'data-status':'0'});
+                object.removeAttr("checked");
+            }
+            alert(thing+what);
+        });
+
+    });
+
+    function getSchool(){
+        $.get("{:U('admin/school/getSchool')}",{
+        },
+        function(data){
+            if(data['send_online'] == 1){
+                $("#send_switch").attr({checked:'','data-status':'1'});
+            }
+            if(data['pickup_online'] == 1){
+                $("#pick_switch").attr({checked:'','data-status':'1'});
+            }
+
+        });
+    }
+    getSchool();
+</script>
+<!-- END JS -->
+</body>
+</html>
+
+
