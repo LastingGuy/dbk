@@ -15,8 +15,11 @@ class AdminDAOImpl implements IAdminDAO{
         $condition['admin_passwd'] = $user_passwd;
 
         if($model->where($condition)->find()){
-            return $this->addSession($user_id);
+            $return = $this->addSession($user_id);
+            FlowRecord::Login("登录成功");
+            return $return;
         }else{
+            FlowRecord::Login("登录失败");
             return  0;
         }
     }

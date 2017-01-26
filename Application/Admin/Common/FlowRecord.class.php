@@ -11,7 +11,7 @@
 namespace Admin\Common;
 
 
-class flowRecord
+class FlowRecord
 {
     //操作代码
     const tLogin = 1;    //登录
@@ -63,32 +63,20 @@ class flowRecord
      */
     private static function record($taskid,$addition="")
     {
-
+        $data = array();
+        if(session("admin_id")==null)
+            $data['admin_id'] = 0;
+        else
+            $data['admin_id'] = session("admin_id");
+        $data['task_id'] = $taskid;
+        $data['addition'] = $addition;
+        $data['date'] = date("Y-m-d H:i:s",time());
+        $data['ip'] = self::getClientIP();
+        $model = M('admin_flowrecord');
+        $model->add($data);
     }
 
-    /**获得账户信息
-     * @return mixed
-     */
-    private static function getAdmin()
-    {
-        $adminID = session("admin_id");
 
-        $adminModel = M('admin');
-        $admin = $adminModel->where("admin_id='%s",$adminID)->find();
-        return $admin;
-    }
-
-
-    /**获得学校信息
-     * @return mixed
-     */
-    private static function getSchool()
-    {
-        $admin = self::getAdmin();
-        $schoolModel = M('school');
-        $school = $schoolModel->where("school_id=%s",$admin['admin_school'])->find();
-        return $school;
-    }
 
     /**获得ip
      * @return mixed
@@ -140,8 +128,7 @@ class flowRecord
      */
     public static function completeAll_PickUp($startStamp,$endStamp,$addition="NULL")
     {
-        $school = self::getSchool();
-        $schoolName = $school['school_name'];
+        $schoolName = session("admin_school_name");
         $add = "School:$schoolName".
             "period: ".date("Y-m-d H:i:s",$startStamp).'-'.date("Y-m-d H:i:s",$endStamp).
             "  Addition:".$addition;
@@ -154,8 +141,7 @@ class flowRecord
      */
     public static function completeAll_Send($startStamp,$endStamp,$addition="NULL")
     {
-        $school = self::getSchool();
-        $schoolName = $school['school_name'];
+        $schoolName = session("admin_school_name");
         $add = "School: $schoolName".
             "period: ".date("Y-m-d H:i:s",$startStamp).'-'.date("Y-m-d H:i:s",$endStamp).
             "  Addition:".$addition;
@@ -191,8 +177,7 @@ class flowRecord
      */
     public static function unfinishedAll_PickUp($startStamp,$endStamp,$addition='NULL')
     {
-        $school = self::getSchool();
-        $schoolName = $school['school_name'];
+        $schoolName = session("admin_school_name");
         $add = "School: $schoolName".
             "period: ".date("Y-m-d H:i:s",$startStamp)."-".date("Y-m-d H:i:s",$endStamp).
             "Addition: ".$addition;
@@ -207,8 +192,7 @@ class flowRecord
      */
     public static function unfinishedAll_Send($startStamp,$endStamp,$addition="NULL")
     {
-        $school = self::getSchool();
-        $schoolName = $school['school_name'];
+        $schoolName = session("admin_school_name");
         $add = "School: $schoolName".
             "period: ".date("Y-m-d H:i:s",$startStamp)."-".date("Y-m-d H:i:s",$endStamp)."Addition: ".$addition;
         self::record(self::tUnFinishedALL_Send,$add);
@@ -220,8 +204,7 @@ class flowRecord
      */
     public static function exportPickUpOrders_today($addition="NULL")
     {
-        $school = self::getSchool();
-        $schoolName = $school['school_name'];
+        $schoolName = session("admin_school_name");
         $add = "School: $schoolName"."  Addition:$addition";
         self::record(self::tExportPickUpOrder_Today,$add);
     }
@@ -234,8 +217,7 @@ class flowRecord
      */
     public static function exportPickOrders_UserDefine($startStamp,$endStamp,$addition="NULL")
     {
-        $school = self::getSchool();
-        $schoolName = $school['school_name'];
+        $schoolName = session("admin_school_name");
         $add = "School: $schoolName".
             "period: ".date("Y-m-d H:i:s",$startStamp).'-'.date("Y-m-d H:i:s",$endStamp).
             "Addition: $addition";
@@ -248,8 +230,7 @@ class flowRecord
      */
     public static function exportSendOrders_today($addition="NULL")
     {
-        $school = self::getSchool();
-        $schoolName = $school['school_name'];
+        $schoolName = session("admin_school_name");
         $add = "School: $schoolName"."  Addition:$addition";
         self::record(self::tExportSendOrder_Today,$add);
     }

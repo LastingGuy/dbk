@@ -21,13 +21,13 @@ class SendDAOImpl implements ISendDAO{
             $return_data['recordsFiltered'] = $return_data['recordsTotal'];
 
             //获取订单
-            $return_data['data'] = $model->where("school_id='$school' and sender_status>=2 and sender_status<=3 and (sender_name like '$search%' or sender_phone like '$search%')")->order("send_id desc")->limit($param['start'],$param['length'])->select();
+            $return_data['data'] = $model->where("school_id='$school' and sender_status>=2 and sender_status<=3 and (sender_name like '$search%' or sender_phone like '$search%')")->order("send_no desc")->limit($param['start'],$param['length'])->select();
         }else{
             $return_data['recordsTotal'] = $model->where("school_id='$school'and sender_status>=2 and sender_status<=3")->count();
             $return_data['recordsFiltered'] = $return_data['recordsTotal'];
 
             //获取订单
-            $return_data['data'] = $model->where("school_id='$school' and sender_status>=2 and sender_status<=3")->order("send_id desc")->limit($param['start'],$param['length'])->select();
+            $return_data['data'] = $model->where("school_id='$school' and sender_status>=2 and sender_status<=3")->order("send_no desc")->limit($param['start'],$param['length'])->select();
         }
 
 
@@ -61,9 +61,9 @@ class SendDAOImpl implements ISendDAO{
 
         $excel = new \PHPExcel();
         //Excel表格式,这里简略写了8列
-        $letter = array('A','B','C','D','E','F','G','H','I','J','K');
+        $letter = array('A','B','C','D','E','F','G','H','I','J');
         //表头数组
-        $tableheader = array('订单号','姓名','手机号码','寝室','寄件物品','寄件地址','收件人','收件人电话','备注','下单时间','状态');
+        $tableheader = array('订单号','寄件人','寄件人电话','收件人','收件人电话','寝室','寄件物品','寄件地址','备注','下单时间');
         //填充表头信息
         for($i = 0;$i < count($tableheader);$i++) {
             $excel->getActiveSheet()->setCellValue("$letter[$i]1","$tableheader[$i]");
@@ -78,8 +78,8 @@ class SendDAOImpl implements ISendDAO{
         $date = date('Y-m-d');
         $today_end = $date." 16:00:00";
         
-        $data = $model->where("school_id='$school' and time<='$today_end' and time>'$today_begin' and sender_status>=2 and sender_status<=3")->getField("send_id,sender_name,sender_phone,dormitory_address,sender_goods,
-            destination,recv_name,recv_phone,remarks,time,sender_status",true);
+        $data = $model->where("school_id='$school' and time<='$today_end' and time>'$today_begin' and sender_status>=2 and sender_status<=3")->getField("send_no,sender_name,sender_phone, recv_name, recv_phone,dormitory_address,sender_goods,
+           destination,remarks,time",true);
 
         //填充表格信息
         $i = 2;
@@ -106,9 +106,9 @@ class SendDAOImpl implements ISendDAO{
 
         $excel = new \PHPExcel();
         //Excel表格式,这里简略写了8列
-        $letter = array('A','B','C','D','E','F','G','H','I','K');
+        $letter = array('A','B','C','D','E','F','G','H','I','J');
         //表头数组
-        $tableheader = array('订单号','姓名','手机号码','寝室','寄件物品','收件人','收件人电话','备注','下单时间','状态');
+        $tableheader = array('订单号','寄件人','寄件人电话','收件人','收件人电话','寝室','寄件物品','寄件地址','备注','下单时间');
         //填充表头信息
         for($i = 0;$i < count($tableheader);$i++) {
             $excel->getActiveSheet()->setCellValue("$letter[$i]1","$tableheader[$i]");
@@ -116,8 +116,8 @@ class SendDAOImpl implements ISendDAO{
         //表格数组
         $model = D('send_view');
 
-        $data = $model->where("school_id='$school' and time<='$end' and time>'$begin' and sender_status>=2 and sender_status<=3")->getField("send_id,sender_name,sender_phone,dormitory_address,sender_goods,
-            recv_name,recv_phone,remarks,time,sender_status",true);
+        $data = $model->where("school_id='$school' and time<='$end' and time>'$begin' and sender_status>=2 and sender_status<=3")->getField("send_no,sender_name,sender_phone, recv_name, recv_phone,dormitory_address,sender_goods,
+           destination,remarks,time",true);
 
         //填充表格信息
         $i = 2;
@@ -138,20 +138,10 @@ class SendDAOImpl implements ISendDAO{
     }
 
     //更新订单状态
-    public function updateStatus($send_id){
+    public function updateStatus($send_no){
         $model = M("send");
-        $data['send_id'] = $send_id;
-        $express_status = $model->where("send_id=$send_id")->getField('sender_status');
-        if($express_status==2){
-            $data['sender_status'] = 3;
-            $model->save($data);
-            return 1;
-        }
-        else if($express_status==3){
-            $data['sender_status'] = 2;
-            $model->save($data);
-            return 2;
-        }
+
+
 
     }
 
