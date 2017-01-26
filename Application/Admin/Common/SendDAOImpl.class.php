@@ -17,33 +17,32 @@ class SendDAOImpl implements ISendDAO{
         $return_data['draw'] = $param["draw"];
         $search = $param['search']['value'];
         if($search!=null){
-            $return_data['recordsTotal'] = $model->where("school_id='$school'and sender_status>=2 and sender_status<=3 and (sender_name like '$search%' or sender_phone like '$search%')")->count();
+            $return_data['recordsTotal'] = $model->where("school_id='$school'and sender_status>=0 and sender_status<=3 and (sender_name like '$search%' or sender_phone like '$search%')")->count();
             $return_data['recordsFiltered'] = $return_data['recordsTotal'];
 
             //获取订单
-            $return_data['data'] = $model->where("school_id='$school' and sender_status>=2 and sender_status<=3 and (sender_name like '$search%' or sender_phone like '$search%')")->order("send_no desc")->limit($param['start'],$param['length'])->select();
+            $return_data['data'] = $model->where("school_id='$school' and sender_status>=0 and sender_status<=3 and (sender_name like '$search%' or sender_phone like '$search%')")->order("send_no desc")->limit($param['start'],$param['length'])->select();
         }else{
-            $return_data['recordsTotal'] = $model->where("school_id='$school'and sender_status>=2 and sender_status<=3")->count();
+            $return_data['recordsTotal'] = $model->where("school_id='$school'and sender_status>=0 and sender_status<=3")->count();
             $return_data['recordsFiltered'] = $return_data['recordsTotal'];
 
             //获取订单
-            $return_data['data'] = $model->where("school_id='$school' and sender_status>=2 and sender_status<=3")->order("send_no desc")->limit($param['start'],$param['length'])->select();
+            $return_data['data'] = $model->where("school_id='$school' and sender_status>=0 and sender_status<=3")->order("send_no desc")->limit($param['start'],$param['length'])->select();
         }
 
 
         foreach($return_data['data'] as $key=>$value){
 
-            if($return_data['data'][$key]['sender_status'] == 2)
-            {
-                $return_data['data'][$key]['edit'] = "<a class=\" complete \" href=\"javascript:;\"><span class=\"label label-success\">完 成</span></a>";
-            }
-            elseif ($return_data['data'][$key]['sender_status'] == 3)
-            {
-                $return_data['data'][$key]['edit'] = "<a class=\" complete \" href=\"javascript:;\"><span class=\"label label-danger\">未完成</span></a>";
-            }
+            $return_data['data'][$key]['edit'] = "";
 
-            if($return_data['data'][$key]['sender_status'] == 2){
-                $return_data['data'][$key]['sender_status'] = "<div style='color:red'>进行中</div>";
+            if($return_data['data'][$key]['sender_status'] == 0){
+                $return_data['data'][$key]['sender_status'] = "<div style='color:red'>失 败</div>";
+            }
+            else if($return_data['data'][$key]['sender_status'] == 1){
+                $return_data['data'][$key]['sender_status'] = "<div style='color:red'>代取中</div>";
+            }
+            else if($return_data['data'][$key]['sender_status'] == 2){
+                $return_data['data'][$key]['sender_status'] = "<div style='color:red'>遗留中</div>";
             }
             else if($return_data['data'][$key]['sender_status'] == 3){
                 $return_data['data'][$key]['sender_status'] = "<div style='color:lightseagreen'>已完成</div>";
@@ -78,7 +77,7 @@ class SendDAOImpl implements ISendDAO{
         $date = date('Y-m-d');
         $today_end = $date." 16:00:00";
         
-        $data = $model->where("school_id='$school' and time<='$today_end' and time>'$today_begin' and sender_status>=2 and sender_status<=3")->getField("send_no,sender_name,sender_phone, recv_name, recv_phone,dormitory_address,sender_goods,
+        $data = $model->where("school_id='$school' and time<='$today_end' and time>'$today_begin' and sender_status>=0 and sender_status<=3")->getField("send_no,sender_name,sender_phone, recv_name, recv_phone,dormitory_address,sender_goods,
            destination,remarks,time",true);
 
         //填充表格信息
@@ -116,7 +115,7 @@ class SendDAOImpl implements ISendDAO{
         //表格数组
         $model = D('send_view');
 
-        $data = $model->where("school_id='$school' and time<='$end' and time>'$begin' and sender_status>=2 and sender_status<=3")->getField("send_no,sender_name,sender_phone, recv_name, recv_phone,dormitory_address,sender_goods,
+        $data = $model->where("school_id='$school' and time<='$end' and time>'$begin' and sender_status>=0 and sender_status<=3")->getField("send_no,sender_name,sender_phone, recv_name, recv_phone,dormitory_address,sender_goods,
            destination,remarks,time",true);
 
         //填充表格信息
@@ -138,11 +137,10 @@ class SendDAOImpl implements ISendDAO{
     }
 
     //更新订单状态
-    public function updateStatus($send_no){
+    public function updateStatus($send_no, $status){
         $model = M("send");
-
-
-
+        $data['sender_status'] = $status;
+        $model->where("send_no=$send_no")->save($data);
     }
 
     //完成指定时间内的订单

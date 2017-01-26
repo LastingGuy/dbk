@@ -74,7 +74,7 @@
                         </div>
                     </div>
                     <div class="adv-table table-responsive">
-                        <table  class="display table table-bordered" id="hidden-table-info">
+                        <table  class="display table table-bordered" id="hidden-table-info" style="line-height:100%">
                             <thead>
                             <tr>
                                 <th></th>
@@ -255,8 +255,24 @@
 
         return sOut;
     }
+
+
     var oTable;
     $(document).ready(function() {
+
+
+        var dropDown = "<span class='dropdown'>"+
+                "<a class='label label-success dropdown-toggle' href='javascript:;' id='dropdownMenu1' data-toggle='dropdown'>"+
+                " 选 择 "+
+                "<span class='caret'></span>"+
+                "</a>"+
+                "<ul class='dropdown-menu' role='menu' aria-labelledby='dropdownMenu1'>"+
+                "<li role='presentation'><a class='changeStatus' data-status=1 role='menuitem' tabindex='-1'>代取中</a></li>"+
+                "<li role='presentation'><a class='changeStatus' data-status=0 role='menuitem' tabindex='-1'>失败</a></li>"+
+                "<li role='presentation'><a class='changeStatus' data-status=2 role='menuitem' tabindex='-1'>遗留中</a></li>"+
+                "<li role='presentation'><a class='changeStatus' data-status=3 role='menuitem' tabindex='-1'>完成</a></li>"+
+                "</ul> </span>";
+
 
         /*
          * Initialse DataTables, with no sorting on the 'details' column
@@ -281,7 +297,11 @@
                 { "data": "recv_phone", "orderable":true },
                 { "data": "time", "orderable":true },
                 { "data": "sender_status", "orderable":false },
-                { "data": "edit", "orderable": false}
+                { "data": "edit", "orderable": false,
+                    render:function(data, type, full, meta){
+                        return dropDown;
+                    }
+                }
             ],
             "oLanguage": {
                 "sProcessing": "正在加载中......",
@@ -321,19 +341,22 @@
             }
         } );
 
-        $('#hidden-table-info a.complete').live('click', function (e) {
-            e.preventDefault();
+        $('#hidden-table-info a.changeStatus').live('click', function (e) {
+            var status = $(this).attr('data-status');
             var nRow = $(this).parents('tr')[0];
             var jqInputs = $('td', nRow);
 
             //修改状态
             $.get("{:U('admin/send/updateStatus')}", {
-                        'send_id': jqInputs[1].innerHTML
+                        'send_no': jqInputs[1].innerHTML,
+                        'status': status
                     },
                     function (data) {
                         oTable.fnDraw(false);
                     });
         });
+
+
 
     } );
 
