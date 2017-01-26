@@ -63,4 +63,12 @@ class Models
             self::$_M_user= M('user');
         return self::$_M_user;
     }
+
+    private static $_M_pickup_pay =false;
+    public static function M_pickup_pay()
+    {
+        if(self::$_M_pickup_pay===false)
+            self::$_M_pickup_pay= M('pickup_pay');
+        return self::$_M_pickup_pay;
+    }
 }

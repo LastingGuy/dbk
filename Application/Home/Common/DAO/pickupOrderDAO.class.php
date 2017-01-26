@@ -12,7 +12,7 @@ namespace Home\Common\DAO;
 use Home\Common\Objects\PickupOrder;
 use Think\Exception;
 
-class pickupOrderDAO
+class pickupOrderDAO extends Models
 {
     public function newOrder(PickupOrder $order)
     {
@@ -54,6 +54,17 @@ class pickupOrderDAO
          }
     }
 
+    /**查找分页
+     * @param $userid
+     * @param $offset
+     * @param $limit
+     * @return mixed
+     */
+    public function selectByPagination($userid, $offset, $limit){
+        return self::M_pickup()->where("userid=$userid")->
+            field("pickup_no,receiver_name,receiver_phone")->
+            limit("$offset,$limit")->select();
+    }
 
     public static function orderID()
     {
@@ -62,5 +73,7 @@ class pickupOrderDAO
         $random = rand(1000,9999);
         return $date.$stamp.$random;
     }
+
+
 
 }
