@@ -69,10 +69,10 @@ class SendController extends Controller
             header('Location:'.U("Admin/Index/index"));
         }
 
-        $send_id = I("get.send_id");
-
+        $send_no = I("get.send_no");
+        $status = I("get.status");
         $object = new Common\SendDAOImpl();
-        $data['result'] = $object->updateStatus($send_id);
+        $data['result'] = $object->updateStatus($send_no, $status);
 
         $this->ajaxReturn($data);
     }

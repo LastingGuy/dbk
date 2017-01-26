@@ -398,7 +398,7 @@
 
             //修改状态
             $.get("{:U('admin/pickup/updateStatus')}", {
-                        'pickup_id': jqInputs[1].innerHTML
+                        'id': jqInputs[1].innerHTML
                     },
                     function (data) {
                         oTable.fnDraw(false);
