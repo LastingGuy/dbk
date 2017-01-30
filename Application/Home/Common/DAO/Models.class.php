@@ -71,4 +71,12 @@ class Models
             self::$_M_pickup_pay= M('pickup_pay');
         return self::$_M_pickup_pay;
     }
+
+    private static $_M_pickup_view =false;
+    public static function M_pickup_view()
+    {
+        if(self::$_M_pickup_view===false)
+            self::$_M_pickup_view= M('pickup_view');
+        return self::$_M_pickup_view;
+    }
 }

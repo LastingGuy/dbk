@@ -59,4 +59,10 @@ class UserDAO extends Models
         return $data[0]['uuid()'];
     }
 
+    /**查询openid
+     * @return mixed
+     */
+    public function getOpenid(){
+        return session("weixin_user");
+    }
 }

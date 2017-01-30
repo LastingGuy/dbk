@@ -18,37 +18,37 @@ class PickupDAOImpl implements IPickupDAO{
         $return_data['draw'] = $param["draw"];
         $search = $param['search']['value'];
         if($search!=null){
-            $return_data['recordsTotal'] = $model->where("school_id='$school' and express_status>=2 and express_status<=3 and (receiver_name like '$search%' or receiver_phone like '$search%' or pickup_no like '$search%')")->count();
+            $return_data['recordsTotal'] = $model->where("school_id='$school' and (express_status=2 or express_status=3 or express_status=8 or express_status=9) and (receiver_name like '$search%' or receiver_phone like '$search%' or pickup_no like '$search%')")->count();
             $return_data['recordsFiltered'] = $return_data['recordsTotal'];
             //获取订单
-            $return_data['data'] = $model->where("school_id='$school' and express_status>=2 and express_status<=3 and (receiver_name like '$search%' or receiver_phone like '$search%' or pickup_no like '$search%')")->order("pickup_id desc")->limit($param['start'],$param['length'])->select();
+            $return_data['data'] = $model->where("school_id='$school' and (express_status=2 or express_status=3 or express_status=8 or express_status=9) and (receiver_name like '$search%' or receiver_phone like '$search%' or pickup_no like '$search%')")->order("pickup_id desc")->limit($param['start'],$param['length'])->select();
 
         }else{
-            $return_data['recordsTotal'] = $model->where("school_id='$school' and express_status>=2 and express_status<=3")->count();
+            $return_data['recordsTotal'] = $model->where("school_id='$school' and (express_status=2 or express_status=3 or express_status=8 or express_status=9)")->count();
             $return_data['recordsFiltered'] = $return_data['recordsTotal'];
             //获取订单
-            $return_data['data'] = $model->where("school_id='$school' and express_status>=2 and express_status<=3")->order("pickup_id desc")->limit($param['start'],$param['length'])->select();
+            $return_data['data'] = $model->where("school_id='$school' and (express_status=2 or express_status=3 or express_status=8 or express_status=9)")->order("pickup_id desc")->limit($param['start'],$param['length'])->select();
 
         }
 
 
 
         foreach($return_data['data'] as $key=>$value){
-            if($return_data['data'][$key]['express_status'] == 2)
-            {
-                $return_data['data'][$key]['edit'] = "<a class=\" complete \" href=\"javascript:;\"><span class=\"label label-success\">完 成</span></a>";
-            }
-            elseif ($return_data['data'][$key]['express_status'] == 3)
-            {
-                $return_data['data'][$key]['edit'] = "<a class=\" complete \" href=\"javascript:;\"><span class=\"label label-danger\">未完成</span></a>";
-            }
+            $return_data['data'][$key]['edit'] = "";
 
             if($return_data['data'][$key]['express_status'] == 2){
-                $return_data['data'][$key]['express_status'] = "<div style='color:red'>进行中</div>";
+                $return_data['data'][$key]['express_status'] = "<div style='color:red'>代 拿</div>";
+            }
+            else if($return_data['data'][$key]['express_status'] == 8){
+                $return_data['data'][$key]['express_status'] = "<div style='color:red'>遗留中</div>";
+            }
+            else if($return_data['data'][$key]['express_status'] == 9){
+                $return_data['data'][$key]['express_status'] = "<div style='color:red'>失败中</div>";
             }
             else if($return_data['data'][$key]['express_status'] == 3){
                 $return_data['data'][$key]['express_status'] = "<div style='color:lightseagreen'>已完成</div>";
             }
+
             $return_data['data'][$key]['look'] = "<img src='".__ROOT__."/Public/assets/advanced-datatable/examples/examples_support/details_open.png'>";
         }
         return $return_data;
@@ -143,25 +143,11 @@ class PickupDAOImpl implements IPickupDAO{
     }
 
     //更新订单状态
-    public function updateStatus($pickup_no){
+    public function updateStatus($pickup_no, $status){
 
         $model = M("pickup");
-        $express_status = $model->where("pickup_no=$pickup_no")->getField('express_status');
-        if($express_status==2){
-            $data['express_status'] = 3;
-            $model->where("pickup_no=$pickup_no")->save($data);
-            //记录流水
-            FlowRecord::setComplete_PickUp($pickup_no,"订单号$pickup_no,更改为完成");
-            return 1;
-        }
-        else if($express_status==3){
-            $data['express_status'] = 2;
-            $model->where("pickup_no=$pickup_no")->save($data);
-            //记录流水
-            FlowRecord::setUnFinished_PickUp($pickup_no,"订单号$pickup_no,更改为未完成");
-            return 2;
-        }
-
+        $data['express_status'] = $status;
+        $model->where("pickup_no=$pickup_no")->save($data);
     }
 
     //完成指定时间内的订单
