@@ -35,17 +35,11 @@ class SendDAOImpl implements ISendDAO{
 
             $return_data['data'][$key]['edit'] = "";
 
-            if($return_data['data'][$key]['sender_status'] == 0){
-                $return_data['data'][$key]['sender_status'] = "<div style='color:red'>失 败</div>";
+            if($return_data['data'][$key]['sender_status'] == 2){
+                $return_data['data'][$key]['sender_status'] = "<div style='color:lightseagreen'>完成</div>";
             }
             else if($return_data['data'][$key]['sender_status'] == 1){
-                $return_data['data'][$key]['sender_status'] = "<div style='color:red'>代取中</div>";
-            }
-            else if($return_data['data'][$key]['sender_status'] == 2){
-                $return_data['data'][$key]['sender_status'] = "<div style='color:red'>遗留中</div>";
-            }
-            else if($return_data['data'][$key]['sender_status'] == 3){
-                $return_data['data'][$key]['sender_status'] = "<div style='color:lightseagreen'>已完成</div>";
+                $return_data['data'][$key]['sender_status'] = "<div style='color:red'>代寄</div>";
             }
 
             $return_data['data'][$key]['look'] = "<img src='".__ROOT__."/Public/assets/advanced-datatable/examples/examples_support/details_open.png'>";
@@ -147,7 +141,7 @@ class SendDAOImpl implements ISendDAO{
     public function completeDuringTheTime($begin_time, $end_time){
         $object = M();
         $school_id = session("admin_school");
-        $object->execute("update dbk_send_view set sender_status=3 where time>='$begin_time' and time<='$end_time' and school_id=$school_id");
+        $object->execute("update dbk_send_view set sender_status=2 where time>='$begin_time' and time<='$end_time' and school_id=$school_id");
         return 1;
     }
 }

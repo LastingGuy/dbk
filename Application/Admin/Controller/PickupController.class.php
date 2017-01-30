@@ -65,17 +65,17 @@ class PickupController extends Controller
         $object = new Common\PickupDAOImpl();
         $object->exportUserDefined($begin_time,$end_time);
     }
-    
+
     //修改订单状态
     public function updateStatus(){
         if(!session("?admin_id")) {
             header('Location:'.U("Admin/Index/index"));
         }
-        
-        $pickup_id = I("get.pickup_id");
 
+        $pickup_no = I("get.pickup_no");
+        $status = I("get.status");
         $object = new Common\PickupDAOImpl();
-        $data['result'] = $object->updateStatus($pickup_id);
+        $data['result'] = $object->updateStatus($pickup_no, $status);
 
         $this->ajaxReturn($data);
     }

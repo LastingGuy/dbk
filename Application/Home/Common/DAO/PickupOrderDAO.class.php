@@ -61,9 +61,8 @@ class pickupOrderDAO extends Models
      * @return mixed
      */
     public function selectByPagination($userid, $offset, $limit){
-        return self::M_pickup()->where("userid=$userid")->
-            field("pickup_no,receiver_name,receiver_phone")->
-            limit("$offset,$limit")->select();
+        return self::M_pickup_view()->where("userid=$userid")->
+        limit("$offset,$limit")->select();
     }
 
     public static function orderID()
