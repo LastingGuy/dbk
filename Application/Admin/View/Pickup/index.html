@@ -328,6 +328,18 @@
 
     $(document).ready(function() {
 
+        var dropDown = "<span class='dropdown'>"+
+                "<a class='label label-success dropdown-toggle' href='javascript:;' id='dropdownMenu1' data-toggle='dropdown'>"+
+                " 选 择 "+
+                "<span class='caret'></span>"+
+                "</a>"+
+                "<ul class='dropdown-menu' role='menu' aria-labelledby='dropdownMenu1'>"+
+                "<li role='presentation'><a class='changeStatus' data-status=2 role='menuitem' tabindex='-1'>代拿</a></li>"+
+                "<li role='presentation'><a class='changeStatus' data-status=9 role='menuitem' tabindex='-1'>失败</a></li>"+
+                "<li role='presentation'><a class='changeStatus' data-status=8 role='menuitem' tabindex='-1'>遗留</a></li>"+
+                "<li role='presentation'><a class='changeStatus' data-status=3 role='menuitem' tabindex='-1'>完成</a></li>"+
+                "</ul></span>";
+
         /*
          * Initialse DataTables, with no sorting on the 'details' column
          */
@@ -353,7 +365,11 @@
                 {"data": "pay_fee", "orderable": false},
                 {"data": "time_end", "orderable": false},
                 {"data": "express_status", "orderable": false},
-                {"data": "edit", "orderable": false},
+                {"data": "edit", "orderable": false,
+                    'render' :function(data, type, full, meta){
+                        return dropDown;
+                    }
+                }
             ],
             "oLanguage": {
                 "sProcessing": "正在加载中......",
@@ -404,6 +420,22 @@
                         oTable.fnDraw(false);
                     });
         });
+
+        $('#hidden-table-info a.changeStatus').live('click', function (e) {
+            var status = $(this).attr('data-status');
+            var nRow = $(this).parents('tr')[0];
+            var jqInputs = $('td', nRow);
+
+            //修改状态
+            $.get("{:U('admin/pickup/updateStatus')}", {
+                        'pickup_no': jqInputs[1].innerHTML,
+                        'status': status
+                    },
+                    function (data) {
+                        oTable.fnDraw(false);
+                    });
+        });
+
     });
 
     if (top.location != location) {
