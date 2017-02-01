@@ -21,14 +21,13 @@ class OrderController extends Controller
     public  function __construct()
     {
         //测试时使用
-        session('userid','aac6112c-e2c9-11e6-93f6-00163e12bad6');
-        session('openid','oF6atwIKrnG44UaIGPsSGDZUGmmk');
+//        session('userid','aac6112c-e2c9-11e6-93f6-00163e12bad6');
+//        session('openid','oF6atwIKrnG44UaIGPsSGDZUGmmk');
     }
 
     public function index()
     {
         echo '#^_^#';
-
     }
 
 
@@ -85,6 +84,9 @@ class OrderController extends Controller
         }
     }
 
+    /**微信支付代取订单
+     *
+     */
     public function weixinPayPickupOrder()
     {
         //验证登录
@@ -148,6 +150,10 @@ class OrderController extends Controller
         $this->ajaxReturn($r->generate());
     }
 
+    public function newSendOrder()
+    {
+
+    }
 
     public function getCities()
     {
