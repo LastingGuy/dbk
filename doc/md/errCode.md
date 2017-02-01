@@ -30,7 +30,7 @@ msg | code | success | body|addition
 用户未登录|13|false|null|登陆状态
 
 ###获得学校寝室和快递点信息（action:getSchoolInfo）
-接口：`interface\getSchoolInfo`
+####接口：`interface\getSchoolInfo`
 msg|code|success|body|addition
 ---|---|---|---|---|---
 获得学校信息成功|1|true|{dors:{},express:{},typesOfExpress{}}|
@@ -61,6 +61,27 @@ msg|code|success|body|addition
 未登录|2|false|NOTSIGN||
 参数错误|3|false|WrongParams|description|
 成功|1|true|OK|orderNo
+
+###支付代取订单（Action:weixinPayPickupOrder）
+####接口：
+`home\order\weixinPayPickupOrder`
+####method:`POST`
+####参数：
+```
+	{
+		orderNo: 170201275153233
+	}
+```
+
+####return
+||code|success|msg|body|addition
+----|-----|---|---|---|---|
+未登录|2|false|NOTSIGN
+参数错误|3|false|WrongParams
+免费订单|41|true|FreeOrder|null
+代金券支付|42|true|UseCoupon|null
+微信支付|43|true|WexinPay|{weixinPay参数}|
+
 
 
 

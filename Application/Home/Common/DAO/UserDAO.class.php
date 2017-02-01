@@ -42,7 +42,7 @@ class UserDAO extends Models
     public function isUserExist($openid)
     {
         $model = self::M_user();
-        if($model->where("openid = '$openid'")->find()){
+        if($info = $model->where("openid = '$openid'")->find()){
             return true;
         }
         else

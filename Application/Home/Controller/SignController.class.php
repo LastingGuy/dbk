@@ -47,6 +47,7 @@ class SignController extends Controller
         $accountSerivice = new AccountService();
         if($accountSerivice->WechatLogin($openid))
         {
+
             $response->setSuccess(true)->setCode($code['success'])->setMsg("SuccessToLogin");
             $this->ajaxReturn($response->generate());
         }
