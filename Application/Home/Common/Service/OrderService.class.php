@@ -167,6 +167,7 @@ class OrderService
         $input->SetOpenid($openid);
         $order = \WxPayApi::unifiedOrder($input);
 
+        print_r($order);
         if($order['return_code']!='SUCCESS')
         {
             return false;
