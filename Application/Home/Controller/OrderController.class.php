@@ -113,7 +113,13 @@ class OrderController extends Controller
             $this->ajaxReturn(ResponseGenerator::WRONGPARAMS("weixinPayPickupOrder")->generate());
         }
 
-
+        $t = $pickupPay->getPayFee();
+        if($t===null)
+        {
+            $r = new ResponseGenerator("weixinPayPickupOrder");
+            $r->setCode(40)->setSuccess(false)->setMsg("Fail");
+            $this->ajaxReturn($r->generate());
+        }
 
         if($orderService->pickupOrder_freeOrder($pickupPay)!==false)
         {
@@ -129,10 +135,10 @@ class OrderController extends Controller
             $this->ajaxReturn($r->generate());
         }
 
-        if($orderService->pickupOrder_WexinPay($orderNo,$pickupPay)!==false)
+        if($body = $orderService->pickupOrder_WexinPay($orderNo,$pickupPay)!==false)
         {
             $r = new ResponseGenerator("weixinPayPickupOrder");
-            $r->setCode(43)->setSuccess(true)->setMsg("UseCoupon");
+            $r->setCode(43)->setSuccess(true)->setMsg("weixinPay")->setBody($body);
             $this->ajaxReturn($r->generate());
         }
 

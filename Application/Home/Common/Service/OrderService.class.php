@@ -150,7 +150,7 @@ class OrderService
 
         //获得用户openid
         $openid = getOpenID();
-        echo $openid;
+
         $time_start = date("YmdHis");
         $time_expire = date("YmdHis", time() + 600);
 
@@ -167,7 +167,7 @@ class OrderService
         $input->SetOpenid($openid);
         $order = \WxPayApi::unifiedOrder($input);
 
-        print_r($order);
+
         if($order['return_code']!='SUCCESS')
         {
             return false;
@@ -184,7 +184,9 @@ class OrderService
 
         if($pickuppayDAO->update($pickupPay))
         {
-            return true;
+            $tools = new \JsApiPay();
+            $str = $tools->GetJsApiParameters($order);
+            return $str;
         }
 
         return false;
