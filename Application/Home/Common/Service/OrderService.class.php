@@ -137,7 +137,7 @@ class OrderService
     /**申请微信支付                       未完成
      * @param $pickupNo
      * @param PickupPay $pickupPay
-     * @return bool
+     * @return mixed
      *  log：
      *      userDAO 中为实现getOpenID()功能
      *      pickupDAO中为实现update（)功能
