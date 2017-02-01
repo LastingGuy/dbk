@@ -115,7 +115,7 @@ class OrderController extends Controller
 
         $fee = $pickupPay->getPayFee();
         echo $fee;
-        if($fee===null)
+        if($fee!==null)
         {
             $r = new ResponseGenerator("weixinPayPickupOrder");
             $r->setCode(40)->setSuccess(false)->setMsg("Fail");
