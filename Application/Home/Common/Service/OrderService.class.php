@@ -150,7 +150,7 @@ class OrderService
 
         //获得用户openid
         $openid = getOpenID();
-
+        echo $openid;
         $time_start = date("YmdHis");
         $time_expire = date("YmdHis", time() + 600);
 
