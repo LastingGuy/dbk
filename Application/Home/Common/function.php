@@ -29,6 +29,27 @@ function isMobile($mobile)
 }
 
 
+function setUserID($id)
+{
+    session('userid',$id);
+}
+
+function setOpenID($id)
+{
+    session('openid',$id);
+}
+
+function getUserID()
+{
+    return session('userid');
+}
+
+function getOpenID()
+{
+    return session('openid');
+}
+
+
 
    //获得城市
     function getCitys_local()
