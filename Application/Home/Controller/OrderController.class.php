@@ -22,7 +22,7 @@ class OrderController extends Controller
     {
         //测试时使用
         session('userid','aac6112c-e2c9-11e6-93f6-00163e12bad6');
-        session('openid','oF6atwIKrnG44UaIGPsSGDZUGmmc');
+        session('openid','oF6atwIKrnG44UaIGPsSGDZUGmmk');
     }
 
     public function index()
