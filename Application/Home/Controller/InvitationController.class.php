@@ -17,11 +17,16 @@ class InvitationController extends Controller
         parent::__construct();
 
         // test
-        // $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmmk';
-        // session('weixin_user',$openid);
+        $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmma';
+        session('weixin_user',$openid);
 
-        $this->invitationDAO = new Common\InvitationDAOImpl();
     }
+
+    public function index()
+    {
+        echo '#^_^# invitation test';
+    }
+
     //获取邀请码，没有邀请码随机生成后返回
     public function getCode(){
         $object = new Common\InvitationDAOImpl();
@@ -30,7 +35,7 @@ class InvitationController extends Controller
 
     //验证邀请码
     public function checkCode(){
-        $code = I('post.');
+        $code = I('get.code');
         $object = new Common\InvitationDAOImpl();
         $this->ajaxReturn($object->checkInvitation($code));
     }
@@ -38,6 +43,6 @@ class InvitationController extends Controller
     //验证优惠券,返回可抵消的金额
     public function checkCoupon(){
         $object = new Common\InvitationDAOImpl();
-        $this->ajaxReturn($object->checkInvitation());
+        $this->ajaxReturn($object->checkCoupon());
     }
 }

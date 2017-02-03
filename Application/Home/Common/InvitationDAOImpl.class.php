@@ -21,7 +21,7 @@ class InvitationDAOImpl implements IInvitationDAO
         if($code==null){
             do{
                 $code = $this->buildCode();
-            }while($model->where('invitation_code="'.$code.'"')->find()=='NULL');
+            }while($model->where('invitation_code="'.$code.'"')->find()==null);
 
             $data[invitation_code] = $code;
             $data[openid] = $openid;
@@ -49,14 +49,21 @@ class InvitationDAOImpl implements IInvitationDAO
     //验证邀请码
     public function checkInvitation($code)
     {
-        $model = M('invitation');
-        $condition['invitation_code'] = $code;
-        $inviter = $model->where($condition)->getField('openid');
-        if ($inviter != 'NULL'){
+        $invitationDAO = M('invitation');
+        $condition1['invitation_code'] = $code;
+        $inviter = $invitationDAO->where($condition1)->getField('openid');
+
+        $couponDAO = M('coupon');
+        $condition2['inviter'] = $inviter;
+        $condition2['openid'] = session('weixin_user');
+        $repeat = $couponDAO->where($condition2)->find();
+
+        if (!$repeat && $inviter != null && $inviter != session('weixin_user')){
             $this->sentTimesCoupon(session('weixin_user'),1,$inviter);
             $this->sentTimesCoupon($inviter,0,null);
+            return 'success';
         } else {
-            return '无效邀请码';
+            return 'no useful';
         }
     }
 
