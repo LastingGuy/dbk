@@ -17,8 +17,8 @@ class InvitationController extends Controller
         parent::__construct();
 
         // test
-        $openid = 'oF6atwIKrnG44UaIGPsSGDZUGmma';
-        session('weixin_user',$openid);
+        //$openid = 'oF6atwIKrnG44UaIGPsSGDZUGmma';
+        //session('weixin_user',$openid);
 
     }
 
