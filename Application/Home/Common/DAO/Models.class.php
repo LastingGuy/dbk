@@ -79,4 +79,12 @@ class Models
             self::$_M_pickup_view= M('pickup_view');
         return self::$_M_pickup_view;
     }
+
+    private static $_M_send = false;
+    public static function M_send()
+    {
+        if(self::$_M_send===false)
+            self::$_M_send = M('send');
+        return self::$_M_send;
+    }
 }

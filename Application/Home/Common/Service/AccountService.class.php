@@ -22,11 +22,24 @@ class AccountService
         $userDAO = new UserDAO();
         if($userDAO->isUserExist($openid))
         {
+            setOpenID($openid);
+            $userDAO = new UserDAO();
+            $userid = $userDAO->getUserIDByOpenID($openid);
+            setUserID($userid);
             return true;
         }
         else
         {
-            return $userDAO->addUser($openid);
+            if($userDAO->addUser($openid))
+            {
+                setOpenID($openid);
+                $userDAO = new UserDAO();
+                $userid = $userDAO->getUserIDByOpenID($openid);
+                setUserID($userid);
+                return true;
+            }
+            else
+                return false;
         }
     }
 

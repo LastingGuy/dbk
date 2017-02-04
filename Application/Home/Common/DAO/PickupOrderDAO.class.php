@@ -69,8 +69,8 @@ class pickupOrderDAO extends Models
     {
         $date = date('ymd');
         $stamp = time() % 100000;
-        $random = rand(1000,9999);
-        return $date.$stamp.$random;
+        $random = rand(100,999);
+        return $date.$stamp.'1'.$random;
     }
 
 

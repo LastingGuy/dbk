@@ -20,9 +20,9 @@ class OrderController extends Controller
 {
     public  function __construct()
     {
-        //测试时使用
-//        session('userid','aac6112c-e2c9-11e6-93f6-00163e12bad6');
-//        session('openid','oF6atwIKrnG44UaIGPsSGDZUGmmk');
+//        测试时使用
+        setUserID('aac6112c-e2c9-11e6-93f6-00163e12bad6');
+        setOpenID('oF6atwIKrnG44UaIGPsSGDZUGmmk');
     }
 
     public function index()
@@ -43,7 +43,7 @@ class OrderController extends Controller
         if(!IS_POST)
             $this->ajaxReturn(ResponseGenerator::WRONGPARAMS("newPickupOrder")->setBody(array('description'=>'无提交数据'))->generate());
 
-        $userid = session('userid');
+        $userid = getUserID();
         $data = I('post.');
         if(!$data)
         {
@@ -152,6 +152,52 @@ class OrderController extends Controller
 
     public function newSendOrder()
     {
+        if(notSign())
+            $this->ajaxReturn(ResponseGenerator::NOTSIGN('newSendOrder')->generate());
+
+        if(!IS_POST)
+            $this->ajaxReturn(ResponseGenerator::WRONGPARAMS("newSendOrder")->setBody(array('description'=>'无提交数据'))->generate());
+
+        $data = I('post.');
+        if(!$data)
+        {
+            $r = ResponseGenerator::WRONGPARAMS("newSendOrder")->setBody(array('description'=>'无提交数据'));
+            $this->ajaxReturn($r->generate());
+        }
+
+        $order = new Objects\SendOrder();
+        $order->setUserID(getUserID());
+        $order->setSenderName($data['sender']);
+        $order->setSenderPhone(($data['senderPhone']));
+        $order->setSchoolName($data['school']);
+        $order->setDormitoryAddress($data['dormitory']);
+        $order->setRecvName($data['receiver']);
+        $order->setRecvPhone($data['receiverPhone']);
+        $order->setGoods($data['goods']);
+        $order->setDestination($data['dest']);
+        $order->setRemarks($data['remarks']);
+
+        $orderService = new OrderService();
+        $result = $orderService->newSendOrder($order);
+        if($result===true)
+        {
+            $r = ResponseGenerator::OK('newSendOrder');
+            $body = array(
+                'orderNo'=>$order->getSendNo()
+            );
+            $r->setBody($body);
+            $this->ajaxReturn($r->generate());
+        }
+        else
+        {
+            $body = array(
+                'description'=>$result
+            );
+            $r = ResponseGenerator::WRONGPARAMS('newPickupOrder');
+            $r->setBody($body);
+            $this->ajaxReturn($r->generate());
+        }
+
 
     }
 

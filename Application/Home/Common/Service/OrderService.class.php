@@ -11,13 +11,15 @@ import("Org.WeixinPay.WxPay#Api",null,".php");
 
 use Home\Common\DAO\pickupOrderDAO;
 use Home\Common\DAO\PickupPayDAO;
+use Home\Common\DAO\SendDAO;
 use Home\Common\DAO\UserDAO;
 use Home\Common\Objects\PickupOrder;
 use Home\Common\Objects\PickupPay;
+use Home\Common\Objects\SendOrder;
 
 class OrderService
 {
-    /**新建订单
+    /**新建代取订单
      * @param PickupOrder $order
      * @return bool|string
      */
@@ -65,6 +67,41 @@ class OrderService
     }
 
 
+    /**新建代寄订单
+     * @param SendOrder $order
+     * @return bool|string
+     */
+    public function newSendOrder(SendOrder $order)
+    {
+        if(!$order->checkUser())
+            return '未登录';
+        if(!$order->checkSchoolName())
+            return '请选择学校';
+        if(!$order->checkDormitory())
+            return '请选择寝室';
+        if(!$order->checkSenderName())
+            return '请输入寄件人姓名';
+        if(!$order->checkSenderPhone())
+            return '寄件人电话非法';
+        if(!$order->checkRecvName())
+            return '请输入收件人姓名';
+        if(!$order->checkSenderPhone())
+            return '收件人电话非法';
+        if(!$order->checkGoods())
+            return '请输入几件物品';
+
+        $order->setStatus(0);
+        $order->setCurrentTime();
+
+        $dao = new SendDAO();
+        if(!$dao->addOrder($order))
+            return '新建订单失败，请重新尝试';
+
+        return true;
+
+    }
+
+
     /**获得pickupPay                          未完成
      * @param $pickupNo
      * @return mixed
@@ -76,6 +113,7 @@ class OrderService
         $pickupPayDao = new PickupPayDAO();
         return $pickupPayDao->findPickupPay($pickupNo);
     }
+
 
     public function pickupOrder_freeOrder(PickupPay $pickupPay)
     {
@@ -193,11 +231,6 @@ class OrderService
 
     }
 
-
-    public function finishWexinPay()
-    {
-
-    }
 
 
 }

@@ -5,7 +5,7 @@
  */
 function notSign()
 {
-    return !session('?userid');
+    return !session('?userid')||!session('?openid');
 }
 
 /**判断联系号码是否合法
