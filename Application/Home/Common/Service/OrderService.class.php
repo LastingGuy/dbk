@@ -9,15 +9,16 @@
 namespace Home\Common\Service;
 import("Org.WeixinPay.WxPay#Api",null,".php");
 
-use Home\Common\DAO\pickupOrderDAO;
 use Home\Common\DAO\PickupPayDAO;
-use Home\Common\DAO\UserDAO;
+use Home\Common\DAO\PickupOrderDAO;
+use Home\Common\DAO\SendDAO;
 use Home\Common\Objects\PickupOrder;
 use Home\Common\Objects\PickupPay;
+use Home\Common\Objects\SendOrder;
 
 class OrderService
 {
-    /**新建订单
+    /**新建代取订单
      * @param PickupOrder $order
      * @return bool|string
      */
@@ -65,6 +66,41 @@ class OrderService
     }
 
 
+    /**新建代寄订单
+     * @param SendOrder $order
+     * @return bool|string
+     */
+    public function newSendOrder(SendOrder $order)
+    {
+        if(!$order->checkUser())
+            return '未登录';
+        if(!$order->checkSchoolName())
+            return '请选择学校';
+        if(!$order->checkDormitory())
+            return '请选择寝室';
+        if(!$order->checkSenderName())
+            return '请输入寄件人姓名';
+        if(!$order->checkSenderPhone())
+            return '寄件人电话非法';
+        if(!$order->checkRecvName())
+            return '请输入收件人姓名';
+        if(!$order->checkSenderPhone())
+            return '收件人电话非法';
+        if(!$order->checkGoods())
+            return '请输入几件物品';
+
+        $order->setStatus(0);
+        $order->setCurrentTime();
+
+        $dao = new SendDAO();
+        if(!$dao->addOrder($order))
+            return '新建订单失败，请重新尝试';
+
+        return true;
+
+    }
+
+
     /**获得pickupPay                          未完成
      * @param $pickupNo
      * @return mixed
@@ -77,6 +113,11 @@ class OrderService
         return $pickupPayDao->findPickupPay($pickupNo);
     }
 
+
+    /**使用代金券支付
+     * @param PickupPay $pickupPay
+     * @return bool
+     */
     public function pickupOrder_freeOrder(PickupPay $pickupPay)
     {
         //价格为0，不申请微信支付
@@ -194,10 +235,111 @@ class OrderService
     }
 
 
-    public function finishWexinPay()
+    /**获得所有类型代取订单
+     * @param $offset
+     * @param int $count
+     * @return array|bool
+     */
+    public function getAllPickupOrders($offset,$count=10)
     {
+        $pickupOrder = new PickupOrderDAO();
+        $userid = getUserID();
+        $datas = $pickupOrder->selectByPagination($userid,$offset,$count+1);
+        if($datas)
+        {
+            $data = array();
+            for($i = 0;$i<($count<count($datas)?$count:count($datas));$i++)
+            {
+                /////选择返回字段
+                $order = $datas[$i];
+
+                $data[$i] = $order;
+            }
+            if(count($datas)<$count+1)
+                $next = -1;
+            else
+                $next = $offset+$count;
+            $r = array(
+                'next'=>$next,
+                'data'=>$data
+            );
+            return $r;
+        }
+        else
+        {
+            return false;
+        }
 
     }
 
+    /**获得代寄订单列表
+     * @param $offset
+     * @param int $count
+     * @return array|bool
+     */
+    public function getAllSendOrders($offset,$count=10)
+    {
+        $sendDAO = new SendDAO();
+        $userid = getUserID();
+        $datas = $sendDAO->selectByPagination($userid,$offset,$count+1);
+        if($datas)
+        {
+            $data = array();
+            for($i = 0;$i<($count<count($datas)?$count:count($datas));$i++)
+            {
+                /////选择返回字段
+                $order = $datas[$i];
 
+                $data[$i] = $order;
+            }
+            if(count($datas)<$count+1)
+                $next = -1;
+            else
+                $next = $offset+$count;
+            $r = array(
+                'next'=>$next,
+                'data'=>$data
+            );
+            return $r;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
+    /**获得代取订单详情
+     * @param $orderNo
+     * @return bool|mixed
+     */
+    public function getPickupOrderDetail($orderNo)
+    {
+        $pickupDAO = new PickupOrderDAO();
+        $order = $pickupDAO->orderDetail(getUserID(),$orderNo);
+        /////此处选择返回字段
+
+        //////////////////
+        if($order)
+            return $order;
+
+        return false;
+    }
+
+    /**获得代寄订单详情
+     * @param $orderNo
+     * @return bool|mixed
+     */
+    public function getSendOrderDetail($orderNo)
+    {
+        $sendDAO = new SendDAO();
+        $order = $sendDAO->orderDetail(getUserID(),$orderNo);
+        /////此处选择返回字段
+
+        //////////////////
+        if($order)
+            return $order;
+
+        return false;
+    }
 }

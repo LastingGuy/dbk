@@ -22,13 +22,37 @@ class AccountService
         $userDAO = new UserDAO();
         if($userDAO->isUserExist($openid))
         {
+            setOpenID($openid);
+            $userDAO = new UserDAO();
+            $userid = $userDAO->getUserIDByOpenID($openid);
+            setUserID($userid);
             return true;
         }
         else
         {
-            return $userDAO->addUser($openid);
+            if($userDAO->addUser($openid))
+            {
+                setOpenID($openid);
+                $userDAO = new UserDAO();
+                $userid = $userDAO->getUserIDByOpenID($openid);
+                setUserID($userid);
+                return true;
+            }
+            else
+                return false;
         }
     }
+
+    /**获得用户默认收获地址
+     * @param $userid
+     * @return bool
+     */
+    public function getUserDefaultInfo($userid)
+    {
+        $userDao = new UserDAO();
+        return $userDao->getDefaultInfo($userid);
+    }
+
 
 
 
