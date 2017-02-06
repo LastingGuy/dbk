@@ -43,6 +43,17 @@ class AccountService
         }
     }
 
+    /**获得用户默认收获地址
+     * @param $userid
+     * @return bool
+     */
+    public function getUserDefaultInfo($userid)
+    {
+        $userDao = new UserDAO();
+        return $userDao->getDefaultInfo($userid);
+    }
+
+
 
 
 }

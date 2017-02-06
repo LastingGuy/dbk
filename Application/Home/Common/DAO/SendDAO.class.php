@@ -56,6 +56,24 @@ class SendDAO extends Models
 
     }
 
+    /**查找分页
+     * @param $userid
+     * @param $offset
+     * @param $limit
+     * @return mixed
+     */
+    public function selectByPagination($userid, $offset, $limit){
+        $data = self::M_send()->where("userid='$userid'")->order("time desc")->
+        limit("$offset,$limit")->select();
+        return $data;
+    }
+
+    public function orderDetail($userid,$orderNo)
+    {
+        $model = self::M_send_view();
+        $data = $model->where("userid = '%s' and send_no = %s",$userid,$orderNo)->find();
+        return $data;
+    }
     private static function getOrderID()
     {
         $date = date('ymd');
@@ -63,4 +81,5 @@ class SendDAO extends Models
         $random = rand(100,999);
         return $date.$stamp.'2'.$random;
     }
+
 }

@@ -9,10 +9,9 @@
 namespace Home\Common\Service;
 import("Org.WeixinPay.WxPay#Api",null,".php");
 
-use Home\Common\DAO\pickupOrderDAO;
 use Home\Common\DAO\PickupPayDAO;
+use Home\Common\DAO\PickupOrderDAO;
 use Home\Common\DAO\SendDAO;
-use Home\Common\DAO\UserDAO;
 use Home\Common\Objects\PickupOrder;
 use Home\Common\Objects\PickupPay;
 use Home\Common\Objects\SendOrder;
@@ -115,6 +114,10 @@ class OrderService
     }
 
 
+    /**使用代金券支付
+     * @param PickupPay $pickupPay
+     * @return bool
+     */
     public function pickupOrder_freeOrder(PickupPay $pickupPay)
     {
         //价格为0，不申请微信支付
@@ -232,5 +235,111 @@ class OrderService
     }
 
 
+    /**获得所有类型代取订单
+     * @param $offset
+     * @param int $count
+     * @return array|bool
+     */
+    public function getAllPickupOrders($offset,$count=10)
+    {
+        $pickupOrder = new PickupOrderDAO();
+        $userid = getUserID();
+        $datas = $pickupOrder->selectByPagination($userid,$offset,$count+1);
+        if($datas)
+        {
+            $data = array();
+            for($i = 0;$i<($count<count($datas)?$count:count($datas));$i++)
+            {
+                /////选择返回字段
+                $order = $datas[$i];
 
+                $data[$i] = $order;
+            }
+            if(count($datas)<$count+1)
+                $next = -1;
+            else
+                $next = $offset+$count;
+            $r = array(
+                'next'=>$next,
+                'data'=>$data
+            );
+            return $r;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
+    /**获得代寄订单列表
+     * @param $offset
+     * @param int $count
+     * @return array|bool
+     */
+    public function getAllSendOrders($offset,$count=10)
+    {
+        $sendDAO = new SendDAO();
+        $userid = getUserID();
+        $datas = $sendDAO->selectByPagination($userid,$offset,$count+1);
+        if($datas)
+        {
+            $data = array();
+            for($i = 0;$i<($count<count($datas)?$count:count($datas));$i++)
+            {
+                /////选择返回字段
+                $order = $datas[$i];
+
+                $data[$i] = $order;
+            }
+            if(count($datas)<$count+1)
+                $next = -1;
+            else
+                $next = $offset+$count;
+            $r = array(
+                'next'=>$next,
+                'data'=>$data
+            );
+            return $r;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
+    /**获得代取订单详情
+     * @param $orderNo
+     * @return bool|mixed
+     */
+    public function getPickupOrderDetail($orderNo)
+    {
+        $pickupDAO = new PickupOrderDAO();
+        $order = $pickupDAO->orderDetail(getUserID(),$orderNo);
+        /////此处选择返回字段
+
+        //////////////////
+        if($order)
+            return $order;
+
+        return false;
+    }
+
+    /**获得代寄订单详情
+     * @param $orderNo
+     * @return bool|mixed
+     */
+    public function getSendOrderDetail($orderNo)
+    {
+        $sendDAO = new SendDAO();
+        $order = $sendDAO->orderDetail(getUserID(),$orderNo);
+        /////此处选择返回字段
+
+        //////////////////
+        if($order)
+            return $order;
+
+        return false;
+    }
 }

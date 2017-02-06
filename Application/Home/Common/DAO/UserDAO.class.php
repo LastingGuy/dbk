@@ -68,4 +68,15 @@ class UserDAO extends Models
         return $data;
     }
 
+    public function getDefaultInfo($userid)
+    {
+        $model = self::M_defaultInfo();
+        $data = $model->where("userid = '$userid'")->find();
+        if($data)
+        {
+            return $data;
+        }
+        else
+            return false;
+    }
 }

@@ -12,7 +12,7 @@ namespace Home\Common\DAO;
 use Home\Common\Objects\PickupOrder;
 use Think\Exception;
 
-class pickupOrderDAO extends Models
+class PickupOrderDAO extends Models
 {
     public function newOrder(PickupOrder $order)
     {
@@ -61,8 +61,16 @@ class pickupOrderDAO extends Models
      * @return mixed
      */
     public function selectByPagination($userid, $offset, $limit){
-        return self::M_pickup_view()->where("userid=$userid")->
+        $data = self::M_pickup()->where("userid='$userid' and express_status<100")->order("time desc")->
         limit("$offset,$limit")->select();
+        return $data;
+    }
+
+    public function orderDetail($userid,$orderNo)
+    {
+        $model = self::M_pickup_view();
+        $data = $model->where("userid = '%s' and pickup_no = %s",$userid,$orderNo)->find();
+        return $data;
     }
 
     public static function orderID()
@@ -73,6 +81,11 @@ class pickupOrderDAO extends Models
         return $date.$stamp.'1'.$random;
     }
 
+    public function changeStatus($orderNo,$status)
+    {
+        $model = self::M_pickup();
+        return $model->where("pickup_no = '%s'",$orderNo)->setField("express_status",$status);
+    }
 
 
 }

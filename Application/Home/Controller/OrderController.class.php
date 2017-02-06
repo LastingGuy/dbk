@@ -13,6 +13,7 @@ use Home\Common\DAO;
 use Home\Common\Objects;
 use Home\Common\Service\AddressService;
 use Home\Common\Service\OrderService;
+use Home\Common\Util\PickupPayNotify;
 use Think\Controller;
 use Think\Crypt\Driver\Think;
 
@@ -21,8 +22,8 @@ class OrderController extends Controller
     public  function __construct()
     {
 //        测试时使用
-        setUserID('aac6112c-e2c9-11e6-93f6-00163e12bad6');
-        setOpenID('oF6atwIKrnG44UaIGPsSGDZUGmmk');
+//        setUserID('d7eac19a-de42-11e6-93f6-00163e12bad6');
+//        setOpenID('oF6atwIKrnG44UaIGPsSGDZUGmmk');
     }
 
     public function index()
@@ -150,6 +151,9 @@ class OrderController extends Controller
         $this->ajaxReturn($r->generate());
     }
 
+    /**
+     * 新建代取订单
+     */
     public function newSendOrder()
     {
         if(notSign())
@@ -200,6 +204,141 @@ class OrderController extends Controller
 
 
     }
+
+    /**
+     * 获得代取订单列表
+     */
+    public function getAllPickupOrders()
+    {
+        if(notSign())
+        {
+            $this->ajaxReturn(ResponseGenerator::NOTSIGN('getAllPickupOrders')->generate());
+        }
+
+        $data = I('post.');
+
+        $orderService = new OrderService();
+        if(!isset($data['offset']))
+            $data['offset']=0;
+
+        //如果count值小于1，则默认获取10条数据
+        if($data['count']<1)
+            $data['count']=10;
+
+        $datas = $orderService->getAllPickupOrders($data['offset'],$data['count']);
+        if($datas!==false)
+        {
+            $r = ResponseGenerator::OK('getAllPickupOrders')
+                ->setMsg("SucessToGetOrders")->setBody($datas);
+            $this->ajaxReturn($r->generate());
+        }
+        else
+        {
+            $r = ResponseGenerator::FAIL('getAllPickupOrders')
+                ->setMsg('FailToFetchData');
+            $this->ajaxReturn($r->generate());
+        }
+
+    }
+
+    /**
+     * 获得代寄订单列表
+     */
+    public function getAllSendOrders()
+    {
+        if(notSign())
+        {
+            $this->ajaxReturn(ResponseGenerator::NOTSIGN('getAllSendOrders')->generate());
+        }
+
+        $data = I('post.');
+
+        $orderService = new OrderService();
+        if(!isset($data['offset']))
+            $data['offset']=0;
+
+        //如果count值小于1，则默认获取10条数据
+        if($data['count']<1)
+            $data['count']=10;
+
+        $datas = $orderService->getAllSendOrders($data['offset'],$data['count']);
+        if($datas!==false)
+        {
+            $r = ResponseGenerator::OK('getAllSendOrders')
+                ->setMsg("SucessToGetOrders")->setBody($datas);
+            $this->ajaxReturn($r->generate());
+        }
+        else
+        {
+            $r = ResponseGenerator::FAIL('getAllSendOrders')
+                ->setMsg('FailToFetchData');
+            $this->ajaxReturn($r->generate());
+        }
+    }
+
+    /**
+     * 获得代取订单详情
+     */
+    public function getPickupOrderDetail()
+    {
+        //登陆验证
+        if(notSign())
+        {
+            $this->ajaxReturn(ResponseGenerator::NOTSIGN('getPickupOrderDetail')->generate());
+        }
+
+        $orderNo = I('post.orderNo');
+        if($orderNo=="")
+        {
+            $this->ajaxReturn(ResponseGenerator::WRONGPARAMS('getPickupOrderDetail')->generate());
+        }
+
+        $orderService = new OrderService();
+        $data = $orderService->getPickupOrderDetail($orderNo);
+        if($data===false)
+        {
+            $r = ResponseGenerator::FAIL('getPickupOrderDetail');
+            $this->ajaxReturn($r->generate());
+        }
+        else
+        {
+            $r = ResponseGenerator::OK('getPickupOrderDetail',$data);
+            $this->ajaxReturn($r->generate());
+        }
+
+    }
+
+    /**
+     * 获得代寄订单详情
+     */
+    public function getSendOrderDetail()
+    {
+        //登陆验证
+        if(notSign())
+        {
+            $this->ajaxReturn(ResponseGenerator::NOTSIGN('getSendOrderDetail')->generate());
+        }
+
+        $orderNo = I('post.orderNo');
+        if($orderNo=="")
+        {
+            $this->ajaxReturn(ResponseGenerator::WRONGPARAMS('getSendOrderDetail')->generate());
+        }
+
+        $orderService = new OrderService();
+        $data = $orderService->getSendOrderDetail($orderNo);
+        if($data===false)
+        {
+            $r = ResponseGenerator::FAIL('getSendOrderDetail');
+            $this->ajaxReturn($r->generate());
+        }
+        else
+        {
+            $r = ResponseGenerator::OK('getSendOrderDetail',$data);
+            $this->ajaxReturn($r->generate());
+        }
+    }
+
 
     public function getCities()
     {

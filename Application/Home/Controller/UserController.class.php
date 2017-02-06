@@ -13,7 +13,7 @@ use Home\Common\ResponseGenerator;
 use Home\Common\Service\AccountService;
 use Think\Controller;
 
-class SignController extends Controller
+class UserController extends Controller
 {
     public function wechatlogin()
     {
@@ -57,25 +57,24 @@ class SignController extends Controller
     }
 
 
+    public function defaultInfo()
+    {
+        if(notSign())
+        {
+            $this->ajaxReturn(ResponseGenerator::NOTSIGN('defaultInfo')->generate());
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        $userService = new AccountService();
+        $data = $userService->getUserDefaultInfo(getUserID());
+        if($data===false)
+        {
+            $r = ResponseGenerator::FAIL('defaultInfo')->setMsg("NoDefaultInfo");
+            $this->ajaxReturn($r->generate());
+        }
+        else
+        {
+            $r = ResponseGenerator::OK('defaultInfo')->setBody($data);
+            $this->ajaxReturn($r->generate());
+        }
+    }
 }
