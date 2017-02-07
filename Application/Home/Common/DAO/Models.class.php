@@ -79,4 +79,29 @@ class Models
             self::$_M_pickup_view= M('pickup_view');
         return self::$_M_pickup_view;
     }
+
+    private static $_M_send_view =false;
+    public static function M_send_view()
+    {
+        if(self::$_M_send_view===false)
+            self::$_M_send_view = M('send_view');
+        return self::$_M_send_view;
+    }
+
+
+    private static $_M_send = false;
+    public static function M_send()
+    {
+        if(self::$_M_send===false)
+            self::$_M_send = M('send');
+        return self::$_M_send;
+    }
+
+    public static $_M_defaultinfo = false;
+    public static function M_defaultInfo()
+    {
+        if(self::$_M_defaultinfo === false)
+            self::$_M_defaultinfo = M('defaultinfo');
+        return self::$_M_defaultinfo;
+    }
 }

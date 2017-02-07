@@ -42,7 +42,7 @@ class UserDAO extends Models
     public function isUserExist($openid)
     {
         $model = self::M_user();
-        if($model->where("openid = '$openid'")->find()){
+        if($info = $model->where("openid = '$openid'")->find()){
             return true;
         }
         else
@@ -62,7 +62,21 @@ class UserDAO extends Models
     /**查询openid
      * @return mixed
      */
-    public function getOpenid(){
-        return session("weixin_user");
+    public function getUserIDByOpenID($openID){
+        $model = self::M_user();
+        $data = $model->where("openid = '%s'",$openID)->getField("userid");
+        return $data;
+    }
+
+    public function getDefaultInfo($userid)
+    {
+        $model = self::M_defaultInfo();
+        $data = $model->where("userid = '$userid'")->find();
+        if($data)
+        {
+            return $data;
+        }
+        else
+            return false;
     }
 }

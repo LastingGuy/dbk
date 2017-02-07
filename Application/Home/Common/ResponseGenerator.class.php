@@ -123,7 +123,7 @@ class ResponseGenerator
         return new ResponseGenerator($action,true,1,'OK',$body);
     }
 
-    public static function WRONGPARAMS($action,$body)
+    public static function WRONGPARAMS($action,$body=null)
     {
         return new ResponseGenerator($action,false,3,'WrongParams',$body);
     }

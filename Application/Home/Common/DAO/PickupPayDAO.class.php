@@ -7,6 +7,7 @@
  */
 
 namespace Home\Common\DAO;
+use Admin\Model\PickupModel;
 use Home\Common\Objects\PickupPay;
 class PickupPayDAO extends Models
 {
@@ -18,7 +19,7 @@ class PickupPayDAO extends Models
     public function insertPickupWithPay($pickup_pay)
     {
         $data['pickup_id'] = $pickup_pay->getPickupId();
-        $data['tota_fee'] = $pickup_pay->getTotalFee();
+        $data['total_fee'] = $pickup_pay->getTotalFee();
         $data['pay_fee'] = $pickup_pay->getPayFee();
         $data['coupon_id'] = $pickup_pay->getCouponId();
         $data['pay_status'] = $pickup_pay->getPayStatus();
@@ -36,7 +37,7 @@ class PickupPayDAO extends Models
     public function update($pickup_pay){
         $data['pickup_id'] = $pickup_pay->getPickupId();
         $data['total_fee'] = $pickup_pay->getTotalFee();
-        $data['pay_fee'] = $pickup_pay->getPayStatus();
+        $data['pay_fee'] = $pickup_pay->getPayFee();
         $data['coupon_id'] = $pickup_pay->getCouponId();
         $data['pay_status'] = $pickup_pay->getPayStatus();
         $data['time_start'] = $pickup_pay->getTimeStart();
@@ -53,9 +54,13 @@ class PickupPayDAO extends Models
      * @param  $pickup_no
      * @return PickupPay|false
      */
-    public function findPickupPay($pickup_no){
-        if($data = self::M_user()->where("pickup_no=$pickup_no")->find()){
-            $data = self::M_pickup_pay()->where("pickup_id="+$data['pickip_id'])->find();
+    public function findPickupPay($pickup_no)
+    {
+        $pickupModel = self::M_pickup();
+        if($data = $pickupModel->where("pickup_no=$pickup_no")->find())
+        {
+            $pickupPayModel = self::M_pickup_pay();
+            $data = $pickupPayModel->where("pickup_id=".$data['pickup_id'])->find();
             $object = new PickupPay();
             $object->setCouponId($data['coupon_id'])->setPayFee($data['pay_fee'])->setPayStatus($data['pay_status'])
                 ->setPickupId($data['pickup_id'])->setRefundId($data['refund_id'])->setRefundTime($data['refund_time'])
