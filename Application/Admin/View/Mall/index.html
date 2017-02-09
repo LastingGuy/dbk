@@ -137,14 +137,14 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label"> &nbsp;&nbsp;&nbsp;一 级 分 类</label>
                         <div class="col-md-6 col-xs-11">
-                            <select id="classify1" class="form-control" name="classify1" onchange="getClassify2()">
+                            <select id="classify1" class="form-control" name="classify1" onchange="getClassify2($(this))">
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-4 control-label"> &nbsp;&nbsp;&nbsp;二 级 分 类</label>
                         <div class="col-md-6 col-xs-11">
-                            <select id="classify2" class="form-control" name="classify2">
+                            <select id="classify1_2" class="form-control" name="classify1_2">
                             </select>
                         </div>
                     </div>
@@ -172,116 +172,70 @@
                     &times;
                 </button>
                 <h4 class="modal-title">
-                    一键完成 —— 选择日期
+                    编辑商品
                 </h4>
             </div>
             <div class="modal-body">
                 <form action="#" class="form-horizontal tasi-form">
                     <div class="form-group">
-                        <label class="control-label col-md-3">
-                            &nbsp;&nbsp;开 始 时 间
-                        </label>
-                        <div class="col-md-6 col-xs-11">
-                            <div class="input-group date dtp" id="complete_start">
-                                <input id="begin_time2" type="text" class="form-control" readonly="" size="16">
-                          <span class="input-group-btn">
-                            <button type="button" class="btn btn-info date-set">
-                              <i class="fa fa-calendar">
-                              </i>
-                            </button>
-                          </span>
-                            </div>
+                        <label class="col-md-4 control-label"> &nbsp;&nbsp;&nbsp;商 品 id</label>
+                        <div class="col-md-5 col-xs-11">
+                            <input id="goods_id2" type="text" placeholder="请输入商品名" class="form-control" readonly>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-3">
-                            &nbsp;&nbsp;截 止 时 间
-                        </label>
-                        <div class="col-md-6 col-xs-11">
-                            <div class="input-group date dtp"  id="complete_end">
-                                <input id="end_time2" type="text" class="form-control" readonly="" size="16">
-                          <span class="input-group-btn">
-                            <button type="button" class="btn btn-info date-set">
-                              <i class="fa fa-calendar">
-                              </i>
-                            </button>
-                          </span>
-                            </div>
+                        <label class="col-md-4 control-label"> &nbsp;&nbsp;&nbsp;商 品 名</label>
+                        <div class="col-md-5 col-xs-11">
+                            <input id="goods_name2" type="text" placeholder="请输入商品名" class="form-control">
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"> &nbsp;&nbsp;&nbsp;商 品 价 格</label>
+                        <div class="col-md-5 col-xs-11">
+                            <input id="goods_price2" type="text" placeholder="请输入商品价格" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"> &nbsp;&nbsp;&nbsp;商 品 链 接</label>
+                        <div class="col-md-5 col-xs-11">
+                            <input id="goods_link2" type="text" placeholder="请输入商品链接" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"> &nbsp;&nbsp;&nbsp;商 品 描 述</label>
+                        <div class="col-md-6 col-xs-11">
+                            <textarea id="goods_description2" rows="5" cols="70" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"> &nbsp;&nbsp;&nbsp;一 级 分 类</label>
+                        <div class="col-md-6 col-xs-11">
+                            <select id="eclassify1" class="form-control" name="classify1" onchange="getClassify2($(this),null)">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"> &nbsp;&nbsp;&nbsp;二 级 分 类</label>
+                        <div class="col-md-6 col-xs-11">
+                            <select id="eclassify1_2" class="form-control" name="eclassify1_2">
+                            </select>
+                        </div>
+                    </div>
+
                 </form>
             </div>
             <div class="modal-footer">
                 <button id="close2" type="button" class="btn btn-default"
                         data-dismiss="modal">关 闭
                 </button>
-                <button type="button" class="btn btn-primary" onclick="completeAll()">
-                    提 交
+                <button type="button" class="btn btn-primary" onclick="update()">
+                    编 辑
                 </button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
-<div class="modal fade" id="myModal3" tabindex="-1" role="dialog"
-     aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close"
-                        data-dismiss="modal" aria-hidden="true">
-                    &times;
-                </button>
-                <h4 class="modal-title">
-                   取消完成 —— 选择日期
-                </h4>
-            </div>
-            <div class="modal-body">
-                <form action="#" class="form-horizontal tasi-form">
-                    <div class="form-group">
-                        <label class="control-label col-md-3">
-                            &nbsp;&nbsp;开 始 时 间
-                        </label>
-                        <div class="col-md-6 col-xs-11">
-                            <div class="input-group date dtp" id="complete_start3">
-                                <input id="begin_time3" type="text" class="form-control" readonly="" size="16">
-                          <span class="input-group-btn">
-                            <button type="button" class="btn btn-info date-set">
-                              <i class="fa fa-calendar">
-                              </i>
-                            </button>
-                          </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3">
-                            &nbsp;&nbsp;截 止 时 间
-                        </label>
-                        <div class="col-md-6 col-xs-11">
-                            <div class="input-group date dtp"  id="complete_end3">
-                                <input id="end_time3" type="text" class="form-control" readonly="" size="16">
-                          <span class="input-group-btn">
-                            <button type="button" class="btn btn-info date-set">
-                              <i class="fa fa-calendar">
-                              </i>
-                            </button>
-                          </span>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button id="close3" type="button" class="btn btn-default"
-                        data-dismiss="modal">关 闭
-                </button>
-                <button type="button" class="btn btn-primary" onclick="uncompleteAll()">
-                    提 交
-                </button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
-</div>
+
 
 <!-- BEGIN JS -->
 <script language="javascript" src="__ROOT__/Public/assets/advanced-datatable/media/js/jquery.js"></script><!-- ADVANCE DATATABLE JS -->
@@ -314,25 +268,31 @@
         return sOut;
     }
 
-    function getClassify1(){
+    function getClassify1(obj){
+
+        obj.empty();
         $.get("{:U('admin/mall/getClassify1')}", {
                 },
                 function (data) {
-                    var html = "<option value='' selected='selected'>请选择</option>";
-                    $("#classify1").append(html);
+                    var html = "<option value=''>请选择</option>";
+                    obj.append(html);
                     for(var i in data){
                         html = "<option value='"+i+"'>"+data[i]+"</option>";
-                        $("#classify1").append(html);
+                        obj.append(html);
                     }
                 });
     }
 
-    function getClassify2(){
-
-        var classify1 = $('#classify1').val();
+    function getClassify2(object,value){
+        var classify1 = object.val();
+        var str;
+        if(object.context.id!=undefined)
+            str = "#"+object.context.id+"_2";
+        else
+            str = object.selector+"_2";
+        var selector = $(""+str);
+        selector.empty();
         if(classify1==""){
-            $("#classify2").empty();
-            $("#classify2").append("<option value='' selected> </option>");
             return ;
         }
         $.get("{:U('admin/mall/getClassify2')}", {
@@ -342,8 +302,10 @@
                     var html;
                     for(var i in data){
                         html = "<option value='"+i+"'>"+data[i]+"</option>";
-                        $("#classify2").append(html);
-                }
+                        selector.append(html);
+                    }
+                    if(value!=null)
+                        selector.val(value);
                 });
     }
 
@@ -351,8 +313,8 @@
 
     $(document).ready(function() {
 
-        getClassify1();
-        getClassify2();
+        getClassify1($('#classify1'));
+        getClassify1($('#eclassify1'));
         var dropDown = "<span class='dropdown'>"+
                 "<a class='label label-success dropdown-toggle' href='javascript:;' id='dropdownMenu1' data-toggle='dropdown'>"+
                 " 选 择 "+
@@ -362,7 +324,7 @@
                 "<li role='presentation'><a class='changeStatus' data-status=0 role='menuitem' tabindex='-1'>下线</a></li>"+
                 "<li role='presentation'><a class='changeStatus' data-status=1 role='menuitem' tabindex='-1'>上线</a></li>"+
                 "</ul></span>";
-        var editButton = "<a class='label label-success' href='javascript:;' id='dropdownMenu1' data-toggle=''>编 辑</a>";
+        var editButton = "<a class='label label-success edit' href='javascript:;' type='button'  data-toggle='modal' data-target='#myModal2'>编 辑</a>";
 
         /*
          * Initialse DataTables, with no sorting on the 'details' column
@@ -385,7 +347,9 @@
                 {"data": "goods_name", "orderable": false},
                 {"data": "goods_price", "orderable": true},
                 {"data": "goods_page_view", "orderable": true},
-                {"data": "classify2_id", "orderable": false},
+                {"data": function data( row, type, set, meta ){
+                    return row['classify1_description']+" "+row['classify2_description'];
+                }, "orderable": false},
                 {"data": "goods_time", "orderable": false},
                 {"data": "goods_online", "orderable": false,
                     'render': function (data, type, full, meta) {
@@ -440,19 +404,6 @@
             }
         });
 
-        $('#hidden-table-info a.complete').live('click', function (e) {
-            e.preventDefault();
-            var nRow = $(this).parents('tr')[0];
-            var jqInputs = $('td', nRow);
-
-            //修改状态
-            $.get("{:U('admin/pickup/updateStatus')}", {
-                        'id': jqInputs[1].innerHTML
-                    },
-                    function (data) {
-                        oTable.fnDraw(false);
-                    });
-        });
 
         $('#hidden-table-info a.changeStatus').live('click', function (e) {
             var status = $(this).attr('data-status');
@@ -469,67 +420,60 @@
                     });
         });
 
-    });
+        $('#hidden-table-info a.edit').live('click', function (e) {
+            var nRow = $(this).parents('tr')[0];
+            var jqInputs = $('td', nRow);
 
-    if (top.location != location) {
-        top.location.href = document.location.href;
-    }
-    $(function () {
-        window.prettyPrint && prettyPrint();
-
-        $('.dtp').datetimepicker({
-            language: "zh-CN",
-            format: "yyyy-mm-dd hh:ii",
-            startView: "month",
-            minView: "hour",
-            maxView: "decade",
-            todayHighlight: true,
-            autoclose: true,
-            minuteStep:30
+            //修改状态
+            $.get("{:U('admin/mall/getOneGoods')}", {
+                        'goods_id': jqInputs[1].innerHTML
+                    },
+                    function (data) {
+                        $("#goods_id2").val(data['goods_id']);
+                        $("#goods_name2").val(data['goods_name']);
+                        $("#goods_price2").val(data['goods_price']);
+                        $("#goods_link2").val(data['goods_link']);
+                        $("#goods_description2").val(data['goods_description']);
+                        $("#eclassify1").val(data['classify1_id']);
+                        getClassify2($("#eclassify1"),data['classify2_id']);
+                    });
         });
-
-        Date.prototype.Format = function(fmt)
-        { //author: meizz   
-            var o = {
-                "M+" : this.getMonth()+1,                 //月份   
-                "d+" : this.getDate(),                    //日   
-                "h+" : this.getHours(),                   //小时   
-                "m+" : this.getMinutes(),                 //分   
-                "s+" : this.getSeconds(),                 //秒   
-                "q+" : Math.floor((this.getMonth()+3)/3), //季度   
-                "S"  : this.getMilliseconds()             //毫秒   
-            };
-            if(/(y+)/.test(fmt))
-                fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
-            for(var k in o)
-                if(new RegExp("("+ k +")").test(fmt))
-                    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
-            return fmt;
-        };
-
-        var end_time = new Date();
-        end_time.setHours(16);
-        end_time.setMinutes(0);
-        var start_time = new Date(end_time.getTime()- 24*60*60*1000);
-        $('#begin_time2').val(start_time.Format("yyyy-MM-dd hh:mm"));
-        $('#end_time2').val(end_time.Format("yyyy-MM-dd hh:mm"));
     });
-
-
 
     function submit(){
         $.post("{:U('admin/mall/add')}", {
-                    goods_name: $('#begin_time2').val(),
-                    goods_price: $('#end_time2').val(),
+                    goods_name: $('#goods_name').val(),
+                    goods_price: $('#goods_price').val(),
                     goods_link: $('#goods_link').val(),
                     goods_description: $("#goods_description").val(),
-                    classify2_id: $("#classify2").val()
+                    classify2_id: $("#classify1_2").val()
                 },
-                function(){
-                    $('#close2').click();
+                function(data){
+                    $('#close').click();
+                    if(data>=0){
+                        alert('添加成功!');
+                    }
                     oTable.fnDraw(false);
                 });
 
+    }
+
+    function update(){
+        $.post("{:U('admin/mall/update')}", {
+                    goods_id: $('#goods_id2').val(),
+                    goods_name: $('#goods_name2').val(),
+                    goods_price: $('#goods_price2').val(),
+                    goods_link: $('#goods_link2').val(),
+                    goods_description: $("#goods_description2").val(),
+                    classify2_id: $("#eclassify1_2").val()
+                },
+                function(data){
+                    $('#close2').click();
+                    if(data>=1){
+                        alert('编辑成功!');
+                    }
+                    oTable.fnDraw(false);
+                });
     }
 
 </script>
