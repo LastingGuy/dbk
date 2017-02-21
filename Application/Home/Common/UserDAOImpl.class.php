@@ -1,11 +1,17 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: lenovo
+ * User: Zheng chengyang
  * Date: 2016/10/24
  * Time: 21:35
+ * Discription:
+ *  用户DAO
+ * LOG：
+ *    2017/1/22：数据库变更，
  */
 namespace Home\Common;
+
+use Think\Model;
 
 class UserDAOImpl implements IUserDAO{
 
@@ -26,15 +32,17 @@ class UserDAOImpl implements IUserDAO{
         {
             $openid = $weixin_user['openid'];
             session('access_token',$weixin_user['access_token']);
-            $model = D("weixin_user");
+            $model = D("user");
+
             if($model->where("openid = '$openid'")->find()){
-                session("weixin_user",$openid);
+                session("userid",'');
             }
             else{
                 $data['openid'] = $openid;
                 $data['register_time'] = date("Y-m-d H:i:s");
-                if($model->data($data)->add()){
-                    session("weixin_user",$openid);
+                $data['userid'] = self::getUUID();
+                if($model->create($data)->add()){
+                    session("userid",$data['userid']);
                 }
             }
             return true;
@@ -45,20 +53,22 @@ class UserDAOImpl implements IUserDAO{
         }
     }
 
-    //获取微信用户个人信息
+    /**获取微信用户个人信息
+     * @return bool
+     */
     public function getUserInfo()
     {
-        if(!session('?weixin_user'))
+        if(!session('?userid'))
         {
             return false;
         }
         else
         {
-            $openid = session('weixin_user');
+            $userid = session('userid');
             $access_token = session('access_token');
 
             $url = "https://api.weixin.qq.com/sns/userinfo?access_token=".$access_token.
-            "&openid=".$openid.
+            "&openid=".$userid.
             "&lang=zh_CN";
             $content = file_get_contents($url);
             if($info = json_decode($content,true))
@@ -82,9 +92,9 @@ class UserDAOImpl implements IUserDAO{
     public function getUserDefaultInfo($id)
     {
         $response = new ResponseGenerator('getUserDefaultInfo');
-        $openid = $id;
+        $userid = $id;
         $model = M('defaultinfo');
-        $data = $model->where("openid='$openid'")->find();
+        $data = $model->where("userid='$userid'")->find();
         if($data)
         {
             $body = array(
@@ -122,5 +132,14 @@ class UserDAOImpl implements IUserDAO{
         }
     }
 
+    /**新建UUID
+     * @return mixed
+     */
+    private static function getUUID()
+    {
+        $model = new Model();
+        $data = $model->query("select uuid()");
+        return $data[0]['uuid()'];
+    }
 
 }

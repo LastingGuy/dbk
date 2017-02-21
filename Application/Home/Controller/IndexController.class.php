@@ -2,6 +2,8 @@
 namespace Home\Controller;
 use Think\Controller;
 use Home\Common;
+use Think\Exception;
+
 class IndexController extends Controller{
     //登陆
     public function index()
@@ -11,23 +13,24 @@ class IndexController extends Controller{
 //         session('weixin_user',$openid);
 //         $this->redirect('home/index/order');
 
-        if(I("get.code")!='')
-        {
-            //查看用户是否已经写入数据库，没有则写入
-            $object = new Common\UserDAOImpl();
-            if($object->login())
-            {
-                $this->redirect('order');
-            }
-            else
-            {
-                $this->error('请登录！');
-            }
-        }
-        else
-        {
-            $this->error('请登录！');
-        }
+//        if(I("get.code")!='')
+//        {
+//            //查看用户是否已经写入数据库，没有则写入
+//            $object = new Common\UserDAOImpl();
+//            if($object->login())
+//            {
+//                $this->redirect('order');
+//            }
+//            else
+//            {
+//                $this->error('请登录！');
+//            }
+//        }
+//        else
+//        {
+//            $this->error('请登录！');
+//        }
+
     }
 
     //订单界面
@@ -35,7 +38,7 @@ class IndexController extends Controller{
     {
 //         $this->redirect('pause');
 
-        if(!session('?weixin_user'))
+        if(!session('?userid'))
         {
             $this->error('请登录！');
         }
@@ -61,7 +64,7 @@ class IndexController extends Controller{
 
     public function ordertest()
     {
-        if(!session('?weixin_user'))
+        if(!session('?userid'))
         {
             $this->error('请登录！');
         }
@@ -72,37 +75,37 @@ class IndexController extends Controller{
         }
     }
 
-    #create the order of receiving mail
-    public function newRecvOrder()
-	{
-        //验证是否登陆
-        if(!session('?weixin_user'))
-        {
-            $this->ajaxReturn('请登录！');
-        }
-
-        
-        if(IS_POST)
-        {
-
-            $data['time'] = date('Y-m-d H:i:s');
-            $data['express_status'] = 1;
-
-            $order = new Common\OrderDAOlmpl();
-            $this->ajaxReturn($order->newRecvOrder());
-
-        }
-        else
-        {
-            $this->ajaxReturn('提交失败');
-        }
-    }
+//    #create the order of receiving mail
+//    public function newRecvOrder()
+//	{
+//        //验证是否登陆
+//        if(!session('?weixin_user'))
+//        {
+//            $this->ajaxReturn('请登录！');
+//        }
+//
+//
+//        if(IS_POST)
+//        {
+//
+//            $data['time'] = date('Y-m-d H:i:s');
+//            $data['express_status'] = 1;
+//
+//            $order = new Common\OrderDAOlmpl();
+//            $this->ajaxReturn($order->newRecvOrder());
+//
+//        }
+//        else
+//        {
+//            $this->ajaxReturn('提交失败');
+//        }
+//    }
 
     //创建代寄快递订单
     public function newSendOrder()
     {
         //验证是否登陆
-        if (!session('?weixin_user')) {
+        if (!session('?userid')) {
             $this->ajaxReturn('请登陆！');
         }
 
@@ -139,7 +142,7 @@ class IndexController extends Controller{
             $data['recv_phone'] = $data['recvtelephone'];
             $data['dormitory_id'] = $data['dor'];
             $data['sender_goods'] = $data['delivery'];
-            $data['openid'] = session('weixin_user');
+            $data['openid'] = session('userid');
 
             //验证订单是否重复
             // if(!$this->isUniqueOrder($data,1))
@@ -267,7 +270,7 @@ class IndexController extends Controller{
     //获得默认地址
     private function getDefaultInfo()
     {
-        $openid = session('weixin_user');
+        $openid = session('userid');
         $model = M('defaultinfo');
         $data = $model->where("openid='$openid'")->select();
         if(count($data)>0)

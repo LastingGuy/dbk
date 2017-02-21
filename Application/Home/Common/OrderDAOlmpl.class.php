@@ -24,7 +24,7 @@ class OrderDAOlmpl implements IOrderDAO
     const Deleted = 100;
 
 
-    private $openid;    //当前用户openid
+    private $userid;    //当前用户openid
     private $sendModel; //M('send')
     private $pickupModel;   //M('pickup')
     private $orderDetail;   //D('orderdetail')
@@ -37,7 +37,7 @@ class OrderDAOlmpl implements IOrderDAO
 
     public function __construct()
     {
-        $this->openid = session('weixin_user');
+        $this->userid = session('userid');
         $this->sendModel = M('send');
         $this->pickupModel = M('pickup');
         $this->orderDetail = D('orderdetail');
@@ -52,11 +52,11 @@ class OrderDAOlmpl implements IOrderDAO
     {
         if($id!='')
         {
-            $this->openid = $id;
+            $this->userid = $id;
         }
         else
         {
-            $this->openid = session('weixin_user');
+            $this->userid = session('userid');
         }
     }
 
@@ -81,7 +81,7 @@ class OrderDAOlmpl implements IOrderDAO
             }
         }
        
-        $order = $model->where("openid='%s' and pickup_id='%s'",$this->openid,$id)->find();
+        $order = $model->where("userid='%s' and pickup_id='%s'",$this->userid,$id)->find();
 
         $ordertime = strtotime($order['time']);
 
@@ -160,7 +160,7 @@ class OrderDAOlmpl implements IOrderDAO
         }
 
 
-        $order = $model->where("openid='%s' and send_id='%s'",$this->openid,$id)->find();
+        $order = $model->where("userid='%s' and send_id='%s'",$this->userid,$id)->find();
 
         $ordertime = strtotime($order['time']);
 
@@ -224,21 +224,21 @@ class OrderDAOlmpl implements IOrderDAO
     //获得所有未删除代取订单
     public function getAllPickupOrders()
     {
-        $datas = $this->pickupModel->where("openid='$this->openid' and express_status<100")->order('time desc')->select();
+        $datas = $this->pickupModel->where("userid='$this->userid' and express_status<100")->order('time desc')->select();
         return $datas;
     }
 
     //获得未完成订单
     public function getUnfinishedPickupOrders()
     {
-        $datas = $this->pickupModel->where("openid='$this->openid' and express_status=2")->order('pickup_id desc')->select();
+        $datas = $this->pickupModel->where("userid='$this->userid' and express_status=2")->order('pickup_id desc')->select();
         return $datas;
     }
 
     //获得已完成订单
     public function getFinishedPickupOrders()
     {
-        $datas = $this->pickupModel->where("openid='$this->openid' and express_status=3")->order('pickup_id desc')->select();
+        $datas = $this->pickupModel->where("userid='$this->userid' and express_status=3")->order('pickup_id desc')->select();
         return $datas;
     }
 
@@ -271,21 +271,21 @@ class OrderDAOlmpl implements IOrderDAO
     //获得所有代寄订单
     public function getAllSendOrders()
     {
-        $datas = $this->sendOrder->where("openid='$this->openid' and sender_status<100")->order('time desc')->select();
+        $datas = $this->sendOrder->where("userid='$this->userid' and sender_status<100")->order('time desc')->select();
         return $datas;
     }
 
     //获得未完成代寄订单
     public function getUnFinishedSendOrders()
     {
-        $datas = $this->sendOrder->where("openid='$this->openid' and express_status=2")->order('time desc')->select();
+        $datas = $this->sendOrder->where("userid='$this->userid' and express_status=2")->order('time desc')->select();
         return $datas;
     }
 
     //获得已完成代寄订单
     public function getFinishedSendOrders()
     {
-        $datas = $this->sendOrder->where("openid='$this->openid' and express_status=3")->order('time desc')->select();
+        $datas = $this->sendOrder->where("userid='$this->userid' and express_status=3")->order('time desc')->select();
         return $datas;
     }
 
@@ -422,7 +422,7 @@ class OrderDAOlmpl implements IOrderDAO
         $data['dormitory_id'] = $data['dor'];
         $data['express_company'] = $data['express'];
         $data['express_code'] = $data['fetch_code']; 
-        $data['openid'] = session('weixin_user');
+        $data['userid'] = session('userid');
         $data['time'] = date('Y-m-d H:i:s');
         if($price==0)   //价格为0。不需要支付
         {
@@ -453,7 +453,7 @@ class OrderDAOlmpl implements IOrderDAO
                         'default_school'=>$school,
                         'default_dormitory'=>$address
                     );
-                    $this->saveDefaultInfo( $data['openid'],$info);
+                    $this->saveDefaultInfo( $data['userid'],$info);
                 }
                 $info = $pickup->where('pickup_id=%s',$id)->find();
                 if($info==null)
@@ -512,7 +512,7 @@ class OrderDAOlmpl implements IOrderDAO
         $data['recv_phone'] = $data['recvtelephone'];
         $data['dormitory_id'] = $data['dor'];
         $data['sender_goods'] = $data['delivery'];
-        $data['openid'] = session('weixin_user');
+        $data['userid'] = session('userid');
 
 
         $data['sender_status'] = 2;
@@ -533,7 +533,7 @@ class OrderDAOlmpl implements IOrderDAO
                         'default_dormitory' => $address
                     );
 
-                    $this->saveDefaultInfo( $data['openid'],$info);
+                    $this->saveDefaultInfo( $data['userid'],$info);
 
                 }
                 $this->ajaxReturn('提交成功');
@@ -564,7 +564,7 @@ class OrderDAOlmpl implements IOrderDAO
         {
             case 1:
             case 2:
-                $order = $weixinPayModel->where("order_id=%s and openid='%s' and pay_type=%s",$orderid,$userid,$orderType)->find();
+                $order = $weixinPayModel->where("order_id=%s and userid='%s' and pay_type=%s",$orderid,$userid,$orderType)->find();
                 if($order)
                 {
                     if($order['pay_status']!=0)
@@ -656,30 +656,30 @@ class OrderDAOlmpl implements IOrderDAO
     //  $data['default_school'],
     //  $data['default_dormitory']
     //and every element is required
-    private function saveDefaultInfo($openid,$data)
+    private function saveDefaultInfo($userid,$data)
     {
         $defaultInfoModel = M('defaultinfo');
-        $count = $defaultInfoModel->where("openid='$openid'")->count();
+        $count = $defaultInfoModel->where("userid='$userid'")->count();
         
         if($count==0)
         {
             ///there is not the default info of this user, add it to db.
-            $data['openid'] = $openid;
+            $data['userid'] = $userid;
             $defaultInfoModel->data($data)->add();
         }
         else
         {
             ///there has already the default info of this user ,so replace it by the new info
-            $defaultInfoModel->where("openid='$openid'")->save($data);
+            $defaultInfoModel->where("userid='$userid'")->save($data);
         }
     }
 
     //获得默认地址
     private function getDefaultInfo()
     {
-        $openid = session('weixin_user');
+        $userid = session('useriduserid');
         $model = M('defaultinfo');
-        $data = $model->where("openid='$openid'")->select();
+        $data = $model->where("userid='$userid'")->select();
         if(count($data)>0)
         {
             $this->assign('isSetDefault','true');
