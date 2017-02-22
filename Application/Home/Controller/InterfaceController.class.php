@@ -227,10 +227,13 @@ class InterfaceController extends Controller
         }
     }
     //微信支付批量查询接口
-    /*public function weixinQuery(){
+    public function weixinQuery(){
         $model = M("weixin_pay");
         $mod = M("pickup");
-        $data = $model->where("time_start>'2016-11-27 12:30:00'")->select();
+        $no = I('no');
+        if(!isset($no))
+            return ;
+        $data = $model->where("trade_no='%s'",$no)->select();
         foreach ($data as $key=>$value){
             $out_trade_no = $value['trade_no'];
             $input = new \WxPayOrderQuery();
@@ -255,7 +258,7 @@ class InterfaceController extends Controller
         }
 
 
-    }*/
+    }
 }
 
 ?>
