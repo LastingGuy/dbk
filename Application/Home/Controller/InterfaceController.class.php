@@ -230,7 +230,7 @@ class InterfaceController extends Controller
     public function weixinQuery(){
         $model = M("weixin_pay");
         $mod = M("pickup");
-        $no = I('no');
+        $no = I('post.no');
         if(!isset($no))
             return ;
         $data = $model->where("trade_no='%s'",$no)->select();
