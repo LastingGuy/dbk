@@ -147,6 +147,7 @@ class WxPayResults extends WxPayDataBase
 	{
 		//fix异常
 		if(!$this->IsSignSet()){
+            \Think\Log::write('签名错误','WARN');
 			throw new WxPayException("签名错误！");
 		}
 		
