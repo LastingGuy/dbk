@@ -15,14 +15,17 @@ class WxPayNotify extends WxPayNotifyReply
 	final public function Handle($needSign = true)
 	{
 		$msg = "OK";
+        \Think\Log::write('handle','WARN');
 		//当返回false的时候，表示notify中调用NotifyCallBack回调失败获取签名校验失败，此时直接回复失败
 		$result = WxpayApi::notify(array($this, 'NotifyCallBack'), $msg);
 		if($result == false){
+            \Think\Log::write('fail','WARN');
 			$this->SetReturn_code("FAIL");
 			$this->SetReturn_msg($msg);
 			$this->ReplyNotify(false);
 			return;
 		} else {
+            \Think\Log::write('success','WARN');
 			//该分支在成功回调到NotifyCallBack方法，处理完成之后流程
 			$this->SetReturn_code("SUCCESS");
 			$this->SetReturn_msg("OK");
@@ -97,6 +100,7 @@ class WxPayNotify extends WxPayNotifyReply
 				}
 				else if($row['pay_type']==2){
 					//代寄订单更新， 变成已支付
+                    \Think\Log::write('代拿订单更新， 变成已支付','WARN');
 					$send['send_id'] = $row['order_id'];
 					$send['sender_status'] = 2;
 					$model = M("send");
