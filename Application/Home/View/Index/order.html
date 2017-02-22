@@ -754,14 +754,13 @@
             JSON.parse(weixinpaydata),
             function(res)
             {     
-                if(res.err_msg == "get_brand_wcpay_request:ok" ) 
+                if(res.err_msg == "get_brand_wcpay_request：ok" )
                 {
                     self.location='../usercenter/usercenter';
                 }
                 else
                 {
-                    alert(res.err_msg);
-                    alert(res.errMsg);
+                    alert('支付失败!');
                     self.location='../usercenter/usercenter';
                 } 
             }
