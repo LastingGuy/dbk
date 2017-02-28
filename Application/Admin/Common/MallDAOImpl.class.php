@@ -7,6 +7,14 @@
  */
 namespace Admin\Common;
 
+import("Org.Qiniu.vendor.autoload", null, ".php");
+
+// 引入鉴权类
+use Qiniu\Auth;
+// 引入上传类
+use Qiniu\Storage\UploadManager;
+
+
 class MallDAOImpl
 {
     public function get($param)
@@ -95,5 +103,35 @@ class MallDAOImpl
             $str .= $arr[$rand];
         }
         return $str;
+    }
+
+    //七牛上传
+    public function qiniuUpload($rootpath,$filename)
+    {
+        // 需要填写你的 Access Key 和 Secret Key
+        $accessKey = 'WNYHEJ0UMEXmA8QGCjZ1IBqKPfh84-9flPX8a_ha';
+        $secretKey = 'JjmpZjN9woi4bBU2pfUtiquQ88aeczGNfwai2EJm';
+
+        // 构建鉴权对象
+        $auth = new Auth($accessKey,$secretKey);
+
+        // 要上传的空间
+        $bucket = 'jingl';
+        // 生成上传 Token
+        $token = $auth->uploadToken($bucket);
+
+        // 要上传文件的本地路径
+        $filePath = $rootpath."\\".$filename;
+        $key = $filename;
+        // 初始化 UploadManager 对象并进行文件的上传
+        $uploadMgr = new UploadManager();
+        // 调用 UploadManager 的 putFile 方法进行文件的上传
+        list($ret, $err) = $uploadMgr->putFile($token, $key, $filePath);
+        echo "\n====> putFile result: \n";
+        if ($err !== null) {
+            //var_dump($err)    ;
+        } else {
+           // var_dump($ret);
+        }
     }
 }

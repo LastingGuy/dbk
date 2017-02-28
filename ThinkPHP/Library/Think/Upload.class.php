@@ -176,7 +176,6 @@ class Upload {
                     call_user_func($this->removeTrash,$data);//删除垃圾据
                 }
             }
-
             /* 生成保存文件名 */
             $savename = $this->getSaveName($file);
             if(false == $savename){
@@ -199,10 +198,10 @@ class Upload {
                 $imginfo = getimagesize($file['tmp_name']);
                 if(empty($imginfo) || ($ext == 'gif' && empty($imginfo['bits']))){
                     $this->error = '非法图像文件！';
+
                     continue;
                 }
             }
-
             /* 保存文件 并记录保存成功的文件 */
             if ($this->uploader->save($file,$this->replace)) {
                 unset($file['error'], $file['tmp_name']);
@@ -214,6 +213,7 @@ class Upload {
         if(isset($finfo)){
             finfo_close($finfo);
         }
+
         return empty($info) ? false : $info;
     }
 

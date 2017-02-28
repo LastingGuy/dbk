@@ -16,10 +16,10 @@ class AdminDAOImpl implements IAdminDAO{
 
         if($model->where($condition)->find()){
             $return = $this->addSession($user_id);
-            FlowRecord::Login("登录成功");
+            //FlowRecord::Login("登录成功");
             return $return;
         }else{
-            FlowRecord::Login("登录失败");
+            //FlowRecord::Login("登录失败");
             return  0;
         }
     }

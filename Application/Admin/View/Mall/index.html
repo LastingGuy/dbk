@@ -23,9 +23,12 @@
     <link rel="stylesheet" type="text/css" href="__ROOT__/Public/assets/bootstrap-datetimepicker/css/datetimepicker.css"><!-- DATETIMEPICKER PLUGIN CSS -->
     <link href="__ROOT__/Public/css/style.css" rel="stylesheet"><!-- THEME BASIC CSS -->
     <link href="__ROOT__/Public/css/style-responsive.css" rel="stylesheet"><!-- THEME RESPONSIVE CSS -->
+    <link href="__ROOT__/Public/assets/bootstrap-fileinput-master/css/fileinput.min.css" rel="stylesheet">
     <!--[if lt IE 9]>
     <script src="__ROOT__/Public/js/html5shiv.js"></script>
     <script src="__ROOT__/Public/js/respond.min.js"></script>
+
+    <script src="https://cdn.staticfile.org/plupload/3.0-beta1/i18n/ar.js"></script>
     <![endif]-->
     <!-- END STYLESHEET -->
 
@@ -99,6 +102,7 @@
      aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
+            <form action="{:U('admin/mall/add')}" class="form-horizontal tasi-form" method="post" enctype="multipart/form-data">
             <div class="modal-header">
                 <button type="button" class="close"
                         data-dismiss="modal" aria-hidden="true">
@@ -109,29 +113,28 @@
                 </h4>
             </div>
             <div class="modal-body">
-                <form action="#" class="form-horizontal tasi-form">
                     <div class="form-group">
                         <label class="col-md-4 control-label"> &nbsp;&nbsp;&nbsp;商 品 名</label>
                         <div class="col-md-5 col-xs-11">
-                            <input id="goods_name" type="text" placeholder="请输入商品名" class="form-control">
+                            <input id="goods_name" name="goods_name" type="text" placeholder="请输入商品名" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-4 control-label"> &nbsp;&nbsp;&nbsp;商 品 价 格</label>
                         <div class="col-md-5 col-xs-11">
-                            <input id="goods_price" type="text" placeholder="请输入商品价格" class="form-control">
+                            <input id="goods_price" name="goods_price" type="text" placeholder="请输入商品价格" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-4 control-label"> &nbsp;&nbsp;&nbsp;商 品 链 接</label>
                         <div class="col-md-5 col-xs-11">
-                            <input id="goods_link" type="text" placeholder="请输入商品链接" class="form-control">
+                            <input id="goods_link" name="goods_link" type="text" placeholder="请输入商品链接" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-4 control-label"> &nbsp;&nbsp;&nbsp;商 品 描 述</label>
                         <div class="col-md-6 col-xs-11">
-                            <textarea id="goods_description" rows="5" cols="70" class="form-control"></textarea>
+                            <textarea id="goods_description" name="goods_description" rows="5" cols="70" class="form-control"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -149,16 +152,21 @@
                         </div>
                     </div>
 
-                </form>
+                    <div class="form-group">
+                        <div class="col-md-12 col-xs-11">
+                            <input name='file[]' id="file-1" type="file" multiple class="file" data-overwrite-initial="false" data-min-file-count="1">
+                        </div>
+                    </div>
+
             </div>
             <div class="modal-footer">
                 <button id="close" type="button" class="btn btn-default"
                         data-dismiss="modal">关 闭
                 </button>
-                <button type="button" class="btn btn-primary" onclick="submit()">
-                    提 交
-                </button>
+                <input type="submit" value='提交' class="btn btn-primary">
+
             </div>
+            </form>
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
@@ -222,6 +230,7 @@
                         </div>
                     </div>
 
+
                 </form>
             </div>
             <div class="modal-footer">
@@ -249,8 +258,7 @@
 <script src="__ROOT__/Public/assets/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script><!-- BOOTSTRAP DATETIMEPICKER JS  -->
 <script src="__ROOT__/Public/assets/bootstrap-datetimepicker/js/locale/bootstrap-datetimepicker.zh-CN.js"></script>
 <script src="__ROOT__/Public/js/common-scripts.js" ></script><!-- BASIC COMMON JS  -->
-
-
+<script src="__ROOT__/Public/assets/bootstrap-fileinput-master/js/fileinput.min.js"></script>
 <script >
     $("#mall_module").addClass("active");
     $("#mall_manage").addClass("active");
@@ -325,6 +333,7 @@
                 "<li role='presentation'><a class='changeStatus' data-status=1 role='menuitem' tabindex='-1'>上线</a></li>"+
                 "</ul></span>";
         var editButton = "<a class='label label-success edit' href='javascript:;' type='button'  data-toggle='modal' data-target='#myModal2'>编 辑</a>";
+
 
         /*
          * Initialse DataTables, with no sorting on the 'details' column
@@ -440,13 +449,29 @@
         });
     });
 
+    $("#file-1").fileinput({
+        showUpload: false,
+        showUploadThumbs: false,
+        //uploadUrl: '#', // you must set a valid URL here else you will get an error
+        allowedFileExtensions: ['jpg', 'png', 'gif'],
+        overwriteInitial: false,
+        maxFileSize: 1000,
+        maxFilesNum: 2,
+        //allowedFileTypes: ['image', 'video', 'flash'],
+        slugCallback: function (filename) {
+            return filename.replace('(', '_').replace(']', '_');
+        }
+    });
+
+
     function submit(){
         $.post("{:U('admin/mall/add')}", {
                     goods_name: $('#goods_name').val(),
                     goods_price: $('#goods_price').val(),
                     goods_link: $('#goods_link').val(),
                     goods_description: $("#goods_description").val(),
-                    classify2_id: $("#classify1_2").val()
+                    classify2_id: $("#classify1_2").val(),
+                    file: $("#file-1").val()
                 },
                 function(data){
                     $('#close').click();
@@ -455,6 +480,7 @@
                     }
                     oTable.fnDraw(false);
                 });
+        return false;
 
     }
 

@@ -11,10 +11,10 @@ use Admin\Common;
 class DataController extends Controller {
 
     public function index(){
-        if(!session("?admin_id")) {
+        /*if(!session("?admin_id")) {
             header('Location:'.U("Admin/Index/index"));
-        }
-
+        }*/
+        var_dump(session('admin_id'));
         //准备权限
         $this->assign("admin_school",session("admin_school"));
         $this->assign("admin_type",session("admin_type"));

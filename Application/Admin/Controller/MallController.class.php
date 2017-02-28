@@ -16,6 +16,7 @@ class MallController extends Controller
             header('Location:'.U("Admin/Index/index"));
         }
 
+
         //准备权限
         $this->assign("admin_school",session("admin_school"));
         $this->assign("admin_type",session("admin_type"));
@@ -76,7 +77,6 @@ class MallController extends Controller
         if(!session("?admin_id")) {
             header('Location:'.U("Admin/Index/index"));
         }
-
         $param['goods_name'] = I("post.goods_name");
         $param['goods_price'] = I("post.goods_price");
         $param['goods_link'] = I("post.goods_link");
@@ -85,7 +85,38 @@ class MallController extends Controller
         if($param['classify2_id']=="")
             $param['classify2_id'] = null;
 
+
+        //文件路径
+        $rootPath = "C:\\Users\\Abby\\Desktop\\file\\";
+
+        //
+
+        //文件上传
+        $upload = new \Think\Upload();
+        $upload->maxSize = 3145728;
+        $upload->etxs = array('jpg', 'gif', 'png', 'jpeg');
+        $upload->rootPath = $rootPath;
+        $upload->savePath = '';
+        $upload->autoSub = false;
+        $info = null;
+
+        $info = $upload->upload();
+
+        if(!$info) {// 上传错误提示错误信息
+            //var_dump($upload->getError());
+        }
+        else{
+            // 上传成功 获取上传文件信息
+            //echo 'ok';
+        }
+
         $object = new Common\MallDAOImpl();
+        $picture = "";
+        foreach ($info as $file) {
+            $object->qiniuUpload($rootPath,$file['savename']);
+            $picture = $picture.'http://ok9ryp7cb.bkt.clouddn.com/'.$file['savename'].",";
+        }
+        $param['pictures'] = $picture;
         $this->ajaxReturn($object->add($param));
     }
 
