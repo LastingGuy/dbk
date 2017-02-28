@@ -96,4 +96,26 @@ class MallDAOImpl
         }
         return $str;
     }
+
+    //加载页面
+    private function curl_get($url){
+        $ch = curl_init();
+        curl_setopt($ch,CURLOPT_URL,$url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch,CURLOPT_HEADER,1);
+        $result=curl_exec($ch);
+        $code=curl_getinfo($ch,CURLINFO_HTTP_CODE);
+        if($code!='404' && $result){
+            return $result;
+        }
+        curl_close($ch);
+    }
+
+    //获取页面url链接
+    private function get_page_curls()
+    {
+        $get_url_result = preg_match_all();
+    }
+
+
 }
