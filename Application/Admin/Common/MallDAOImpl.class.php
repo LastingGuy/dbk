@@ -58,6 +58,7 @@ class MallDAOImpl
                     return false;
             }
         }while($result==0);
+        return true;
     }
 
     //获得一级目录
@@ -88,7 +89,8 @@ class MallDAOImpl
     public function getOneGoods($goods_id)
     {
         $model = M("goodsView");
-        return $model->find($goods_id);
+        return $model->where("goods_id='$goods_id'")->getField("goods_id,goods_name,
+        goods_price,goods_page_view,goods_link,goods_description,classify2_id,classify1_id,goods_time");
     }
 
     //随机生成6位带字母数字的goods_id
@@ -127,11 +129,11 @@ class MallDAOImpl
         $uploadMgr = new UploadManager();
         // 调用 UploadManager 的 putFile 方法进行文件的上传
         list($ret, $err) = $uploadMgr->putFile($token, $key, $filePath);
-        echo "\n====> putFile result: \n";
+       /* echo "\n====> putFile result: \n";*/
         if ($err !== null) {
-            //var_dump($err)    ;
+          /* var_dump($err);*/
         } else {
-           // var_dump($ret);
+           /*var_dump($ret);*/
         }
     }
 }

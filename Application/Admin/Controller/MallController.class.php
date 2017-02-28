@@ -10,6 +10,8 @@ use Think\Controller;
 use Admin\Common;
 class MallController extends Controller
 {
+    //文件上传路径
+    static $rootPath = "C:\\Users\\lenovo\\desktop\\file1\\";
     public function index()
     {
         if(!session("?admin_id")) {
@@ -64,11 +66,43 @@ class MallController extends Controller
         $param['goods_price'] = I("post.goods_price");
         $param['goods_link'] = I("post.goods_link");
         $param['goods_description'] = I("post.goods_description");
-        $param['classify2_id'] = I("post.classify2_id");
+        if($param['classify2_id']=="")
+            $param['classify2_id'] = null;
+
+
+        //文件上传
+        $upload = new \Think\Upload();
+        $upload->maxSize = 3145728;
+        $upload->etxs = array('jpg', 'gif', 'png', 'jpeg');
+        $upload->rootPath = self::$rootPath;
+        $upload->savePath = '';
+        $upload->autoSub = false;
+        $info = null;
+
+        $info = $upload->upload();
+
+        if(!$info) {// 上传错误提示错误信息
+            /*var_dump($upload->getError());*/
+        }
+        else{
+            /* // 上传成功 获取上传文件信息
+             echo 'ok';*/
+        }
 
         $object = new Common\MallDAOImpl();
-        $this->ajaxReturn($object->update($param));
-
+        $picture = "";
+        foreach ($info as $file) {
+            $object->qiniuUpload(self::$rootPath,$file['savename']);
+            $picture = $picture.'http://ok9ryp7cb.bkt.clouddn.com/'.$file['savename'].",";
+        }
+        $param['pictures'] = $picture;
+        $result = "";
+        $object = new Common\MallDAOImpl();
+        if($object->update($param)==true)
+            $result = "添加成功！";
+        else
+            $result = "添加失败！";
+        echo $result."</br><a href='./index'> 返 回 </a>";
     }
 
     //增加商品
@@ -86,16 +120,11 @@ class MallController extends Controller
             $param['classify2_id'] = null;
 
 
-        //文件路径
-        $rootPath = "C:\\Users\\Abby\\Desktop\\file\\";
-
-        //
-
         //文件上传
         $upload = new \Think\Upload();
         $upload->maxSize = 3145728;
         $upload->etxs = array('jpg', 'gif', 'png', 'jpeg');
-        $upload->rootPath = $rootPath;
+        $upload->rootPath = self::$rootPath;
         $upload->savePath = '';
         $upload->autoSub = false;
         $info = null;
@@ -103,24 +132,29 @@ class MallController extends Controller
         $info = $upload->upload();
 
         if(!$info) {// 上传错误提示错误信息
-            //var_dump($upload->getError());
+            /*var_dump($upload->getError());*/
         }
         else{
-            // 上传成功 获取上传文件信息
-            //echo 'ok';
+           /* // 上传成功 获取上传文件信息
+            echo 'ok';*/
         }
 
         $object = new Common\MallDAOImpl();
         $picture = "";
         foreach ($info as $file) {
-            $object->qiniuUpload($rootPath,$file['savename']);
+            $object->qiniuUpload(self::$rootPath,$file['savename']);
             $picture = $picture.'http://ok9ryp7cb.bkt.clouddn.com/'.$file['savename'].",";
         }
         $param['pictures'] = $picture;
-        $this->ajaxReturn($object->add($param));
+        $result = "";
+        if($object->add($param)==true)
+            $result = "添加成功！";
+        else
+            $result = "添加失败！";
+        echo $result."</br><a href='./index'> 返 回 </a>";
     }
 
-    //增加商品
+    //更新商品在线情况
     public function updateOnline()
     {
         if(!session("?admin_id")) {
